@@ -15,7 +15,7 @@ This plan outlines the initial development roadmap for AetherLens Home Edition, 
 ### Key Objectives
 
 1. Build a minimal viable product (MVP) within 3 months
-2. Support 3-5 key integrations (smart plugs, Home Assistant, cloud costs)
+2. Support 3 key cloud cost integrations (Azure, AWS, Home Assistant)
 3. Run efficiently on Raspberry Pi 4 (<2GB RAM)
 4. Establish foundation for community plugin ecosystem
 5. Maintain 100% local operation with optional cloud features
@@ -273,45 +273,51 @@ src/aetherlens/costs/
 **Deliverables:**
 - `docs/PLUGIN_GUIDE.md` (comprehensive guide)
 - Plugin template repository
-- Example plugins (3 working examples)
+- Example plugins (3 working examples: Azure, Home Assistant, AWS)
 - Plugin testing utilities
 
 ---
 
-### 3.2 Shelly Smart Plug Plugin
+### 3.2 Azure Cost Management Plugin
 
-**Objective:** First production plugin for Shelly devices
+**Objective:** First production plugin for Azure cloud cost tracking
 
 **Tasks:**
-- [ ] Research Shelly API endpoints
-- [ ] Implement device discovery
-- [ ] Add authentication support
-- [ ] Collect power metrics
-- [ ] Collect energy totals
-- [ ] Handle offline devices gracefully
-- [ ] Add configuration validation
+- [ ] Research Azure Cost Management API
+- [ ] Implement Azure authentication (managed identity, service principal)
+- [ ] Support multiple subscription access
+- [ ] Fetch daily cost data
+- [ ] Break down by resource group
+- [ ] Break down by service/meter category
+- [ ] Handle API pagination and rate limits
+- [ ] Cache API responses (avoid excessive calls)
+- [ ] Add cost forecasting
 - [ ] Write plugin tests
 - [ ] Document configuration options
 
 **Metrics Collected:**
-- Real-time power (watts)
-- Total energy (kWh)
-- Voltage (volts)
-- Current (amperes)
-- Temperature (optional)
-- Device status (online/offline)
+- Daily Azure costs by subscription
+- Cost breakdown by resource group
+- Cost breakdown by service (Compute, Storage, Networking, etc.)
+- Month-to-date spending
+- Cost forecasts and trends
+- Budget alerts and overages
 
 **Configuration:**
 ```yaml
 plugins:
-  - name: shelly
+  - name: azure_cost
     enabled: true
-    poll_interval: 30
-    devices:
-      - ip: 192.168.1.100
-        id: shelly-office-desk
-        name: "Office Desk"
-        room: "Office"
+    tenant_id: "${AZURE_TENANT_ID}"
+    client_id: "${AZURE_CLIENT_ID}"
+    client_secret: "${AZURE_CLIENT_SECRET}"
+    subscriptions:
+      - id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        name: "Personal Subscription"
+      - id: "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
+        name: "Dev/Test Subscription"
+    poll_interval: 3600  # Hourly (API has daily granularity)
+    include_forecasts: true
 ```
 
 ---
@@ -747,7 +753,7 @@ src/components/
 ```
 Week 1-2:   Environment Setup, Database, Core API
 Week 3-5:   Plugin System, Data Collection, Cost Engine
-Week 6-8:   Initial Plugins (Shelly, Home Assistant, AWS)
+Week 6-8:   Initial Plugins (Azure, Home Assistant, AWS)
 Week 9-10:  Web UI Development
 Week 11-12: Testing, Documentation
 Week 13:    Deployment, Release v1.0.0
@@ -798,6 +804,11 @@ Week 13:    Deployment, Release v1.0.0
    - Add buffering
    - Implement batch inserts
    - Test performance
+
+3. **Start first plugin (Azure Cost Management)**
+   - Research Azure Cost Management API documentation
+   - Set up Azure authentication flow
+   - Create basic plugin structure
 
 ---
 
