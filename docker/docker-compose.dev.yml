@@ -1,0 +1,62 @@
+version: '3.8'
+
+# Development override for docker-compose.yml
+# Usage: docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up
+
+services:
+  aetherlens:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: builder  # Use builder stage for dev
+    volumes:
+      # Mount source code for hot-reload
+      - ../src:/app/src:ro
+      - ../tests:/app/tests:ro
+      - ../pyproject.toml:/app/pyproject.toml:ro
+      # Development outputs
+      - ../coverage:/app/coverage
+    environment:
+      - DEBUG=true
+      - RELOAD=true
+      - LOG_LEVEL=debug
+    command: >
+      python -m uvicorn aetherlens.api.main:app
+      --host 0.0.0.0
+      --port 8080
+      --reload
+      --log-level debug
+
+  # PGAdmin for database management (dev only)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: aetherlens-pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@aetherlens.local
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - timescaledb
+    networks:
+      - aetherlens-network
+
+  # Redis Commander for cache inspection (dev only)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: aetherlens-redis-ui
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+    networks:
+      - aetherlens-network
+
+volumes:
+  pgadmin-data:
+    driver: local

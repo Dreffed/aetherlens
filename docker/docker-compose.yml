@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # AetherLens Core Application
+  aetherlens:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: aetherlens
+    ports:
+      - "8080:8080"   # API/Web UI
+      - "9090:9090"   # Prometheus metrics
+    volumes:
+      - aetherlens-data:/data
+      - aetherlens-config:/config
+      - aetherlens-logs:/logs
+      - aetherlens-plugins:/plugins
+    environment:
+      - TZ=America/New_York
+      - DATABASE_URL=postgresql://postgres:aetherlens_pass@timescaledb:5432/aetherlens
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-CHANGE_ME_INSECURE_DEFAULT}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - DEBUG=${DEBUG:-false}
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - aetherlens-network
+
+  # TimescaleDB for time-series data
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: aetherlens-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescaledb-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=aetherlens
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-aetherlens_pass}
+      - POSTGRES_INITDB_ARGS=-E UTF8
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - aetherlens-network
+
+  # Redis for caching (optional but recommended)
+  redis:
+    image: redis:7-alpine
+    container_name: aetherlens-cache
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - aetherlens-network
+
+volumes:
+  aetherlens-data:
+    driver: local
+  aetherlens-config:
+    driver: local
+  aetherlens-logs:
+    driver: local
+  aetherlens-plugins:
+    driver: local
+  timescaledb-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  aetherlens-network:
+    driver: bridge
