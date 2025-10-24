@@ -3,7 +3,6 @@ Pytest configuration and fixtures for AetherLens tests.
 """
 
 import pytest
-from fastapi.testclient import TestClient
 
 
 @pytest.fixture

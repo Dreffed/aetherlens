@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     jwt_refresh_token_expire_days: int = 7
 
     # Redis (optional)
-    redis_url: Optional[RedisDsn] = Field(default=None)
+    redis_url: RedisDsn | None = Field(default=None)
     redis_max_connections: int = 50
 
     # Plugins
