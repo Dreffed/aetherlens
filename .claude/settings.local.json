@@ -8,7 +8,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(python -m ruff:*)",
-      "Bash(./venv/Scripts/python:*)"
+      "Bash(./venv/Scripts/python:*)",
+      "Bash(.\\venv\\Scripts\\python:*)",
+      "Bash(python -m black:*)"
     ],
     "deny": [],
     "ask": []

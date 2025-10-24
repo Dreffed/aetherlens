@@ -86,7 +86,7 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:test_password@localhost:5432/aetherlens_test
           REDIS_URL: redis://localhost:6379/0
-          SECRET_KEY: test_secret_key_for_ci_only
+          SECRET_KEY: test_secret_key_minimum_32_characters_long_for_ci_only_testing
           PYTHONPATH: ${{ github.workspace }}/src
         run: |
           pytest tests/ -v --cov=src/aetherlens --cov-report=xml --cov-report=html
