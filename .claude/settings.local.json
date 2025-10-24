@@ -6,7 +6,9 @@
       "Bash(tree:*)",
       "Bash(find:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(python -m ruff:*)",
+      "Bash(./venv/Scripts/python:*)"
     ],
     "deny": [],
     "ask": []
