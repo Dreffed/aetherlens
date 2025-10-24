@@ -144,6 +144,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: false
+          load: true
           tags: aetherlens/home:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
