@@ -22,9 +22,7 @@ class Settings(BaseSettings):
     aetherlens_bind_addr: str = "0.0.0.0:8080"
 
     # Database
-    database_url: str = Field(
-        default="postgresql://postgres:changeme@localhost:5432/aetherlens"
-    )
+    database_url: str = Field(default="postgresql://postgres:changeme@localhost:5432/aetherlens")
     database_pool_size: int = 10
     database_max_overflow: int = 20
 
