@@ -190,17 +190,25 @@ scripts/
 
 ### 1.3 Core API Framework ⏳ NEXT
 
-**Objective:** Build FastAPI foundation with authentication
+**Status:** ⏳ **Next - Ready to Start**
+**Estimated Duration:** 3-4 days
+**Target Date:** October 28, 2025
 
-**Tasks:**
-- [ ] Create FastAPI application structure
-- [ ] Implement JWT authentication system
-- [ ] Set up CORS middleware
-- [ ] Add rate limiting middleware
-- [ ] Create health check endpoint
-- [ ] Implement Prometheus metrics endpoint
-- [ ] Set up structured logging (structlog)
-- [ ] Create API documentation (OpenAPI/Swagger)
+**Objective:** Build production-ready FastAPI foundation with authentication, middleware, monitoring, and comprehensive API documentation.
+
+📋 **Detailed Plan:** See [plans/1.3-core-api-framework-plan.md](./1.3-core-api-framework-plan.md) for comprehensive task breakdown.
+
+**High-Level Tasks:**
+- [ ] Task 1: FastAPI Application Bootstrap (2 hours)
+- [ ] Task 2: Structured Logging Setup (1.5 hours)
+- [ ] Task 3: JWT Authentication System (4 hours)
+- [ ] Task 4: Rate Limiting Middleware (2 hours)
+- [ ] Task 5: Health Check Endpoint (1.5 hours)
+- [ ] Task 6: Prometheus Metrics Endpoint (2 hours)
+- [ ] Task 7: API Models and Validation (2 hours)
+- [ ] Task 8: Basic CRUD Endpoints (2 hours)
+- [ ] Task 9: Integration Testing (2 hours)
+- [ ] Task 10: Documentation and Deployment (1.5 hours)
 
 **Files:**
 ```python
@@ -224,13 +232,40 @@ src/aetherlens/
     └── credentials.py
 ```
 
+**Key Deliverables:**
+- `src/aetherlens/api/main.py` - FastAPI application with lifespan management
+- `src/aetherlens/api/database.py` - Database connection pool manager
+- `src/aetherlens/api/logging.py` - Structured logging with request IDs
+- `src/aetherlens/security/jwt.py` - JWT token management
+- `src/aetherlens/security/passwords.py` - Password hashing
+- `src/aetherlens/api/dependencies.py` - Authentication dependencies
+- `src/aetherlens/api/routes/auth.py` - Login/token endpoints
+- `src/aetherlens/api/routes/health.py` - Health check endpoints
+- `src/aetherlens/api/routes/devices.py` - Device CRUD endpoints
+- `src/aetherlens/api/metrics.py` - Prometheus metrics
+- `src/aetherlens/api/rate_limit.py` - Rate limiting middleware
+- `src/aetherlens/models/device.py` - Device models
+- `src/aetherlens/models/metric.py` - Metric models
+
 **Acceptance Criteria:**
-- FastAPI server starts on port 8080
-- `/health` endpoint returns 200 OK
-- `/docs` displays Swagger UI
-- JWT token generation works
-- Rate limiting blocks excessive requests
-- Prometheus `/metrics` exports data
+- [ ] FastAPI server starts on port 8080
+- [ ] Database connection pool initializes successfully
+- [ ] `/health` endpoint returns comprehensive status
+- [ ] `/docs` displays interactive Swagger UI
+- [ ] JWT authentication flow works end-to-end
+- [ ] Protected endpoints require valid tokens
+- [ ] Rate limiting enforces 60/min and 1000/hour limits
+- [ ] Prometheus `/metrics` exports all metrics
+- [ ] Structured logging includes request IDs
+- [ ] All CRUD operations work correctly
+- [ ] Integration tests pass
+- [ ] Docker deployment successful
+
+**Performance Targets:**
+- API response time (p95): <200ms
+- Requests per second: >1000
+- Memory usage: <256MB
+- Startup time: <5s
 
 ---
 
