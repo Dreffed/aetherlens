@@ -45,14 +45,16 @@ services:
       - "5432:5432"
     volumes:
       - timescaledb-data:/var/lib/postgresql/data
+      - ../migrations/init:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_DB=aetherlens
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${DB_PASSWORD:-aetherlens_pass}
-      - POSTGRES_INITDB_ARGS=-E UTF8
+      - POSTGRES_INITDB_ARGS=-E UTF8 --locale=en_US.UTF-8
+    command: postgres -c shared_preload_libraries=timescaledb -c max_connections=200 -c shared_buffers=256MB
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aetherlens"]
       interval: 10s
       timeout: 5s
       retries: 5

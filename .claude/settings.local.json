@@ -10,7 +10,15 @@
       "Bash(python -m ruff:*)",
       "Bash(./venv/Scripts/python:*)",
       "Bash(.\\venv\\Scripts\\python:*)",
-      "Bash(python -m black:*)"
+      "Bash(python -m black:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
+      "Bash(./venv/Scripts/alembic:*)",
+      "Bash(set PGPASSWORD=aetherlens_pass)",
+      "Bash(set DATABASE_URL=postgresql://postgres:aetherlens_pass@127.0.0.1:5432/aetherlens)",
+      "Bash(timeout 30 sh:*)",
+      "Bash(bash scripts/backup_database.sh:*)"
     ],
     "deny": [],
     "ask": []
