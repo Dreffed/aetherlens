@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(if not exist plans mkdir plans)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
