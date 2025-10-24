@@ -112,36 +112,64 @@ aetherlens/
 
 ---
 
-### 1.2 Database Setup
+### 1.2 Database Setup ⏳ NEXT
 
-**Objective:** Initialize TimescaleDB with core schema
+**Status:** ⏳ **Next - Ready to Start**
+**Estimated Duration:** 3-4 days (25 hours)
 
-**Tasks:**
-- [ ] Install TimescaleDB via Docker
-- [ ] Create initial database schema from SCHEMA.md
-- [ ] Implement hypertable for metrics
-- [ ] Create device registry table
-- [ ] Set up continuous aggregates (hourly, daily)
-- [ ] Configure compression policies
-- [ ] Set up retention policies (90 days default)
-- [ ] Create database migration framework (Alembic)
+**Objective:** Initialize TimescaleDB with core schema, hypertables, compression, retention policies, and migration framework.
 
-**SQL Files:**
-```sql
+📋 **Detailed Plan:** See [plans/1.2-database-setup-plan.md](./1.2-database-setup-plan.md) for comprehensive task breakdown.
+
+**High-Level Tasks:**
+- [ ] Task 1: TimescaleDB Docker Setup (2 hours)
+- [ ] Task 2: Migration Framework Setup - Alembic (3 hours)
+- [ ] Task 3: Core Schema Creation (4 hours)
+- [ ] Task 4: Hypertable Implementation (3 hours)
+- [ ] Task 5: Indexes and Optimization (2 hours)
+- [ ] Task 6: Continuous Aggregates - hourly/daily (3 hours)
+- [ ] Task 7: Compression Policies (2 hours)
+- [ ] Task 8: Retention Policies - 90 days (2 hours)
+- [ ] Task 9: Sample Data and Testing (2 hours)
+- [ ] Task 10: Backup and Recovery Scripts (2 hours)
+
+**Key Deliverables:**
+```
 migrations/
-├── 001_initial_schema.sql
-├── 002_hypertables.sql
-├── 003_indexes.sql
-├── 004_aggregates.sql
-└── 005_retention_policies.sql
+├── alembic.ini                      # Migration config
+├── env.py                           # Migration environment
+└── versions/
+    ├── 001_initial_schema.py        # Core tables (devices, users, etc.)
+    ├── 002_create_hypertables.py    # Metrics hypertable
+    ├── 003_create_indexes.py        # Performance indexes
+    ├── 004_continuous_aggregates.py # Hourly/daily aggregates
+    ├── 005_compression_policies.py  # Data compression (7d threshold)
+    └── 006_retention_policies.py    # Data retention (90d/1yr/5yr)
+
+scripts/
+├── backup_database.sh               # Backup script
+├── restore_database.sh              # Restore script
+└── load_sample_data.sh              # Sample data loader
 ```
 
 **Acceptance Criteria:**
-- TimescaleDB container runs successfully
-- All tables created with proper indexes
-- Sample data inserts and queries work
-- Compression activates after 7 days
-- Retention policy deletes data >90 days
+- ✅ TimescaleDB container runs successfully with healthcheck
+- ✅ All migrations run: `alembic upgrade head`
+- ✅ All core tables created with proper indexes
+- ✅ Metrics hypertable creates chunks automatically
+- ✅ Continuous aggregates (hourly, daily) refresh on schedule
+- ✅ Compression activates after 7 days, achieves >70% reduction
+- ✅ Retention policies active (90 days raw, 1yr hourly, 5yr daily)
+- ✅ Sample data loads successfully
+- ✅ Backup and restore scripts working
+- ✅ Recent queries (<24h) complete in <50ms
+
+**Performance Targets:**
+- Recent data queries (<24h): <50ms
+- Historical queries (7 days): <500ms
+- Bulk insert (1000 metrics): <1s
+- Compression ratio: >70%
+- Memory usage: <512MB
 
 ---
 
