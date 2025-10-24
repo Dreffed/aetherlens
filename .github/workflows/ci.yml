@@ -80,12 +80,14 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements-dev.txt
+          pip install -e .
 
       - name: Run tests with coverage
         env:
           DATABASE_URL: postgresql://postgres:test_password@localhost:5432/aetherlens_test
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test_secret_key_for_ci_only
+          PYTHONPATH: ${{ github.workspace }}/src
         run: |
           pytest tests/ -v --cov=src/aetherlens --cov-report=xml --cov-report=html
 

@@ -2,7 +2,7 @@
 Configuration management for AetherLens.
 """
 
-from pydantic import Field, PostgresDsn, RedisDsn
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     aetherlens_bind_addr: str = "0.0.0.0:8080"
 
     # Database
-    database_url: PostgresDsn = Field(
+    database_url: str = Field(
         default="postgresql://postgres:changeme@localhost:5432/aetherlens"
     )
     database_pool_size: int = 10
@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     jwt_refresh_token_expire_days: int = 7
 
     # Redis (optional)
-    redis_url: RedisDsn | None = Field(default=None)
+    redis_url: str | None = Field(default=None)
     redis_max_connections: int = 50
 
     # Plugins
