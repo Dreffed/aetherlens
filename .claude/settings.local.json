@@ -23,7 +23,12 @@
       "Bash(bash scripts/lint.sh:*)",
       "Bash(./venv/Scripts/ruff check:*)",
       "Bash(./venv/Scripts/black:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(bash scripts/test-local.sh:*)",
+      "Bash(pip --version:*)",
+      "Bash(docker-compose:*)",
+      "Bash(python scripts/generate-secret-key.py:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
