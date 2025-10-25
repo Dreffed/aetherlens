@@ -295,7 +295,7 @@ ______________________________________________________________________
 
 ### Documentation
 
-- [DEVELOPMENT.md](../DEVELOPMENT.md) - Developer setup guide
+- [DEVELOPMENT.md](../docs/DEVELOPMENT.md) - Developer setup guide
 - [ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture
 - [SCHEMA.md](../SCHEMA.md) - Database design
 - [Initial Development Plan](./initial-development-plan.md) - Full roadmap
