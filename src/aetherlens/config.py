@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     # Security
     secret_key: str = Field(
-        default="INSECURE_DEFAULT_KEY_CHANGE_ME",
+        default="INSECURE_DEFAULT_KEY_CHANGE_ME_IN_PRODUCTION_USE_32_CHARS_MINIMUM",
         min_length=32,
     )
     jwt_algorithm: str = "HS256"
