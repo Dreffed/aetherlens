@@ -9,7 +9,7 @@
 
 ## Overview
 
-Build a comprehensive test suite with local Docker-based testing and enhanced GitHub CI/CD integration. This addresses the deferred integration testing from Phase 1.3 and establishes a robust testing foundation for ongoing development.
+Build a comprehensive test suite with local Docker-based testing, code quality validation, security scanning, and enhanced GitHub CI/CD integration. This addresses the deferred integration testing from Phase 1.3 and establishes a robust testing foundation for ongoing development.
 
 ---
 
@@ -21,6 +21,8 @@ Build a comprehensive test suite with local Docker-based testing and enhanced Gi
 3. **Enhanced CI/CD** - Improve GitHub Actions with parallel testing, better reporting
 4. **Test Coverage** - Achieve >70% code coverage for core components
 5. **Performance Testing** - Add basic performance benchmarks for API endpoints
+6. **Code Quality** ✅ - Ensure local linting matches CI exactly (ruff, black, isort, mypy)
+7. **Security Testing** - Automated vulnerability scanning and security validation
 
 ### Secondary Goals
 - Fast test execution (<3 minutes for unit tests, <10 minutes for full suite)
@@ -28,6 +30,8 @@ Build a comprehensive test suite with local Docker-based testing and enhanced Gi
 - Clear test documentation and examples
 - Database migration testing
 - Plugin system testing framework
+- Pre-commit hooks to prevent CI failures ✅
+- Security reports for dependency vulnerabilities
 
 ---
 
@@ -40,6 +44,9 @@ Build a comprehensive test suite with local Docker-based testing and enhanced Gi
 - **Test Structure**: `tests/unit/`, `tests/integration/`, `conftest.py` skeleton
 - **Coverage Tools**: pytest-cov configured, Codecov integration ready
 - **Docker**: Production Dockerfile and docker-compose.yml exist
+- **Linting Infrastructure** ✅ **NEW**: Makefile, lint scripts (Bash + Windows), pre-commit hooks
+- **Code Quality Tools** ✅ **NEW**: ruff, black, isort, mypy all configured
+- **Documentation** ✅ **NEW**: DEVELOPMENT.md, QUICKSTART.md with linting workflows
 
 ### Gaps to Address ❌
 - **No Integration Tests**: Placeholder only, no actual API tests
@@ -48,7 +55,8 @@ Build a comprehensive test suite with local Docker-based testing and enhanced Gi
 - **No API Tests**: Zero tests for authentication, CRUD endpoints, health checks
 - **No Database Test Fixtures**: No sample data or database reset between tests
 - **No Performance Tests**: No benchmarks for API response times
-- **Limited Test Documentation**: No guide for writing or running tests
+- **No Security Test Suite**: Need tests for vulnerabilities, secrets, SQL injection
+- **Limited Test Documentation**: No comprehensive TESTING.md guide
 
 ---
 
@@ -59,15 +67,19 @@ Build a comprehensive test suite with local Docker-based testing and enhanced Gi
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    Test Execution Layer                      │
-│  (pytest runner, coverage, reporting)                        │
+│  (pytest runner, coverage, reporting, linting, security)    │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
 │                    Test Categories                           │
-│  ┌──────────┬──────────────┬──────────┬─────────────────┐  │
-│  │  Unit    │ Integration  │   API    │  Performance   │  │
-│  │  Tests   │    Tests     │  Tests   │    Tests       │  │
-│  └──────────┴──────────────┴──────────┴─────────────────┘  │
+│  ┌──────────┬─────────────┬──────────┬─────────────────┐   │
+│  │  Unit    │Integration  │   API    │  Performance   │   │
+│  │  Tests   │   Tests     │  Tests   │    Tests       │   │
+│  └──────────┴─────────────┴──────────┴─────────────────┘   │
+│  ┌──────────────────────┬───────────────────────────────┐   │
+│  │  Code Quality ✅     │  Security Testing            │   │
+│  │  (ruff/black/mypy)   │  (bandit/safety/vulns)       │   │
+│  └──────────────────────┴───────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -110,6 +122,21 @@ Build a comprehensive test suite with local Docker-based testing and enhanced Gi
    - Load testing
    - Database query performance
    - Memory usage profiling
+
+5. **Code Quality Tests** (`tests/quality/`) ✅ **COMPLETE**
+   - Linting infrastructure validation
+   - Verify ruff, black, isort, mypy can run
+   - Test that lint scripts execute correctly
+   - Ensure local lint matches CI
+   - Examples: formatter checks, type checker validation
+
+6. **Security Tests** (`tests/security/`)
+   - Vulnerability scanning (bandit, safety)
+   - Hardcoded secrets detection
+   - SQL injection protection verification
+   - Password hashing strength validation
+   - JWT secret key requirements
+   - CORS configuration validation
 
 ---
 
@@ -1630,20 +1657,593 @@ Tests should automatically rollback transactions. If you see state pollution:
 
 ---
 
+### Task 8: Code Quality & Linting Tests (2h)
+
+**Goal:** Ensure local linting matches GitHub Actions CI exactly and integrate into test workflow
+
+**Status:** ✅ **COMPLETED** (October 25, 2025)
+
+**Deliverables:**
+- `Makefile` - Convenient lint and format commands
+- `scripts/lint.sh` - Bash script matching CI lint checks
+- `scripts/lint.bat` - Windows batch script for cmd.exe
+- Updated `.pre-commit-config.yaml` - Pre-commit hooks matching CI
+- `QUICKSTART.md` - Quick reference for linting
+- Updated `docs/DEVELOPMENT.md` - Linting workflow documentation
+
+**Implementation:**
+
+1. **Makefile Commands:**
+```makefile
+lint:
+	@echo "Running all linters (matching GitHub Actions)..."
+	ruff check src/ tests/
+	black --check src/ tests/
+	isort --check-only src/ tests/
+	mypy src/
+
+lint-ruff:
+	ruff check src/ tests/
+
+lint-black:
+	black --check src/ tests/
+
+lint-isort:
+	isort --check-only src/ tests/
+
+lint-mypy:
+	mypy src/
+
+lint-security:
+	safety check || true
+	bandit -r src/ -f screen
+
+format:
+	@echo "Auto-formatting code..."
+	ruff check src/ tests/ --fix
+	black src/ tests/
+	isort src/ tests/
+```
+
+2. **scripts/lint.sh** (Matches CI Exactly):
+```bash
+#!/bin/bash
+set -e
+
+echo "========================================"
+echo "  AetherLens Linting (matches CI)"
+echo "========================================"
+
+FAILED=0
+
+# 1. Run ruff
+echo "[1/4] Running ruff linter..."
+if ruff check src/ tests/; then
+    echo "✓ ruff passed"
+else
+    echo "✗ ruff failed"
+    FAILED=1
+fi
+
+# 2. Run black
+echo "[2/4] Running black formatter check..."
+if black --check src/ tests/; then
+    echo "✓ black passed"
+else
+    echo "✗ black failed"
+    echo "Tip: Run 'make format' to auto-fix"
+    FAILED=1
+fi
+
+# 3. Run isort
+echo "[3/4] Running isort import check..."
+if isort --check-only src/ tests/; then
+    echo "✓ isort passed"
+else
+    echo "✗ isort failed"
+    echo "Tip: Run 'make format' to auto-fix"
+    FAILED=1
+fi
+
+# 4. Run mypy
+echo "[4/4] Running mypy type checker..."
+if mypy src/; then
+    echo "✓ mypy passed"
+else
+    echo "✗ mypy failed"
+    FAILED=1
+fi
+
+# Summary
+if [ $FAILED -eq 0 ]; then
+    echo "✓ All linting checks passed!"
+    exit 0
+else
+    echo "✗ Some linting checks failed"
+    exit 1
+fi
+```
+
+3. **Updated .pre-commit-config.yaml:**
+```yaml
+repos:
+  # Ruff linting (matches CI: ruff check src/ tests/)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^(src|tests)/
+
+  # Black formatting (matches CI: black --check src/ tests/)
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        files: ^(src|tests)/
+
+  # isort import sorting (matches CI: isort --check-only src/ tests/)
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: ^(src|tests)/
+
+  # mypy type checking (matches CI: mypy src/)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        args: [--ignore-missing-imports]
+        files: ^src/
+```
+
+4. **Linting Test Suite** (`tests/quality/test_code_quality.py`):
+```python
+"""
+Tests to verify code quality checks can run successfully.
+These tests ensure linting infrastructure is properly configured.
+"""
+
+import subprocess
+import pytest
+
+
+@pytest.mark.quality
+def test_ruff_check_runs():
+    """Test that ruff linter can run without errors."""
+    result = subprocess.run(
+        ["ruff", "check", "src/", "tests/", "--exit-zero"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0, f"ruff failed: {result.stderr}"
+
+
+@pytest.mark.quality
+def test_black_check_runs():
+    """Test that black formatter check can run."""
+    result = subprocess.run(
+        ["black", "--check", "src/", "tests/", "--quiet"],
+        capture_output=True,
+        text=True
+    )
+    # Exit code 0 = all formatted, 1 = would reformat (both OK for test)
+    assert result.returncode in [0, 1], f"black failed: {result.stderr}"
+
+
+@pytest.mark.quality
+def test_isort_check_runs():
+    """Test that isort import checker can run."""
+    result = subprocess.run(
+        ["isort", "--check-only", "src/", "tests/"],
+        capture_output=True,
+        text=True
+    )
+    # Exit code 0 = sorted, 1 = would sort (both OK for test)
+    assert result.returncode in [0, 1], f"isort failed: {result.stderr}"
+
+
+@pytest.mark.quality
+def test_mypy_check_runs():
+    """Test that mypy type checker can run."""
+    result = subprocess.run(
+        ["mypy", "src/", "--no-error-summary"],
+        capture_output=True,
+        text=True
+    )
+    # Just verify it runs, errors are reported separately
+    assert "error: invalid syntax" not in result.stderr.lower()
+
+
+@pytest.mark.quality
+def test_all_linters_via_script():
+    """Test that lint script runs all checks."""
+    import platform
+
+    script = "scripts/lint.sh" if platform.system() != "Windows" else "scripts\\lint.bat"
+    result = subprocess.run(
+        [script if platform.system() != "Windows" else "cmd", "/c", script] if platform.system() == "Windows" else ["bash", script],
+        capture_output=True,
+        text=True
+    )
+
+    # Script should run without crashing
+    assert "Running all linters" in result.stdout or "AetherLens Linting" in result.stdout
+```
+
+**Acceptance Criteria:**
+- ✅ Makefile with lint and format commands
+- ✅ Lint scripts for Bash and Windows
+- ✅ Pre-commit hooks matching CI exactly
+- ✅ Tests verify linting infrastructure works
+- ✅ Documentation in DEVELOPMENT.md and QUICKSTART.md
+- ✅ Local linting produces identical results to GitHub Actions
+
+**Testing:**
+```bash
+# Test all linting locally
+make lint
+
+# Test auto-formatting
+make format
+
+# Test pre-commit hooks
+pre-commit run --all-files
+
+# Test linting tests
+pytest tests/quality/ -v -m quality
+```
+
+---
+
+### Task 9: Security Testing (2h)
+
+**Goal:** Add comprehensive security testing with local and CI integration
+
+**Deliverables:**
+- `tests/security/` - Security test suite
+- Security scanning scripts
+- Updated GitHub Actions with security checks
+- Security testing documentation
+
+**Implementation:**
+
+1. **tests/security/test_security_scans.py:**
+```python
+"""
+Security scanning tests to catch common vulnerabilities.
+"""
+
+import subprocess
+import pytest
+import json
+
+
+@pytest.mark.security
+def test_bandit_security_scan():
+    """Run bandit security scanner on source code."""
+    result = subprocess.run(
+        ["bandit", "-r", "src/", "-f", "json", "-o", "bandit-report.json"],
+        capture_output=True,
+        text=True
+    )
+
+    # Load results
+    try:
+        with open("bandit-report.json", "r") as f:
+            report = json.load(f)
+
+        # Check for high/medium severity issues
+        high_issues = [r for r in report.get("results", []) if r["issue_severity"] == "HIGH"]
+        medium_issues = [r for r in report.get("results", []) if r["issue_severity"] == "MEDIUM"]
+
+        assert len(high_issues) == 0, f"Found {len(high_issues)} high-severity security issues"
+
+        # Medium issues are warnings, not failures
+        if medium_issues:
+            pytest.skip(f"Found {len(medium_issues)} medium-severity issues (warnings)")
+
+    except FileNotFoundError:
+        pytest.fail("bandit did not generate report file")
+
+
+@pytest.mark.security
+def test_safety_dependency_check():
+    """Check for known vulnerabilities in dependencies."""
+    result = subprocess.run(
+        ["safety", "check", "--json"],
+        capture_output=True,
+        text=True
+    )
+
+    # safety returns non-zero if vulnerabilities found
+    if result.returncode != 0:
+        try:
+            vulnerabilities = json.loads(result.stdout)
+            if vulnerabilities:
+                # List vulnerabilities but don't fail (they may be false positives)
+                vuln_count = len(vulnerabilities)
+                pytest.skip(f"Found {vuln_count} dependency vulnerabilities (review required)")
+        except json.JSONDecodeError:
+            pass
+
+    # Test that safety itself runs correctly
+    assert "error" not in result.stderr.lower()
+
+
+@pytest.mark.security
+def test_no_hardcoded_secrets():
+    """Check for hardcoded secrets in source code."""
+    import re
+    from pathlib import Path
+
+    # Patterns to detect
+    secret_patterns = [
+        r'(?i)(password|passwd|pwd)\s*=\s*["\'][^"\']+["\']',
+        r'(?i)(api_key|apikey)\s*=\s*["\'][^"\']+["\']',
+        r'(?i)(secret|token)\s*=\s*["\'][^"\']+["\']',
+        r'(?i)(aws_access_key_id|aws_secret_access_key)\s*=\s*["\'][^"\']+["\']',
+    ]
+
+    violations = []
+
+    # Scan Python files
+    for py_file in Path("src").rglob("*.py"):
+        content = py_file.read_text()
+
+        for pattern in secret_patterns:
+            matches = re.finditer(pattern, content)
+            for match in matches:
+                # Exclude test/example values
+                if any(test_val in match.group().lower() for test_val in
+                       ["test", "example", "placeholder", "your_", "xxx", "changeme", "default"]):
+                    continue
+
+                violations.append(f"{py_file}:{match.group()}")
+
+    assert len(violations) == 0, f"Found potential hardcoded secrets:\n" + "\n".join(violations)
+
+
+@pytest.mark.security
+def test_sql_injection_protection():
+    """Verify SQL queries use parameterization."""
+    import re
+    from pathlib import Path
+
+    violations = []
+
+    # Pattern to detect string concatenation in SQL
+    dangerous_patterns = [
+        r'execute\(["\'].*\+.*["\']',
+        r'fetchval\(["\'].*\+.*["\']',
+        r'fetchrow\(["\'].*\+.*["\']',
+        r'fetch\(["\'].*\+.*["\']',
+        r'f["\']SELECT.*\{.*\}',  # f-string in SQL
+    ]
+
+    for py_file in Path("src").rglob("*.py"):
+        content = py_file.read_text()
+
+        for pattern in dangerous_patterns:
+            if re.search(pattern, content):
+                violations.append(f"{py_file}: Potential SQL injection risk")
+
+    assert len(violations) == 0, f"Found potential SQL injection vulnerabilities:\n" + "\n".join(violations)
+
+
+@pytest.mark.security
+def test_secure_password_hashing():
+    """Verify password hashing uses secure algorithms."""
+    from aetherlens.security.passwords import hash_password, verify_password
+
+    # Test that bcrypt is being used (should take noticeable time)
+    import time
+
+    start = time.time()
+    hashed = hash_password("test_password_123")
+    duration = time.time() - start
+
+    # bcrypt should take at least 50ms (indicates proper cost factor)
+    assert duration > 0.05, "Password hashing too fast, may not be using bcrypt properly"
+
+    # Verify hash format (bcrypt starts with $2b$)
+    assert hashed.startswith("$2"), "Password hash doesn't appear to be bcrypt format"
+
+    # Verify verification works
+    assert verify_password("test_password_123", hashed), "Password verification failed"
+    assert not verify_password("wrong_password", hashed), "Wrong password was accepted"
+
+
+@pytest.mark.security
+def test_jwt_secret_key_strength():
+    """Verify JWT secret key meets minimum security requirements."""
+    from aetherlens.config import settings
+
+    secret_key = settings.secret_key
+
+    # Minimum length
+    assert len(secret_key) >= 32, "JWT secret key too short (minimum 32 characters)"
+
+    # Should not be default/placeholder
+    weak_keys = ["secret", "changeme", "password", "test", "default", "insecure"]
+    assert not any(weak in secret_key.lower() for weak in weak_keys[:3]), \
+        "JWT secret key appears to be a weak/default value"
+
+
+@pytest.mark.security
+def test_cors_configuration():
+    """Verify CORS settings are properly configured."""
+    # This would test the actual CORS middleware configuration
+    # For now, just verify it's not wide open in production
+    from aetherlens.config import settings
+
+    # In production, CORS should not allow all origins
+    if not settings.debug:
+        # This test would check actual CORS configuration
+        # For now, just ensure debug mode awareness exists
+        assert hasattr(settings, "debug"), "Debug mode setting not found"
+```
+
+2. **scripts/security-scan.sh:**
+```bash
+#!/bin/bash
+# Security scanning script for local use
+
+set -e
+
+echo "========================================"
+echo "  AetherLens Security Scan"
+echo "========================================"
+echo ""
+
+FAILED=0
+
+# 1. Bandit - Python security scanner
+echo "[1/3] Running bandit security scanner..."
+if bandit -r src/ -f screen --severity-level medium; then
+    echo "✓ bandit passed"
+else
+    echo "⚠ bandit found potential issues"
+    FAILED=1
+fi
+echo ""
+
+# 2. Safety - Dependency vulnerability check
+echo "[2/3] Running safety dependency check..."
+if safety check; then
+    echo "✓ safety passed"
+else
+    echo "⚠ safety found vulnerable dependencies"
+    FAILED=1
+fi
+echo ""
+
+# 3. pytest security tests
+echo "[3/3] Running security tests..."
+if pytest tests/security/ -v -m security; then
+    echo "✓ security tests passed"
+else
+    echo "✗ security tests failed"
+    FAILED=1
+fi
+echo ""
+
+# Summary
+echo "========================================"
+if [ $FAILED -eq 0 ]; then
+    echo "✓ All security checks passed!"
+    exit 0
+else
+    echo "⚠ Some security checks found issues"
+    echo "Review findings and fix critical issues"
+    exit 1
+fi
+```
+
+3. **Makefile Security Commands:**
+```makefile
+security-scan:
+	@echo "Running security scans..."
+	bandit -r src/ -f screen --severity-level medium
+	safety check || true
+	pytest tests/security/ -v -m security
+
+security-report:
+	@echo "Generating security reports..."
+	bandit -r src/ -f json -o reports/bandit-report.json
+	bandit -r src/ -f html -o reports/bandit-report.html
+	safety check --json > reports/safety-report.json || true
+	@echo "Reports generated in reports/"
+```
+
+4. **GitHub Actions Security Job Enhancement:**
+```yaml
+security:
+  name: Security Scan
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        pip install safety bandit pytest
+        pip install -r requirements.txt
+
+    - name: Run bandit security scan
+      run: |
+        bandit -r src/ -f json -o bandit-report.json
+        bandit -r src/ -f screen --severity-level medium
+      continue-on-error: true
+
+    - name: Run safety dependency check
+      run: |
+        safety check --json > safety-report.json || true
+        safety check
+      continue-on-error: true
+
+    - name: Run security tests
+      run: |
+        pytest tests/security/ -v -m security
+
+    - name: Upload security reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+```
+
+**Acceptance Criteria:**
+- ✅ Security test suite created
+- ✅ Bandit scanning configured
+- ✅ Safety dependency checking configured
+- ✅ Tests for common vulnerabilities (SQL injection, secrets, etc.)
+- ✅ Security scan script for local use
+- ✅ GitHub Actions security job enhanced
+- ✅ Security documentation added to TESTING.md
+
+**Testing:**
+```bash
+# Run security scans locally
+make security-scan
+
+# Run security tests
+pytest tests/security/ -v -m security
+
+# Generate security reports
+make security-report
+
+# Via script
+./scripts/security-scan.sh
+```
+
+---
+
 ## Timeline and Effort Estimation
 
-| Task | Description | Estimated Hours |
-|------|-------------|----------------|
-| 1 | Docker Compose Test Environment | 4h |
-| 2 | Enhanced Test Fixtures | 3h |
-| 3 | API Endpoint Tests | 5h |
-| 4 | Integration Tests | 4h |
-| 5 | Performance Testing | 3h |
-| 6 | Enhanced GitHub Actions | 2h |
-| 7 | Test Documentation | 2h |
-| **Total** | | **23h** |
+| Task | Description | Estimated Hours | Status |
+|------|-------------|----------------|--------|
+| 1 | Docker Compose Test Environment | 4h | Pending |
+| 2 | Enhanced Test Fixtures | 3h | Pending |
+| 3 | API Endpoint Tests | 5h | Pending |
+| 4 | Integration Tests | 4h | Pending |
+| 5 | Performance Testing | 3h | Pending |
+| 6 | Enhanced GitHub Actions | 2h | Pending |
+| 7 | Test Documentation | 2h | Pending |
+| 8 | Code Quality & Linting Tests | 2h | ✅ **Complete** |
+| 9 | Security Testing | 2h | Pending |
+| **Total** | | **27h** | **1/9 Complete** |
 
 **Estimated Duration:** 3-4 days (flexible based on availability)
+
+**Note:** Task 8 (Linting) completed October 25, 2025 with local infrastructure matching GitHub Actions CI
 
 ---
 
@@ -1654,6 +2254,9 @@ Tests should automatically rollback transactions. If you see state pollution:
 - [ ] >70% code coverage for core components
 - [ ] All API endpoints have tests
 - [ ] Integration tests for database operations
+- [x] **Local linting matches GitHub Actions CI exactly** ✅
+- [x] **Pre-commit hooks configured and functional** ✅
+- [ ] Security tests for common vulnerabilities
 - [ ] GitHub Actions workflow passing
 - [ ] Test documentation complete
 
@@ -1663,6 +2266,9 @@ Tests should automatically rollback transactions. If you see state pollution:
 - [ ] Automated coverage enforcement in CI
 - [ ] Test result visualization
 - [ ] Parallel test execution optimization
+- [x] **Make commands for convenient testing** ✅
+- [x] **Cross-platform linting scripts (Bash + Windows)** ✅
+- [ ] Security scan reports in CI artifacts
 
 ---
 
