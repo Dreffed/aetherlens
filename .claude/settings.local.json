@@ -31,7 +31,8 @@
       "Bash(curl:*)",
       "Bash(./venv/Scripts/pip:*)",
       "Bash(./venv/Scripts/mdformat:*)",
-      "Read(//d/**)"
+      "Read(//d/**)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
