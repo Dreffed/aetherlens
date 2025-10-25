@@ -371,26 +371,51 @@ Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Setup
 
+**Quick Start:**
 ```bash
-# Clone repository
+# Clone and setup
 git clone https://github.com/aetherlens/home.git
-cd home
+cd aetherlens
+python -m venv venv
+source venv/bin/activate  # Windows: .\venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
-npm install
+pip install -r requirements-dev.txt
+pip install -e .
 
-# Start development environment
-docker-compose -f docker-compose.dev.yml up -d
+# Install pre-commit hooks (prevents CI failures)
+pip install pre-commit
+pre-commit install
 
-# Run tests
-pytest tests/
-npm test
-
-# Start development server
-python -m aetherlens.server --dev
-npm run dev
+# Verify setup
+./venv/Scripts/ruff check src/ tests/
+./venv/Scripts/black --check src/ tests/
+./venv/Scripts/pytest tests/unit/ -v
 ```
+
+**Before Every Commit/Push:**
+```bash
+# Run linting (matches GitHub Actions CI exactly)
+./venv/Scripts/ruff check src/ tests/
+./venv/Scripts/black --check src/ tests/
+./venv/Scripts/isort --check-only src/ tests/
+./venv/Scripts/mypy src/
+
+# Or use Make (Linux/Mac):
+make lint
+
+# Auto-fix formatting issues:
+./venv/Scripts/black src/ tests/
+./venv/Scripts/isort src/ tests/
+# Or: make format
+```
+
+**📚 Full Documentation:**
+- **[QUICKSTART.md](QUICKSTART.md)** - Get started in 5 minutes
+- **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)** - Complete development guide
+- **[docs/TESTING.md](docs/TESTING.md)** - Testing documentation
+- **[docs/API.md](docs/API.md)** - API reference
+- **[CLAUDE.md](CLAUDE.md)** - AI-assisted development guidelines
 
 ### Top Contributors
 
