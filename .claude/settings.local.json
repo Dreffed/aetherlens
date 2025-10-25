@@ -22,7 +22,8 @@
       "Bash(chmod:*)",
       "Bash(bash scripts/lint.sh:*)",
       "Bash(./venv/Scripts/ruff check:*)",
-      "Bash(./venv/Scripts/black:*)"
+      "Bash(./venv/Scripts/black:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

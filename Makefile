@@ -109,10 +109,20 @@ test-api:
 test-performance:
 	pytest tests/performance/ -v -m performance
 
+test-security:
+	pytest tests/security/ -v -m security
+
+test-quality:
+	pytest tests/quality/ -v -m quality
+
 test-coverage:
 	pytest tests/ -v --cov=src/aetherlens --cov-report=html --cov-report=term
 	@echo ""
 	@echo "Coverage report generated in htmlcov/index.html"
+
+test-all:
+	@echo "Running all test categories..."
+	pytest tests/ -v --cov=src/aetherlens --cov-report=html -m "not performance"
 
 # Docker-based testing
 docker-test:

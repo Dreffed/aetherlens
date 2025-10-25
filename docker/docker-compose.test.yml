@@ -1,0 +1,75 @@
+version: '3.8'
+
+# Docker Compose configuration for testing environment
+# This setup matches GitHub Actions CI services exactly
+
+services:
+  # TimescaleDB test database
+  db-test:
+    image: timescale/timescaledb:latest-pg15
+    container_name: aetherlens-test-db
+    environment:
+      POSTGRES_DB: aetherlens_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test_password
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts with dev/prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      # Mount init scripts for TimescaleDB setup
+      - ../migrations/init:/docker-entrypoint-initdb.d:ro
+      # Persist test data (optional, can be removed for clean state)
+      - aetherlens-test-db-data:/var/lib/postgresql/data
+    networks:
+      - aetherlens-test-network
+
+  # Redis test cache
+  redis-test:
+    image: redis:7-alpine
+    container_name: aetherlens-test-redis
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - aetherlens-test-network
+
+  # AetherLens API test instance (optional - for E2E testing)
+  api-test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: aetherlens-test-api
+    depends_on:
+      db-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:test_password@db-test:5432/aetherlens_test
+      REDIS_URL: redis://redis-test:6379/0
+      SECRET_KEY: test_secret_key_minimum_32_characters_long_for_testing_only
+      AETHERLENS_LOG_LEVEL: debug
+      DEBUG: "true"
+    ports:
+      - "8001:8000"
+    networks:
+      - aetherlens-test-network
+    profiles:
+      - e2e  # Only start when explicitly requested
+
+volumes:
+  aetherlens-test-db-data:
+    name: aetherlens-test-db-data
+
+networks:
+  aetherlens-test-network:
+    name: aetherlens-test-network
+    driver: bridge
