@@ -19,7 +19,7 @@ services:
       - TZ=America/New_York
       - DATABASE_URL=postgresql://postgres:aetherlens_pass@timescaledb:5432/aetherlens
       - REDIS_URL=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY:-CHANGE_ME_INSECURE_DEFAULT}
+      - SECRET_KEY=${SECRET_KEY:-INSECURE_DEFAULT_CHANGE_ME_MUST_BE_32_CHARS_OR_MORE}
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - DEBUG=${DEBUG:-false}
     depends_on:
