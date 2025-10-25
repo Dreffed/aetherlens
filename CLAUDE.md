@@ -2,7 +2,9 @@
 
 ## Project Context
 
-**AetherLens Home Edition** is an open-source cost and usage monitoring platform for home labs, smart homes, IoT devices, and personal cloud services. This document provides context and guidelines for AI assistants (particularly Claude and other LLMs) when contributing to this project.
+**AetherLens Home Edition** is an open-source cost and usage monitoring platform for home labs, smart homes, IoT
+devices, and personal cloud services. This document provides context and guidelines for AI assistants (particularly
+Claude and other LLMs) when contributing to this project.
 
 ## Project Philosophy
 
@@ -11,21 +13,23 @@
 - **Security First**: Defense in depth, encrypted credentials, minimal attack surface
 - **Simplicity Over Features**: Start minimal, iterate based on real user needs
 - **Plugin-Driven**: Core is minimal; functionality comes from community plugins
-- **Resource-Efficient**: Must run on Raspberry Pi 4 or equivalent (<2GB RAM)
+- **Resource-Efficient**: Must run on Raspberry Pi 4 or equivalent (\<2GB RAM)
 - **Observable**: Comprehensive logging and metrics for debugging
 - **Learning Platform**: Great for showcasing full-stack engineering skills
 
 ## Target Audience
 
 ### Primary Users
+
 - **Home Lab Enthusiasts** - Running Proxmox, TrueNAS, or Kubernetes clusters
-- **Smart Home Power Users** - Complex Home Assistant or Node-RED setups  
+- **Smart Home Power Users** - Complex Home Assistant or Node-RED setups
 - **Self-Hosters** - Managing their own services (Nextcloud, Plex, etc.)
 - **Crypto Miners** - Tracking profitability vs. electricity costs
 - **Solar Power Owners** - Optimizing self-consumption
 - **Remote Workers** - Managing home office expenses
 
 ### Secondary Users
+
 - **Small Businesses** - Single-location monitoring
 - **Apartment Dwellers** - Understanding energy costs
 - **Students** - Learning about energy efficiency
@@ -35,17 +39,20 @@
 ### Language Preferences
 
 **Core Engine**: Python 3.11+ (FastAPI)
+
 - Prioritize readability and AI-assisted development
 - Use type hints extensively
 - Async/await for all I/O operations
 - Optimize hot paths in Rust only when profiling shows bottlenecks
 
 **Plugin SDK**: Python (primary)
+
 - Focus on single language for v1.0
 - Go/Rust/TypeScript support in future phases
 - Keep plugin API simple and well-documented
 
 **Frontend**: TypeScript + React 18+
+
 - Vite for build tooling
 - Tailwind CSS for styling
 - Recharts for data visualization
@@ -139,6 +146,7 @@ raise Exception("Connection failed")
 ```
 
 Never use bare `except:` clauses:
+
 ```python
 # ✅ Good
 try:
@@ -168,14 +176,15 @@ Device/Service → Plugin → Collector → Processor → Storage → API → UI
 ```
 
 1. **Collection**: Plugins gather metrics from devices/services
-2. **Processing**: Normalize, enrich, and calculate derived metrics
-3. **Storage**: Persist to TimescaleDB with retention policies
-4. **Serving**: API layer serves processed data
-5. **Consumption**: UI, mobile app, Grafana, Home Assistant, etc.
+1. **Processing**: Normalize, enrich, and calculate derived metrics
+1. **Storage**: Persist to TimescaleDB with retention policies
+1. **Serving**: API layer serves processed data
+1. **Consumption**: UI, mobile app, Grafana, Home Assistant, etc.
 
 ### Plugin Architecture
 
 **Key Principles:**
+
 - Plugins run in isolated processes (security)
 - Simple HTTP API for communication (no gRPC complexity in v1.0)
 - Plugin crashes don't affect core or other plugins
@@ -207,6 +216,7 @@ class BasePlugin(ABC):
 ### Security Requirements
 
 **Non-Negotiable:**
+
 - All external connections use TLS/HTTPS
 - Credentials stored in platform keyring (encrypted)
 - JWT tokens for API authentication
@@ -215,6 +225,7 @@ class BasePlugin(ABC):
 - Rate limiting on API endpoints
 
 **Best Practices:**
+
 ```python
 # Store credentials securely
 import keyring
@@ -397,12 +408,13 @@ def calculate_energy_cost(
 ### API Documentation
 
 All API endpoints must have:
+
 - Clear description
 - Request/response examples
 - Error responses
 - Rate limits (if applicable)
 
-```python
+````python
 @app.get("/api/v1/devices/{device_id}/metrics", 
          response_model=MetricsResponse,
          summary="Get device metrics")
@@ -447,7 +459,7 @@ async def get_device_metrics(
     - 429: Rate limit exceeded
     """
     ...
-```
+````
 
 ## Common Patterns
 
@@ -589,26 +601,26 @@ class CircuitBreaker:
 ### Feature Development
 
 1. **Create Issue** - Describe the feature with user stories
-2. **Write Tests First** (TDD) - Define expected behavior
-3. **Implement Minimal Solution** - Make tests pass
-4. **Refactor for Clarity** - Improve code quality
-5. **Update Documentation** - API docs, README, examples
-6. **Submit PR** - With tests passing and docs updated
+1. **Write Tests First** (TDD) - Define expected behavior
+1. **Implement Minimal Solution** - Make tests pass
+1. **Refactor for Clarity** - Improve code quality
+1. **Update Documentation** - API docs, README, examples
+1. **Submit PR** - With tests passing and docs updated
 
 ### Bug Fixes
 
 1. **Write Test Reproducing Bug** - Proves the bug exists
-2. **Fix Bug** - Minimal changes to make test pass
-3. **Verify No Regression** - Run full test suite
-4. **Update CHANGELOG** - Document the fix
+1. **Fix Bug** - Minimal changes to make test pass
+1. **Verify No Regression** - Run full test suite
+1. **Update CHANGELOG** - Document the fix
 
 ### Plugin Development
 
 1. **Use Plugin Template** - Start with example plugin
-2. **Implement Required Methods** - `collect_metrics()` at minimum
-3. **Add Configuration Schema** - Define in `plugin.yaml`
-4. **Write Tests** - Unit tests for plugin logic
-5. **Document in README** - Installation and configuration
+1. **Implement Required Methods** - `collect_metrics()` at minimum
+1. **Add Configuration Schema** - Define in `plugin.yaml`
+1. **Write Tests** - Unit tests for plugin logic
+1. **Document in README** - Installation and configuration
 
 ## Performance Guidelines
 
@@ -740,10 +752,11 @@ with collection_duration.labels(plugin='shelly').time():
 
 ### Issue: High Memory Usage
 
-**Symptoms:** Memory usage growing over time  
+**Symptoms:** Memory usage growing over time\
 **Causes:** Memory leaks, unbounded caches, retained references
 
 **Solutions:**
+
 ```python
 # Check for memory leaks
 import tracemalloc
@@ -771,6 +784,7 @@ gc.collect()  # Force garbage collection
 **Symptoms:** Plugin repeatedly failing, high error rates
 
 **Solutions:**
+
 ```python
 # Add health checks
 class PluginHealthMonitor:
@@ -800,6 +814,7 @@ class PluginHealthMonitor:
 **Symptoms:** API latency >1 second
 
 **Solutions:**
+
 ```python
 # Profile slow endpoints
 import time
@@ -830,13 +845,13 @@ async def get_current_metrics():
 ## Questions to Ask When Developing
 
 1. **Will this run on a Raspberry Pi?** (Memory/CPU constraints)
-2. **Is this the simplest solution?** (Avoid over-engineering)
-3. **What happens when the network fails?** (Graceful degradation)
-4. **How does this impact privacy?** (Local-first principle)
-5. **Is the error message actionable?** (Help users fix issues)
-6. **Can this be unit tested?** (Testability)
-7. **Will users understand this configuration?** (Usability)
-8. **Is there a security risk?** (Defense in depth)
+1. **Is this the simplest solution?** (Avoid over-engineering)
+1. **What happens when the network fails?** (Graceful degradation)
+1. **How does this impact privacy?** (Local-first principle)
+1. **Is the error message actionable?** (Help users fix issues)
+1. **Can this be unit tested?** (Testability)
+1. **Will users understand this configuration?** (Usability)
+1. **Is there a security risk?** (Defense in depth)
 
 ## Red Flags to Avoid
 
@@ -890,14 +905,15 @@ When generating code for this project, ensure:
 This is a **learning platform** and **community project**:
 
 1. **Teach Through Code** - Write exemplary code that others can learn from
-2. **Document Decisions** - Explain why, not just what
-3. **Welcome Contributions** - Make it easy for newcomers to contribute
-4. **Iterate Quickly** - Ship working code, refactor later
-5. **Listen to Users** - Build what people actually need
-6. **Stay Humble** - There's always a better way
+1. **Document Decisions** - Explain why, not just what
+1. **Welcome Contributions** - Make it easy for newcomers to contribute
+1. **Iterate Quickly** - Ship working code, refactor later
+1. **Listen to Users** - Build what people actually need
+1. **Stay Humble** - There's always a better way
 
 Remember: **Every line of code should reflect our values of privacy, security, simplicity, and community.**
 
----
+______________________________________________________________________
 
-**This document is a living guide.** Update it as patterns emerge and lessons are learned. When in doubt, ask the community on Discord or GitHub Discussions.
+**This document is a living guide.** Update it as patterns emerge and lessons are learned. When in doubt, ask the
+community on Discord or GitHub Discussions.

@@ -16,6 +16,7 @@ Get AetherLens running with Docker in minutes!
 **IMPORTANT:** You MUST generate a secure SECRET_KEY before starting the containers.
 
 **Linux/macOS:**
+
 ```bash
 # Generate and create .env file automatically
 python scripts/generate-secret-key.py --env
@@ -25,6 +26,7 @@ python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 # Generate and create .env file automatically
 python scripts\generate-secret-key.py --env
@@ -34,6 +36,7 @@ python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
 **Windows (Command Prompt):**
+
 ```cmd
 REM Generate and create .env file automatically
 scripts\generate-secret-key.bat --env
@@ -66,6 +69,7 @@ http://localhost:8080/api/v1/health
 ```
 
 You should see output like:
+
 ```json
 {
   "status": "healthy",
@@ -83,18 +87,19 @@ You should see output like:
 
 After `docker-compose up -d`, you'll have:
 
-| Service | Port | Description |
-|---------|------|-------------|
-| **AetherLens API** | 8080 | Main application and web UI |
-| **Prometheus Metrics** | 9090 | Metrics endpoint |
-| **TimescaleDB** | 5432 | Time-series database |
-| **Redis** | 6379 | Caching and session storage |
+| Service                | Port | Description                 |
+| ---------------------- | ---- | --------------------------- |
+| **AetherLens API**     | 8080 | Main application and web UI |
+| **Prometheus Metrics** | 9090 | Metrics endpoint            |
+| **TimescaleDB**        | 5432 | Time-series database        |
+| **Redis**              | 6379 | Caching and session storage |
 
 ## Common Issues
 
 ### Issue: Container keeps restarting
 
 **Symptom:**
+
 ```bash
 $ docker-compose ps
 NAME                STATUS
@@ -104,6 +109,7 @@ aetherlens          Restarting (1)
 **Cause:** SECRET_KEY is too short (must be ≥32 characters)
 
 **Solution:**
+
 ```bash
 # Generate a new secret key
 python scripts/generate-secret-key.py --env --force
@@ -113,6 +119,7 @@ docker-compose restart
 ```
 
 **Check logs:**
+
 ```bash
 docker logs aetherlens
 ```
@@ -122,6 +129,7 @@ docker logs aetherlens
 **Symptom:** Logs show "could not connect to database"
 
 **Solution:**
+
 ```bash
 # Wait for database to be fully ready (can take 30-40 seconds)
 docker-compose logs timescaledb
@@ -137,6 +145,7 @@ docker-compose restart aetherlens
 **Symptom:** "port is already allocated"
 
 **Solution:**
+
 ```bash
 # Check what's using the port
 netstat -ano | grep :8080  # Linux/macOS
@@ -153,6 +162,7 @@ netstat -ano | findstr :8080  # Windows
 **Symptom:** Database or logs filling disk
 
 **Solution:**
+
 ```bash
 # View disk usage
 docker system df
@@ -351,10 +361,10 @@ docker stats
 ## Next Steps
 
 1. **Configure Devices** - Add your devices and sensors
-2. **Set Up Integrations** - Connect cloud accounts (Azure, AWS, etc.)
-3. **Install Plugins** - Add support for Shelly, Tasmota, Home Assistant
-4. **Configure Alerts** - Set up cost/usage notifications
-5. **Explore API** - Visit http://localhost:8080/docs
+1. **Set Up Integrations** - Connect cloud accounts (Azure, AWS, etc.)
+1. **Install Plugins** - Add support for Shelly, Tasmota, Home Assistant
+1. **Configure Alerts** - Set up cost/usage notifications
+1. **Explore API** - Visit http://localhost:8080/docs
 
 ## Getting Help
 
@@ -384,6 +394,6 @@ docker volume prune
 docker-compose up -d
 ```
 
----
+______________________________________________________________________
 
 **Need more help?** Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) or ask in GitHub Discussions!

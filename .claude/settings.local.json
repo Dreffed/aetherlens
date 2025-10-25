@@ -28,7 +28,10 @@
       "Bash(pip --version:*)",
       "Bash(docker-compose:*)",
       "Bash(python scripts/generate-secret-key.py:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(./venv/Scripts/pip:*)",
+      "Bash(./venv/Scripts/mdformat:*)",
+      "Read(//d/**)"
     ],
     "deny": [],
     "ask": []

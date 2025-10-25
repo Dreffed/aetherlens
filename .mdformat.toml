@@ -1,0 +1,11 @@
+# Markdown Formatting Configuration for AetherLens
+# Uses mdformat with GitHub Flavored Markdown extensions
+
+# Wrap text at this column (0 = no wrap)
+wrap = 120
+
+# Number ordered list items
+number = false
+
+# End files with newline
+end_of_line = "lf"

@@ -1,7 +1,7 @@
 # AetherLens Makefile
 # Provides convenient commands for development, testing, and linting
 
-.PHONY: help install install-dev lint format test test-unit test-integration test-api test-performance test-coverage clean docker-test pre-commit-install
+.PHONY: help install install-dev lint format lint-md format-md test test-unit test-integration test-api test-performance test-coverage clean docker-test pre-commit-install
 
 # Default target
 help:
@@ -21,6 +21,10 @@ help:
 	@echo "  make lint-isort           Check isort import ordering"
 	@echo "  make lint-mypy            Run mypy type checking"
 	@echo "  make lint-security        Run security checks (bandit, safety)"
+	@echo ""
+	@echo "Documentation:"
+	@echo "  make format-md            Format all markdown files"
+	@echo "  make lint-md              Check markdown formatting"
 	@echo ""
 	@echo "Testing:"
 	@echo "  make test                 Run all tests"
@@ -92,6 +96,16 @@ format:
 	black src/ tests/
 	isort src/ tests/
 	@echo "✓ Code formatted!"
+
+# Markdown Formatting
+format-md:
+	@echo "Formatting markdown files..."
+	mdformat plans/ docs/ *.md
+	@echo "✓ Markdown formatted!"
+
+lint-md:
+	@echo "Checking markdown formatting..."
+	mdformat --check plans/ docs/ *.md
 
 # Testing
 test:

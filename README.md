@@ -1,6 +1,7 @@
 # 🔭 AetherLens Home Edition
 
-> **See Through Your Digital Energy Cloud** - Open-source cost and usage monitoring for smart homes, IoT devices, and personal cloud services.
+> **See Through Your Digital Energy Cloud** - Open-source cost and usage monitoring for smart homes, IoT devices, and
+> personal cloud services.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Discord](https://img.shields.io/discord/placeholder?color=7289da&logo=discord&logoColor=white)](https://discord.gg/aetherlens)
@@ -9,7 +10,9 @@
 
 ## 🏠 What is AetherLens?
 
-AetherLens brings enterprise-grade cost monitoring and optimization to your home lab. Track every watt, every API call, and every penny across your entire digital footprint - from smart plugs to cloud services. Built by the home lab community, for the home lab community.
+AetherLens brings enterprise-grade cost monitoring and optimization to your home lab. Track every watt, every API call,
+and every penny across your entire digital footprint - from smart plugs to cloud services. Built by the home lab
+community, for the home lab community.
 
 ### 🎯 Perfect For
 
@@ -24,6 +27,7 @@ AetherLens brings enterprise-grade cost monitoring and optimization to your home
 ## ✨ Key Features
 
 ### 📊 Unified Cost Dashboard
+
 - **Real-time monitoring** of power consumption across all devices
 - **Historical trends** and usage patterns with customizable time ranges
 - **Cost breakdowns** by device, room, category, or cloud service
@@ -33,20 +37,24 @@ AetherLens brings enterprise-grade cost monitoring and optimization to your home
 ### 🔌 Extensive Integrations
 
 **Smart Home Devices:**
+
 - Smart Plugs: TP-Link Kasa, Shelly, Tasmota, Zigbee devices
 - Energy Monitors: Emporia Vue, Sense, IoTaWatt, CurrentCost
 - Home Automation: Home Assistant, Hubitat, SmartThings, openHAB
 
 **Solar & Battery Systems:**
+
 - Inverters: Tesla Powerwall, Enphase, SolarEdge, Fronius, SMA
 - Battery Management: LG Chem, Sonnen, BYD
 
 **Cloud Services:**
+
 - AWS Cost Explorer API (personal accounts)
 - Azure Cost Management API
 - Google Cloud Billing API
 
 **Crypto Mining:**
+
 - Mining Pools: NiceHash, Ethermine, F2Pool
 - Mining Management: HiveOS, Awesome Miner
 
@@ -132,17 +140,18 @@ open http://localhost:8080
 ### Home Assistant Add-on
 
 1. Add the AetherLens repository to your Home Assistant:
+
    ```
    https://github.com/aetherlens/home-assistant-addon
    ```
 
-2. Navigate to **Settings → Add-ons → Add-on Store**
+1. Navigate to **Settings → Add-ons → Add-on Store**
 
-3. Search for **AetherLens** and click **Install**
+1. Search for **AetherLens** and click **Install**
 
-4. Configure the add-on and click **Start**
+1. Configure the add-on and click **Start**
 
-5. Access via the Home Assistant sidebar
+1. Access via the Home Assistant sidebar
 
 ## 📖 Configuration Example
 
@@ -321,6 +330,7 @@ PLUGIN_CLASS = MyDevicePlugin
 ## 🛣️ Roadmap
 
 ### Phase 1 - Foundation ✅ (Q1 2025)
+
 - [x] Core architecture and plugin system
 - [x] TimescaleDB integration with retention policies
 - [x] Docker deployment with docker-compose
@@ -330,6 +340,7 @@ PLUGIN_CLASS = MyDevicePlugin
 - [x] Basic cost calculations and time-of-use rates
 
 ### Phase 2 - Intelligence 🚧 (Q2 2025)
+
 - [ ] Machine learning cost predictions
 - [ ] Automated optimization recommendations
 - [ ] Anomaly detection algorithms
@@ -339,6 +350,7 @@ PLUGIN_CLASS = MyDevicePlugin
 - [ ] Solar production and net metering support
 
 ### Phase 3 - Ecosystem 📋 (Q3 2025)
+
 - [ ] Plugin marketplace and registry
 - [ ] Optional cloud sync (E2E encrypted)
 - [ ] Multi-home/site support
@@ -348,6 +360,7 @@ PLUGIN_CLASS = MyDevicePlugin
 - [ ] Advanced carbon footprint calculations
 
 ### Phase 4 - Advanced Features 📋 (Q4 2025)
+
 - [ ] Distributed deployment for large installations
 - [ ] Neo4j integration for complex relationship queries
 - [ ] Custom alert scripting (Python/Lua)
@@ -360,6 +373,7 @@ PLUGIN_CLASS = MyDevicePlugin
 ## 🤝 Contributing
 
 We love contributions! Whether it's:
+
 - 🐛 Bug reports and feature requests
 - 🔌 New device plugins
 - 📖 Documentation improvements
@@ -372,6 +386,7 @@ Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 ### Development Setup
 
 **Quick Start:**
+
 ```bash
 # Clone and setup
 git clone https://github.com/aetherlens/home.git
@@ -394,6 +409,7 @@ pre-commit install
 ```
 
 **Before Every Commit/Push:**
+
 ```bash
 # Run linting (matches GitHub Actions CI exactly)
 ./venv/Scripts/ruff check src/ tests/
@@ -411,6 +427,7 @@ make lint
 ```
 
 **📚 Full Documentation:**
+
 - **[QUICKSTART.md](QUICKSTART.md)** - Get started in 5 minutes
 - **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)** - Complete development guide
 - **[docs/TESTING.md](docs/TESTING.md)** - Testing documentation
@@ -433,13 +450,17 @@ make lint
 
 ## 🏆 Success Stories
 
-> "Cut my electricity bill by 30% after identifying vampire loads I never knew existed. The time-of-use optimizer alone saved me $40/month!" - *@homelab_hero*
+> "Cut my electricity bill by 30% after identifying vampire loads I never knew existed. The time-of-use optimizer alone
+> saved me $40/month!" - *@homelab_hero*
 
-> "Finally understand what my solar panels are actually saving me. The production vs. consumption dashboard is exactly what I needed." - *@solar_saver*
+> "Finally understand what my solar panels are actually saving me. The production vs. consumption dashboard is exactly
+> what I needed." - *@solar_saver*
 
-> "The Home Assistant integration is flawless. Seeing all my device costs in one place changed how I think about my smart home." - *@smart_home_sam*
+> "The Home Assistant integration is flawless. Seeing all my device costs in one place changed how I think about my
+> smart home." - *@smart_home_sam*
 
-> "Discovered my crypto mining rig was costing more in electricity than it was earning. Made the decision to shut it down based on real data." - *@crypto_realist*
+> "Discovered my crypto mining rig was costing more in electricity than it was earning. Made the decision to shut it
+> down based on real data." - *@crypto_realist*
 
 ## 📊 Community Stats
 
@@ -452,6 +473,7 @@ make lint
 ## 🛡️ Security
 
 Security is our top priority:
+
 - All credentials stored encrypted using platform keyring
 - Optional encryption at rest for time-series data
 - Regular dependency scanning with Dependabot
@@ -466,17 +488,20 @@ See [SECURITY.md](SECURITY.md) for our complete security policy.
 AetherLens Home Edition is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 This means you can:
+
 - ✅ Use commercially
 - ✅ Modify and distribute
 - ✅ Use privately
 - ✅ Sublicense
 
 You must:
+
 - 📄 Include the license and copyright notice
 
 ## 🙏 Acknowledgments
 
 Built with amazing open-source projects:
+
 - [TimescaleDB](https://github.com/timescale/timescaledb) - Time-series data storage
 - [FastAPI](https://github.com/tiangolo/fastapi) - High-performance API framework
 - [React](https://github.com/facebook/react) - UI framework
@@ -501,7 +526,7 @@ Special thanks to all our [plugin contributors](CONTRIBUTORS.md)!
 [![Docker Image Size](https://img.shields.io/docker/image-size/aetherlens/home/latest)](https://hub.docker.com/r/aetherlens/home)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://docs.aetherlens.io)
 
----
+______________________________________________________________________
 
 <div align="center">
   <b>⚡ Every Watt Counts - From Home to Cloud ⚡</b>

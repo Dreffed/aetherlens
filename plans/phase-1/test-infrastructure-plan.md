@@ -1,12 +1,9 @@
 # Test Infrastructure Plan
 
-**Created:** October 25, 2025
-**Status:** ✅ **COMPLETED** (October 25, 2025)
-**Priority:** High
-**Estimated Duration:** 27 hours (planned) / ~25 hours (actual)
-**Completion:** 100% (9/9 tasks complete)
+**Created:** October 25, 2025 **Status:** ✅ **COMPLETED** (October 25, 2025) **Priority:** High **Estimated Duration:**
+27 hours (planned) / ~25 hours (actual) **Completion:** 100% (9/9 tasks complete)
 
----
+______________________________________________________________________
 
 ## ✅ Completion Summary
 
@@ -15,14 +12,14 @@
 ### What Was Delivered
 
 1. **Docker Test Environment** - Isolated testing with TimescaleDB and Redis
-2. **Enhanced Test Fixtures** - Comprehensive fixtures for all test types (461 lines)
-3. **API Endpoint Tests** - 56 tests across authentication, health, and devices
-4. **Integration Tests** - 39 tests for database operations and migrations
-5. **Performance Testing** - 5 benchmark tests for API and database
-6. **Enhanced GitHub Actions** - Parallel test execution with 9 separate jobs
-7. **Test Documentation** - 474-line TESTING.md and 443-line CONTRIBUTING.md
-8. **Code Quality & Linting** - Makefile, scripts, pre-commit hooks
-9. **Security Testing** - 3 security validation tests
+1. **Enhanced Test Fixtures** - Comprehensive fixtures for all test types (461 lines)
+1. **API Endpoint Tests** - 56 tests across authentication, health, and devices
+1. **Integration Tests** - 39 tests for database operations and migrations
+1. **Performance Testing** - 5 benchmark tests for API and database
+1. **Enhanced GitHub Actions** - Parallel test execution with 9 separate jobs
+1. **Test Documentation** - 474-line TESTING.md and 443-line CONTRIBUTING.md
+1. **Code Quality & Linting** - Makefile, scripts, pre-commit hooks
+1. **Security Testing** - 3 security validation tests
 
 ### Test Statistics
 
@@ -35,32 +32,36 @@
 ### Key Commits
 
 1. `b97e0be` - feat: Implement comprehensive test infrastructure (Tasks 1-5, 9)
-2. `46950d1` - feat: Enhanced GitHub Actions with parallel testing (Task 6)
-3. `2291a5f` - docs: Add comprehensive testing and contributing documentation (Task 7)
+1. `46950d1` - feat: Enhanced GitHub Actions with parallel testing (Task 6)
+1. `2291a5f` - docs: Add comprehensive testing and contributing documentation (Task 7)
 
 **Ready for production use!** ✅
 
----
+______________________________________________________________________
 
 ## Overview
 
-Build a comprehensive test suite with local Docker-based testing, code quality validation, security scanning, and enhanced GitHub CI/CD integration. This addresses the deferred integration testing from Phase 1.3 and establishes a robust testing foundation for ongoing development.
+Build a comprehensive test suite with local Docker-based testing, code quality validation, security scanning, and
+enhanced GitHub CI/CD integration. This addresses the deferred integration testing from Phase 1.3 and establishes a
+robust testing foundation for ongoing development.
 
----
+______________________________________________________________________
 
 ## Goals
 
 ### Primary Goals
+
 1. **Local Docker Testing** - Enable developers to run full test suite locally with Docker
-2. **Integration Tests** - Complete API endpoint and database integration testing
-3. **Enhanced CI/CD** - Improve GitHub Actions with parallel testing, better reporting
-4. **Test Coverage** - Achieve >70% code coverage for core components
-5. **Performance Testing** - Add basic performance benchmarks for API endpoints
-6. **Code Quality** ✅ - Ensure local linting matches CI exactly (ruff, black, isort, mypy)
-7. **Security Testing** - Automated vulnerability scanning and security validation
+1. **Integration Tests** - Complete API endpoint and database integration testing
+1. **Enhanced CI/CD** - Improve GitHub Actions with parallel testing, better reporting
+1. **Test Coverage** - Achieve >70% code coverage for core components
+1. **Performance Testing** - Add basic performance benchmarks for API endpoints
+1. **Code Quality** ✅ - Ensure local linting matches CI exactly (ruff, black, isort, mypy)
+1. **Security Testing** - Automated vulnerability scanning and security validation
 
 ### Secondary Goals
-- Fast test execution (<3 minutes for unit tests, <10 minutes for full suite)
+
+- Fast test execution (\<3 minutes for unit tests, \<10 minutes for full suite)
 - Easy setup for new contributors
 - Clear test documentation and examples
 - Database migration testing
@@ -68,11 +69,12 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
 - Pre-commit hooks to prevent CI failures ✅
 - Security reports for dependency vulnerabilities
 
----
+______________________________________________________________________
 
 ## Current State Analysis
 
 ### Existing Infrastructure ✅
+
 - **GitHub Actions CI**: Lint, test (Python 3.11/3.12), security, Docker build
 - **Services in CI**: TimescaleDB, Redis configured as GitHub Actions services
 - **Basic Tests**: `test_config.py`, `test_version.py` (minimal unit tests)
@@ -84,6 +86,7 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
 - **Documentation** ✅ **NEW**: DEVELOPMENT.md, QUICKSTART.md with linting workflows
 
 ### Gaps to Address ❌
+
 - **No Integration Tests**: Placeholder only, no actual API tests
 - **No Local Test Environment**: Can't easily run tests with services locally
 - **Minimal Fixtures**: conftest.py has stubs but no real test fixtures
@@ -93,7 +96,7 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
 - **No Security Test Suite**: Need tests for vulnerabilities, secrets, SQL injection
 - **Limited Test Documentation**: No comprehensive TESTING.md guide
 
----
+______________________________________________________________________
 
 ## Architecture
 
@@ -134,38 +137,44 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
 ### Test Categories
 
 1. **Unit Tests** (`tests/unit/`)
+
    - Pure logic testing, no external dependencies
-   - Fast execution (<1s per test)
+   - Fast execution (\<1s per test)
    - Mock external services
    - Examples: config, utilities, calculations, validators
 
-2. **Integration Tests** (`tests/integration/`)
+1. **Integration Tests** (`tests/integration/`)
+
    - Test component interactions
    - Use real database (test instance)
    - Test migrations, queries, data flow
    - Examples: database operations, plugin loading
 
-3. **API Tests** (`tests/api/`)
+1. **API Tests** (`tests/api/`)
+
    - End-to-end API endpoint testing
    - Authentication flows
    - CRUD operations
    - Error handling
    - Rate limiting
 
-4. **Performance Tests** (`tests/performance/`)
+1. **Performance Tests** (`tests/performance/`)
+
    - Benchmark API response times
    - Load testing
    - Database query performance
    - Memory usage profiling
 
-5. **Code Quality Tests** (`tests/quality/`) ✅ **COMPLETE**
+1. **Code Quality Tests** (`tests/quality/`) ✅ **COMPLETE**
+
    - Linting infrastructure validation
    - Verify ruff, black, isort, mypy can run
    - Test that lint scripts execute correctly
    - Ensure local lint matches CI
    - Examples: formatter checks, type checker validation
 
-6. **Security Tests** (`tests/security/`)
+1. **Security Tests** (`tests/security/`)
+
    - Vulnerability scanning (bandit, safety)
    - Hardcoded secrets detection
    - SQL injection protection verification
@@ -173,7 +182,7 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
    - JWT secret key requirements
    - CORS configuration validation
 
----
+______________________________________________________________________
 
 ## Detailed Tasks
 
@@ -182,6 +191,7 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
 **Goal:** Create local Docker-based test environment matching CI services
 
 **Deliverables:**
+
 - `docker/docker-compose.test.yml` - Test environment configuration
 - `scripts/test-local.sh` - Helper script to run tests locally
 - Documentation in `docs/TESTING.md`
@@ -189,6 +199,7 @@ Build a comprehensive test suite with local Docker-based testing, code quality v
 **Implementation:**
 
 1. **docker-compose.test.yml**:
+
 ```yaml
 version: '3.8'
 
@@ -239,6 +250,7 @@ services:
 ```
 
 2. **scripts/test-local.sh**:
+
 ```bash
 #!/bin/bash
 set -e
@@ -264,19 +276,21 @@ docker-compose -f docker/docker-compose.test.yml down -v
 ```
 
 **Acceptance Criteria:**
+
 - ✅ Can run `./scripts/test-local.sh` and execute full test suite
 - ✅ Services start healthy and tests connect successfully
 - ✅ Database starts with TimescaleDB extension enabled
 - ✅ Tests run in isolated environment (no conflicts with dev database)
 - ✅ Cleanup removes all test containers and volumes
 
----
+______________________________________________________________________
 
 ### Task 2: Enhanced Test Fixtures (3h)
 
 **Goal:** Create comprehensive test fixtures for database, API, and authentication
 
 **Deliverables:**
+
 - Enhanced `tests/conftest.py` with reusable fixtures
 - `tests/fixtures/` directory with sample data generators
 - Database transaction rollback fixtures
@@ -284,6 +298,7 @@ docker-compose -f docker/docker-compose.test.yml down -v
 **Implementation:**
 
 1. **tests/conftest.py**:
+
 ```python
 import asyncio
 import pytest
@@ -505,6 +520,7 @@ async def sample_metrics(db_pool, sample_device):
 ```
 
 2. **tests/fixtures/data_generators.py**:
+
 ```python
 """Test data generators for creating sample data."""
 
@@ -580,19 +596,21 @@ def generate_rate_schedule(
 ```
 
 **Acceptance Criteria:**
+
 - ✅ All fixtures available in conftest.py
 - ✅ Database transaction rollback working (tests don't pollute DB)
 - ✅ Can create authenticated API clients easily
 - ✅ Sample data generators for devices, metrics, rate schedules
 - ✅ Fixtures are well-documented with docstrings
 
----
+______________________________________________________________________
 
 ### Task 3: API Endpoint Tests (5h)
 
 **Goal:** Comprehensive tests for all API endpoints
 
 **Deliverables:**
+
 - `tests/api/test_auth.py` - Authentication endpoint tests
 - `tests/api/test_devices.py` - Device CRUD tests
 - `tests/api/test_health.py` - Health check tests
@@ -601,6 +619,7 @@ def generate_rate_schedule(
 **Implementation:**
 
 1. **tests/api/test_auth.py**:
+
 ```python
 """Test authentication endpoints."""
 
@@ -681,6 +700,7 @@ async def test_expired_token(api_client: AsyncClient):
 ```
 
 2. **tests/api/test_devices.py**:
+
 ```python
 """Test device CRUD endpoints."""
 
@@ -807,6 +827,7 @@ async def test_create_device_validation_error(admin_client: AsyncClient):
 ```
 
 3. **tests/api/test_health.py**:
+
 ```python
 """Test health check endpoints."""
 
@@ -871,6 +892,7 @@ async def test_health_check_database_latency(api_client: AsyncClient):
 ```
 
 **Acceptance Criteria:**
+
 - ✅ All API endpoints have test coverage
 - ✅ Authentication flow tested (login, token validation, expiration)
 - ✅ RBAC tested (admin vs user permissions)
@@ -879,13 +901,14 @@ async def test_health_check_database_latency(api_client: AsyncClient):
 - ✅ Health checks tested
 - ✅ Tests use async/await properly
 
----
+______________________________________________________________________
 
 ### Task 4: Integration Tests (4h)
 
 **Goal:** Test database operations, migrations, and component integration
 
 **Deliverables:**
+
 - `tests/integration/test_database.py` - Database operations
 - `tests/integration/test_migrations.py` - Migration testing
 - `tests/integration/test_data_flow.py` - End-to-end data flow
@@ -893,6 +916,7 @@ async def test_health_check_database_latency(api_client: AsyncClient):
 **Implementation:**
 
 1. **tests/integration/test_database.py**:
+
 ```python
 """Test database operations and queries."""
 
@@ -1037,6 +1061,7 @@ async def test_transaction_rollback(db_pool, sample_device):
 ```
 
 2. **tests/integration/test_migrations.py**:
+
 ```python
 """Test database migrations."""
 
@@ -1100,19 +1125,21 @@ async def test_indexes_exist(db_pool):
 ```
 
 **Acceptance Criteria:**
+
 - ✅ Database connectivity tests pass
 - ✅ TimescaleDB features tested (hypertables, chunks, aggregates)
 - ✅ Migration verification tests
 - ✅ Transaction rollback works correctly
 - ✅ Foreign key relationships tested
 
----
+______________________________________________________________________
 
 ### Task 5: Performance Testing (3h)
 
 **Goal:** Add basic performance benchmarks for API endpoints
 
 **Deliverables:**
+
 - `tests/performance/test_api_performance.py` - API endpoint benchmarks
 - `tests/performance/test_database_performance.py` - Query benchmarks
 - Performance test configuration
@@ -1120,6 +1147,7 @@ async def test_indexes_exist(db_pool):
 **Implementation:**
 
 1. **tests/performance/test_api_performance.py**:
+
 ```python
 """Performance tests for API endpoints."""
 
@@ -1184,6 +1212,7 @@ async def test_concurrent_requests(authenticated_client: AsyncClient):
 ```
 
 2. **tests/performance/test_database_performance.py**:
+
 ```python
 """Performance tests for database queries."""
 
@@ -1240,19 +1269,21 @@ async def test_aggregate_query_performance(db_pool, sample_metrics):
 ```
 
 **Acceptance Criteria:**
+
 - ✅ Performance benchmarks for key endpoints
 - ✅ Response time assertions (p50, p95)
 - ✅ Concurrent request handling tested
 - ✅ Database query performance benchmarks
 - ✅ Performance tests marked with `@pytest.mark.performance`
 
----
+______________________________________________________________________
 
 ### Task 6: Enhanced GitHub Actions Workflow (2h)
 
 **Goal:** Improve CI/CD with parallel testing, better reporting, test caching
 
 **Deliverables:**
+
 - Updated `.github/workflows/ci.yml`
 - Test result reporting
 - Code coverage enforcement
@@ -1523,25 +1554,27 @@ jobs:
 ```
 
 **Acceptance Criteria:**
+
 - ✅ Separate jobs for unit and integration tests
 - ✅ Parallel test execution where possible
 - ✅ Performance tests run on PRs only
 - ✅ Coverage reports uploaded to Codecov
 - ✅ Test results clearly visible in GitHub Actions UI
 
----
+______________________________________________________________________
 
 ### Task 7: Test Documentation (2h)
 
 **Goal:** Document testing procedures for contributors
 
 **Deliverables:**
+
 - `docs/TESTING.md` - Comprehensive testing guide
 - Update `CONTRIBUTING.md` with test requirements
 
 **Implementation:**
 
-```markdown
+````markdown
 # Testing Guide
 
 ## Overview
@@ -1738,9 +1771,10 @@ format:
 	ruff check src/ tests/ --fix
 	black src/ tests/
 	isort src/ tests/
-```
+````
 
 2. **scripts/lint.sh** (Matches CI Exactly):
+
 ```bash
 #!/bin/bash
 set -e
@@ -1800,6 +1834,7 @@ fi
 ```
 
 3. **Updated .pre-commit-config.yaml:**
+
 ```yaml
 repos:
   # Ruff linting (matches CI: ruff check src/ tests/)
@@ -1834,6 +1869,7 @@ repos:
 ```
 
 4. **Linting Test Suite** (`tests/quality/test_code_quality.py`):
+
 ```python
 """
 Tests to verify code quality checks can run successfully.
@@ -1908,6 +1944,7 @@ def test_all_linters_via_script():
 ```
 
 **Acceptance Criteria:**
+
 - ✅ Makefile with lint and format commands
 - ✅ Lint scripts for Bash and Windows
 - ✅ Pre-commit hooks matching CI exactly
@@ -1916,6 +1953,7 @@ def test_all_linters_via_script():
 - ✅ Local linting produces identical results to GitHub Actions
 
 **Testing:**
+
 ```bash
 # Test all linting locally
 make lint
@@ -1930,13 +1968,14 @@ pre-commit run --all-files
 pytest tests/quality/ -v -m quality
 ```
 
----
+______________________________________________________________________
 
 ### Task 9: Security Testing (2h)
 
 **Goal:** Add comprehensive security testing with local and CI integration
 
 **Deliverables:**
+
 - `tests/security/` - Security test suite
 - Security scanning scripts
 - Updated GitHub Actions with security checks
@@ -1945,6 +1984,7 @@ pytest tests/quality/ -v -m quality
 **Implementation:**
 
 1. **tests/security/test_security_scans.py:**
+
 ```python
 """
 Security scanning tests to catch common vulnerabilities.
@@ -2121,6 +2161,7 @@ def test_cors_configuration():
 ```
 
 2. **scripts/security-scan.sh:**
+
 ```bash
 #!/bin/bash
 # Security scanning script for local use
@@ -2177,6 +2218,7 @@ fi
 ```
 
 3. **Makefile Security Commands:**
+
 ```makefile
 security-scan:
 	@echo "Running security scans..."
@@ -2193,6 +2235,7 @@ security-report:
 ```
 
 4. **GitHub Actions Security Job Enhancement:**
+
 ```yaml
 security:
   name: Security Scan
@@ -2236,6 +2279,7 @@ security:
 ```
 
 **Acceptance Criteria:**
+
 - ✅ Security test suite created
 - ✅ Bandit scanning configured
 - ✅ Safety dependency checking configured
@@ -2245,6 +2289,7 @@ security:
 - ✅ Security documentation added to TESTING.md
 
 **Testing:**
+
 ```bash
 # Run security scans locally
 make security-scan
@@ -2259,32 +2304,33 @@ make security-report
 ./scripts/security-scan.sh
 ```
 
----
+______________________________________________________________________
 
 ## Timeline and Effort Estimation
 
-| Task | Description | Estimated Hours | Status |
-|------|-------------|----------------|--------|
-| 1 | Docker Compose Test Environment | 4h | Pending |
-| 2 | Enhanced Test Fixtures | 3h | Pending |
-| 3 | API Endpoint Tests | 5h | Pending |
-| 4 | Integration Tests | 4h | Pending |
-| 5 | Performance Testing | 3h | Pending |
-| 6 | Enhanced GitHub Actions | 2h | Pending |
-| 7 | Test Documentation | 2h | Pending |
-| 8 | Code Quality & Linting Tests | 2h | ✅ **Complete** |
-| 9 | Security Testing | 2h | Pending |
-| **Total** | | **27h** | **1/9 Complete** |
+| Task      | Description                     | Estimated Hours | Status           |
+| --------- | ------------------------------- | --------------- | ---------------- |
+| 1         | Docker Compose Test Environment | 4h              | Pending          |
+| 2         | Enhanced Test Fixtures          | 3h              | Pending          |
+| 3         | API Endpoint Tests              | 5h              | Pending          |
+| 4         | Integration Tests               | 4h              | Pending          |
+| 5         | Performance Testing             | 3h              | Pending          |
+| 6         | Enhanced GitHub Actions         | 2h              | Pending          |
+| 7         | Test Documentation              | 2h              | Pending          |
+| 8         | Code Quality & Linting Tests    | 2h              | ✅ **Complete**  |
+| 9         | Security Testing                | 2h              | Pending          |
+| **Total** |                                 | **27h**         | **1/9 Complete** |
 
 **Estimated Duration:** 3-4 days (flexible based on availability)
 
 **Note:** Task 8 (Linting) completed October 25, 2025 with local infrastructure matching GitHub Actions CI
 
----
+______________________________________________________________________
 
 ## Success Criteria
 
 ### Must Have ✅
+
 - [ ] Docker-based local test environment working
 - [ ] >70% code coverage for core components
 - [ ] All API endpoints have tests
@@ -2296,6 +2342,7 @@ make security-report
 - [ ] Test documentation complete
 
 ### Nice to Have 🎯
+
 - [ ] Performance benchmarks established
 - [ ] Load testing capability
 - [ ] Automated coverage enforcement in CI
@@ -2305,68 +2352,74 @@ make security-report
 - [x] **Cross-platform linting scripts (Bash + Windows)** ✅
 - [ ] Security scan reports in CI artifacts
 
----
+______________________________________________________________________
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| Docker networking issues on Windows | Medium | Medium | Provide clear documentation, test on multiple platforms |
-| Slow test execution | Medium | Low | Implement parallel execution, optimize fixtures |
-| Flaky integration tests | Medium | Medium | Add retries, improve test isolation |
-| Coverage gaps | Low | Medium | Regular coverage reports, PR checks |
+| Risk                                | Likelihood | Impact | Mitigation                                              |
+| ----------------------------------- | ---------- | ------ | ------------------------------------------------------- |
+| Docker networking issues on Windows | Medium     | Medium | Provide clear documentation, test on multiple platforms |
+| Slow test execution                 | Medium     | Low    | Implement parallel execution, optimize fixtures         |
+| Flaky integration tests             | Medium     | Medium | Add retries, improve test isolation                     |
+| Coverage gaps                       | Low        | Medium | Regular coverage reports, PR checks                     |
 
----
+______________________________________________________________________
 
 ## Dependencies
 
 ### External Dependencies
+
 - TimescaleDB container (already in use)
 - Redis container (already in use)
 - pytest ecosystem (installed)
 - httpx for async API testing (install)
 
 ### Internal Dependencies
+
 - Phase 1.3 API implementation (complete)
 - Database migrations (complete)
 - Docker configuration (complete)
 
----
+______________________________________________________________________
 
 ## Rollout Plan
 
 ### Phase 1: Foundation (Days 1-2)
+
 1. Create Docker Compose test environment
-2. Set up test fixtures
-3. Basic unit tests for existing code
+1. Set up test fixtures
+1. Basic unit tests for existing code
 
 ### Phase 2: API Testing (Day 2-3)
+
 4. Authentication tests
-5. Device CRUD tests
-6. Health check tests
+1. Device CRUD tests
+1. Health check tests
 
 ### Phase 3: Integration (Day 3)
+
 7. Database integration tests
-8. Migration verification
+1. Migration verification
 
 ### Phase 4: Finalization (Day 4)
-9. Performance tests
-10. Enhanced CI/CD
-11. Documentation
 
----
+9. Performance tests
+1. Enhanced CI/CD
+1. Documentation
+
+______________________________________________________________________
 
 ## Follow-up Work
 
 After this plan is complete, future testing improvements could include:
 
 1. **Plugin Testing Framework** - When Phase 2.1 begins
-2. **Contract Testing** - For plugin API compatibility
-3. **E2E UI Tests** - When Phase 4 begins
-4. **Chaos Testing** - For resilience validation
-5. **Mutation Testing** - To verify test quality
+1. **Contract Testing** - For plugin API compatibility
+1. **E2E UI Tests** - When Phase 4 begins
+1. **Chaos Testing** - For resilience validation
+1. **Mutation Testing** - To verify test quality
 
----
+______________________________________________________________________
 
 ## References
 
@@ -2376,7 +2429,6 @@ After this plan is complete, future testing improvements could include:
 - [GitHub Actions services](https://docs.github.com/en/actions/using-containerized-services)
 - Current CI: `.github/workflows/ci.yml`
 
----
+______________________________________________________________________
 
-**Plan Status:** Ready for Implementation
-**Next Step:** Review plan with stakeholders, then begin Task 1
+**Plan Status:** Ready for Implementation **Next Step:** Review plan with stakeholders, then begin Task 1

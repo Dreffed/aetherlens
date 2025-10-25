@@ -2,17 +2,19 @@
 
 ## Overview
 
-AetherLens Home Edition follows a modular, plugin-based architecture designed for **security**, **simplicity**, and **resource efficiency**. The system can run on hardware as modest as a Raspberry Pi 4 while handling thousands of metrics per second, with all data staying local by default.
+AetherLens Home Edition follows a modular, plugin-based architecture designed for **security**, **simplicity**, and
+**resource efficiency**. The system can run on hardware as modest as a Raspberry Pi 4 while handling thousands of
+metrics per second, with all data staying local by default.
 
 ## Core Design Principles
 
 1. **Security First**: Defense in depth, encrypted credentials, minimal attack surface
-2. **Privacy by Default**: 100% local operation, no external dependencies required
-3. **Simplicity Over Features**: Start minimal, grow deliberately based on real needs
-4. **Plugin-Driven Architecture**: Core is minimal; functionality comes from plugins
-5. **Resource Efficient**: Must run on ARM devices with <2GB RAM
-6. **Observable**: Comprehensive metrics and logging for debugging
-7. **Fail-Safe**: Plugin failures don't affect core or other plugins
+1. **Privacy by Default**: 100% local operation, no external dependencies required
+1. **Simplicity Over Features**: Start minimal, grow deliberately based on real needs
+1. **Plugin-Driven Architecture**: Core is minimal; functionality comes from plugins
+1. **Resource Efficient**: Must run on ARM devices with \<2GB RAM
+1. **Observable**: Comprehensive metrics and logging for debugging
+1. **Fail-Safe**: Plugin failures don't affect core or other plugins
 
 ## High-Level Architecture
 
@@ -93,11 +95,13 @@ graph TB
 
 ### Core Engine
 
-The core engine is written in **Python 3.11+** using **FastAPI** for rapid development and AI-assisted coding. Performance-critical paths may be optimized in **Rust** in future phases.
+The core engine is written in **Python 3.11+** using **FastAPI** for rapid development and AI-assisted coding.
+Performance-critical paths may be optimized in **Rust** in future phases.
 
 #### Plugin Manager
 
 **Responsibilities:**
+
 - Plugin lifecycle management (load, configure, start, stop, unload)
 - Health monitoring and automatic restart on failures
 - Resource isolation via separate processes (containerized in production)
@@ -105,6 +109,7 @@ The core engine is written in **Python 3.11+** using **FastAPI** for rapid devel
 - Dependency resolution and version compatibility checks
 
 **Security Features:**
+
 - Plugins run in restricted user contexts
 - Resource limits enforced (CPU, memory, network)
 - File system access restricted to designated directories
@@ -136,6 +141,7 @@ class PluginManager:
 #### Data Collector
 
 **Responsibilities:**
+
 - Receives metrics from plugins via internal API
 - Validates and normalizes incoming data
 - Buffers metrics for efficient batch processing
@@ -143,6 +149,7 @@ class PluginManager:
 - Implements retry logic with exponential backoff
 
 **Performance Optimizations:**
+
 - Batch insertions (1000+ metrics per transaction)
 - Async I/O for all network operations
 - Connection pooling for database access
@@ -185,6 +192,7 @@ class DataCollector:
 #### Data Processor
 
 **Responsibilities:**
+
 - Enriches metrics with contextual metadata
 - Calculates derived metrics (cost, carbon emissions)
 - Applies data transformations and aggregations
@@ -192,6 +200,7 @@ class DataCollector:
 - Triggers alerts and automations based on rules
 
 **Cost Calculation Example:**
+
 ```python
 class CostProcessor:
     async def calculate_cost(self, metric: Metric) -> Cost:
@@ -224,6 +233,7 @@ class CostProcessor:
 #### Storage Engine
 
 **Responsibilities:**
+
 - Manages time-series data persistence in TimescaleDB
 - Implements retention policies and data rollups
 - Handles data compaction and compression
@@ -231,6 +241,7 @@ class CostProcessor:
 - Manages backup and restore operations
 
 **Schema Design:**
+
 ```sql
 -- Main metrics table (hypertable)
 CREATE TABLE metrics (
@@ -265,6 +276,7 @@ SELECT add_retention_policy('metrics', INTERVAL '90 days');
 ```
 
 **Continuous Aggregates:**
+
 ```sql
 -- Hourly aggregates
 CREATE MATERIALIZED VIEW metrics_hourly
@@ -309,6 +321,7 @@ WITH NO DATA;
 #### API Server
 
 **Responsibilities:**
+
 - RESTful API with OpenAPI 3.0 specification
 - WebSocket support for real-time metric streaming
 - Prometheus-compatible metrics endpoint
@@ -316,6 +329,7 @@ WITH NO DATA;
 - Request validation and error handling
 
 **Security Features:**
+
 - JWT-based authentication with refresh tokens
 - Role-based access control (RBAC)
 - API key management with scoped permissions
@@ -361,6 +375,7 @@ async def get_current_metrics(
 #### Scheduler
 
 **Responsibilities:**
+
 - Cron-based task scheduling for plugin collection
 - Dynamic interval adjustment based on load
 - Priority queue for time-sensitive tasks
@@ -401,7 +416,8 @@ class TaskScheduler:
 
 ### Plugin Architecture
 
-Plugins run as **separate processes** for isolation and fault tolerance. Communication happens via a simple HTTP API rather than gRPC to reduce complexity.
+Plugins run as **separate processes** for isolation and fault tolerance. Communication happens via a simple HTTP API
+rather than gRPC to reduce complexity.
 
 ```python
 # Plugin interface
@@ -459,6 +475,7 @@ class BasePlugin(ABC):
 ### Plugin Types
 
 **Collection Plugins** - Gather data from external sources
+
 ```python
 class ShellyPlugin(BasePlugin):
     """Shelly smart plug integration"""
@@ -492,6 +509,7 @@ class ShellyPlugin(BasePlugin):
 ```
 
 **Processing Plugins** - Transform or enrich data
+
 ```python
 class CostCalculatorPlugin(BasePlugin):
     """Calculate costs based on energy consumption"""
@@ -515,6 +533,7 @@ class CostCalculatorPlugin(BasePlugin):
 ```
 
 **Export Plugins** - Send data to external systems
+
 ```python
 class InfluxDBExportPlugin(BasePlugin):
     """Export metrics to InfluxDB"""
@@ -673,6 +692,7 @@ graph TB
 ### Credential Management
 
 **Platform Keyring Integration:**
+
 ```python
 import keyring
 from cryptography.fernet import Fernet
@@ -702,6 +722,7 @@ class SecureCredentialStore:
 ```
 
 **Environment Variable Substitution:**
+
 ```yaml
 # config.yaml - Safe credential reference
 plugins:
@@ -1018,31 +1039,32 @@ spec:
 
 ### Resource Usage Targets
 
-| Component | Memory | CPU (Idle) | CPU (Active) | Disk I/O |
-|-----------|--------|------------|--------------|----------|
-| Core Engine | <256MB | <2% | <10% | <5 MB/s |
-| Plugin (avg) | <50MB | <1% | <3% | <1 MB/s |
-| TimescaleDB | <500MB | <5% | <20% | <50 MB/s |
-| Redis (optional) | <256MB | <1% | <2% | <1 MB/s |
-| **Total System** | **<1GB** | **<10%** | **<35%** | **<60 MB/s** |
+| Component        | Memory    | CPU (Idle) | CPU (Active) | Disk I/O      |
+| ---------------- | --------- | ---------- | ------------ | ------------- |
+| Core Engine      | \<256MB   | \<2%       | \<10%        | \<5 MB/s      |
+| Plugin (avg)     | \<50MB    | \<1%       | \<3%         | \<1 MB/s      |
+| TimescaleDB      | \<500MB   | \<5%       | \<20%        | \<50 MB/s     |
+| Redis (optional) | \<256MB   | \<1%       | \<2%         | \<1 MB/s      |
+| **Total System** | **\<1GB** | **\<10%**  | **\<35%**    | **\<60 MB/s** |
 
 *Tested on Raspberry Pi 4 (4GB RAM) with 50 devices and 5,000 metrics/minute*
 
 ### Scalability Targets
 
-| Metric | Target | Tested |
-|--------|--------|--------|
-| Concurrent Devices | 1,000 | 1,247 |
-| Metrics per Second | 10,000 | 12,450 |
-| API Latency (p50) | <100ms | 45ms |
-| API Latency (p99) | <1s | 320ms |
-| Query Response (24h) | <100ms | 67ms |
-| Query Response (30d) | <500ms | 234ms |
-| Storage Growth | <50 MB/day | 42 MB/day |
+| Metric               | Target      | Tested    |
+| -------------------- | ----------- | --------- |
+| Concurrent Devices   | 1,000       | 1,247     |
+| Metrics per Second   | 10,000      | 12,450    |
+| API Latency (p50)    | \<100ms     | 45ms      |
+| API Latency (p99)    | \<1s        | 320ms     |
+| Query Response (24h) | \<100ms     | 67ms      |
+| Query Response (30d) | \<500ms     | 234ms     |
+| Storage Growth       | \<50 MB/day | 42 MB/day |
 
 ### Optimization Strategies
 
 **Connection Pooling:**
+
 ```python
 # Database connection pool
 from sqlalchemy import create_engine
@@ -1059,6 +1081,7 @@ engine = create_engine(
 ```
 
 **Batch Processing:**
+
 ```python
 # Batch metric insertion
 async def batch_insert_metrics(metrics: List[Metric], batch_size: int = 1000):
@@ -1075,6 +1098,7 @@ async def batch_insert_metrics(metrics: List[Metric], batch_size: int = 1000):
 ```
 
 **Caching Strategy:**
+
 ```python
 from functools import lru_cache
 import aiocache
@@ -1099,6 +1123,7 @@ async def get_current_rate() -> float:
 ### Metrics Exposure
 
 **Prometheus Endpoint:**
+
 ```python
 from prometheus_client import Counter, Histogram, Gauge, generate_latest
 
@@ -1398,16 +1423,17 @@ async def test_bulk_insert_performance():
 
 ### ADR-001: Python Core Instead of Rust
 
-**Status:** Accepted  
+**Status:** Accepted\
 **Date:** 2025-01-15
 
-**Context:**  
+**Context:**\
 Need to choose primary language for core engine. Options are Rust (performance) or Python (development speed).
 
-**Decision:**  
+**Decision:**\
 Use Python 3.11+ with FastAPI for core engine. Optimize hot paths in Rust only when profiling shows bottlenecks.
 
 **Rationale:**
+
 - AI tools (Claude, Copilot) excel at Python
 - Faster development and iteration
 - Easier community contributions
@@ -1415,24 +1441,26 @@ Use Python 3.11+ with FastAPI for core engine. Optimize hot paths in Rust only w
 - Can optimize specific components in Rust later
 
 **Consequences:**
+
 - Slightly higher memory usage (~200MB vs ~50MB)
 - Lower throughput ceiling (10k vs 100k metrics/sec)
 - But: Faster time-to-market, easier maintenance
 
----
+______________________________________________________________________
 
 ### ADR-002: TimescaleDB Over InfluxDB
 
-**Status:** Accepted  
+**Status:** Accepted\
 **Date:** 2025-01-15
 
-**Context:**  
+**Context:**\
 Need time-series database. Options are TimescaleDB (SQL) or InfluxDB (purpose-built).
 
-**Decision:**  
+**Decision:**\
 Use TimescaleDB as primary time-series database.
 
 **Rationale:**
+
 - Single database for time-series + configuration data
 - Standard SQL queries (easier for contributors)
 - Excellent compression and retention policies
@@ -1440,106 +1468,113 @@ Use TimescaleDB as primary time-series database.
 - Already familiar to most developers
 
 **Consequences:**
+
 - Must learn TimescaleDB-specific features (hypertables, continuous aggregates)
 - Slightly less optimal than purpose-built InfluxDB
 - But: Simpler architecture, one less service to manage
 
----
+______________________________________________________________________
 
 ### ADR-003: Process Isolation Over In-Process Plugins
 
-**Status:** Accepted  
+**Status:** Accepted\
 **Date:** 2025-01-15
 
-**Context:**  
+**Context:**\
 Plugins can run in-process (fast) or separate processes (isolated).
 
-**Decision:**  
+**Decision:**\
 Run plugins in separate processes with HTTP communication.
 
 **Rationale:**
+
 - Plugin crashes don't affect core
 - Resource limits per plugin (CPU, memory)
 - Security: Restricted filesystem and network access
 - Easier debugging (separate logs, profiling)
 
 **Consequences:**
+
 - Higher memory overhead (~30MB per plugin)
 - Slightly higher latency (HTTP vs function call)
 - But: Better stability and security
 
----
+______________________________________________________________________
 
 ### ADR-004: REST-Only API (No GraphQL)
 
-**Status:** Accepted  
+**Status:** Accepted\
 **Date:** 2025-01-15
 
-**Context:**  
+**Context:**\
 Choose API style: REST, GraphQL, or both.
 
-**Decision:**  
+**Decision:**\
 Use REST API only for v1.0. Consider GraphQL in future if needed.
 
 **Rationale:**
+
 - Simpler to implement and test
 - Easier for community integrations
 - OpenAPI specification for documentation
 - Home lab use cases don't need GraphQL flexibility
 
 **Consequences:**
+
 - May need multiple API calls for complex queries
 - Will need to version API carefully
 - But: Faster development, better tooling support
 
----
+______________________________________________________________________
 
 ### ADR-005: Local-First, Cloud-Optional
 
-**Status:** Accepted  
+**Status:** Accepted\
 **Date:** 2025-01-15
 
-**Context:**  
+**Context:**\
 Decide whether to require cloud connectivity.
 
-**Decision:**  
+**Decision:**\
 All functionality works 100% locally. Cloud is opt-in.
 
 **Rationale:**
+
 - Privacy-focused target audience
 - No internet dependency for core features
 - Lower hosting costs (no backend needed)
 - Better reliability (works offline)
 
 **Consequences:**
+
 - Can't offer cloud-based features (remote access, mobile sync)
 - Users responsible for their own backups
 - But: Better privacy, lower operating costs
 
----
+______________________________________________________________________
 
 ## Technology Stack Summary
 
-| Layer | Technology | Version | Why? |
-|-------|-----------|---------|------|
-| **Core Language** | Python | 3.11+ | AI-friendly, rapid development |
-| **API Framework** | FastAPI | 0.104+ | High performance, async, OpenAPI |
-| **Time-Series DB** | TimescaleDB | 2.13+ | SQL + time-series, compression |
-| **Config DB** | PostgreSQL | 15+ | Same as TimescaleDB |
-| **Cache** | Redis | 7.2+ | Optional, for scaling |
-| **Web Framework** | React | 18+ | Component-based UI |
-| **UI Language** | TypeScript | 5+ | Type safety |
-| **CSS Framework** | Tailwind | 3+ | Utility-first styling |
-| **Charts** | Recharts | 2.8+ | React-native charting |
-| **Container** | Docker | 24+ | Deployment |
-| **Orchestration** | Docker Compose | 2.20+ | Multi-container apps |
-| **HTTP Client** | aiohttp | 3.9+ | Async HTTP |
-| **Validation** | Pydantic | 2.5+ | Data validation |
-| **ORM** | SQLAlchemy | 2.0+ | Database abstraction |
-| **Migrations** | Alembic | 1.12+ | Schema migrations |
-| **Testing** | pytest | 7.4+ | Test framework |
-| **Logging** | structlog | 23.1+ | Structured logging |
-| **Metrics** | prometheus_client | 0.18+ | Metrics export |
+| Layer              | Technology        | Version | Why?                             |
+| ------------------ | ----------------- | ------- | -------------------------------- |
+| **Core Language**  | Python            | 3.11+   | AI-friendly, rapid development   |
+| **API Framework**  | FastAPI           | 0.104+  | High performance, async, OpenAPI |
+| **Time-Series DB** | TimescaleDB       | 2.13+   | SQL + time-series, compression   |
+| **Config DB**      | PostgreSQL        | 15+     | Same as TimescaleDB              |
+| **Cache**          | Redis             | 7.2+    | Optional, for scaling            |
+| **Web Framework**  | React             | 18+     | Component-based UI               |
+| **UI Language**    | TypeScript        | 5+      | Type safety                      |
+| **CSS Framework**  | Tailwind          | 3+      | Utility-first styling            |
+| **Charts**         | Recharts          | 2.8+    | React-native charting            |
+| **Container**      | Docker            | 24+     | Deployment                       |
+| **Orchestration**  | Docker Compose    | 2.20+   | Multi-container apps             |
+| **HTTP Client**    | aiohttp           | 3.9+    | Async HTTP                       |
+| **Validation**     | Pydantic          | 2.5+    | Data validation                  |
+| **ORM**            | SQLAlchemy        | 2.0+    | Database abstraction             |
+| **Migrations**     | Alembic           | 1.12+   | Schema migrations                |
+| **Testing**        | pytest            | 7.4+    | Test framework                   |
+| **Logging**        | structlog         | 23.1+   | Structured logging               |
+| **Metrics**        | prometheus_client | 0.18+   | Metrics export                   |
 
 ## File Structure
 
@@ -1621,13 +1656,15 @@ RELOAD=false
 
 ## Port Usage
 
-| Port | Protocol | Service | Purpose |
-|------|----------|---------|---------|
+| Port | Protocol   | Service      | Purpose           |
+| ---- | ---------- | ------------ | ----------------- |
 | 8080 | HTTP/HTTPS | Web UI & API | Primary interface |
-| 9090 | HTTP | Prometheus | Metrics endpoint |
-| 5432 | TCP | PostgreSQL | Database |
-| 6379 | TCP | Redis | Cache (optional) |
+| 9090 | HTTP       | Prometheus   | Metrics endpoint  |
+| 5432 | TCP        | PostgreSQL   | Database          |
+| 6379 | TCP        | Redis        | Cache (optional)  |
 
----
+______________________________________________________________________
 
-**This architecture provides a solid foundation for AetherLens Home Edition** - balancing security, simplicity, and extensibility while remaining resource-efficient and privacy-focused. The plugin system enables community contributions while the core remains stable and maintainable.
+**This architecture provides a solid foundation for AetherLens Home Edition** - balancing security, simplicity, and
+extensibility while remaining resource-efficient and privacy-focused. The plugin system enables community contributions
+while the core remains stable and maintainable.

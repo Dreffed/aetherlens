@@ -1,0 +1,21 @@
+Plan Directory Organization
+===========================
+
+phase-1/
+  - All Phase 1 planning and completion documents
+  - Plans: 1.2, 1.3, test-infrastructure
+  - Summaries: 1.1, 1.2, 1.3, foundation-complete, test-infrastructure
+
+archived/
+  - Outdated or superseded plans
+  - GitHub Actions quick fixes (superseded by proper implementation)
+  - Initial development plan (Phase 1 now complete)
+
+Root (plans/)
+  - Active planning documents
+  - Templates
+  - Index/README
+
+completed/
+  - Reserved for future use
+  - Can hold major milestone summaries

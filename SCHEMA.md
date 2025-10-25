@@ -2,7 +2,8 @@
 
 ## Overview
 
-AetherLens uses a hybrid storage approach optimized for time-series data, configuration management, and real-time analytics. This document defines the complete data schema, storage patterns, and indexing strategies.
+AetherLens uses a hybrid storage approach optimized for time-series data, configuration management, and real-time
+analytics. This document defines the complete data schema, storage patterns, and indexing strategies.
 
 ## Storage Architecture
 
@@ -31,19 +32,20 @@ graph LR
 
 ### Data Lifecycle
 
-| Age | Storage | Precision | Purpose |
-|-----|---------|-----------|----------|
-| <1 hour | Memory/Redis | Raw (1s) | Real-time display |
-| 1hr-7days | Time-series DB | 1 minute | Detailed analysis |
-| 7-30 days | Time-series DB | 5 minutes | Trends & patterns |
-| 30-90 days | Time-series DB | 1 hour | Historical comparison |
-| >90 days | Parquet files | 1 day | Long-term archive |
+| Age        | Storage        | Precision | Purpose               |
+| ---------- | -------------- | --------- | --------------------- |
+| \<1 hour   | Memory/Redis   | Raw (1s)  | Real-time display     |
+| 1hr-7days  | Time-series DB | 1 minute  | Detailed analysis     |
+| 7-30 days  | Time-series DB | 5 minutes | Trends & patterns     |
+| 30-90 days | Time-series DB | 1 hour    | Historical comparison |
+| >90 days   | Parquet files  | 1 day     | Long-term archive     |
 
 ## Core Data Models
 
 ### 1. Metrics Schema
 
 #### Time-Series Metric
+
 ```json
 {
   "timestamp": "2024-01-15T10:30:00Z",
@@ -66,6 +68,7 @@ graph LR
 ```
 
 #### InfluxDB Schema
+
 ```flux
 // Measurement: device_metrics
 // Tags: device_id, room, device_type, metric_type
@@ -76,6 +79,7 @@ device_metrics,device_id=shelly-plug-office-01,room=office,device_type=smart_plu
 ```
 
 #### TimescaleDB Schema
+
 ```sql
 CREATE TABLE metrics (
     time         TIMESTAMPTZ NOT NULL,
@@ -108,6 +112,7 @@ SELECT add_compression_policy('metrics', INTERVAL '7 days');
 ### 2. Device Registry
 
 #### Device Model
+
 ```json
 {
   "device_id": "shelly-plug-office-01",
@@ -158,6 +163,7 @@ SELECT add_compression_policy('metrics', INTERVAL '7 days');
 ```
 
 #### SQLite/PostgreSQL Schema
+
 ```sql
 CREATE TABLE devices (
     device_id         TEXT PRIMARY KEY,
@@ -182,6 +188,7 @@ CREATE INDEX idx_devices_status ON devices USING GIN (status);
 ### 3. Energy Rates
 
 #### Rate Schedule Model
+
 ```json
 {
   "rate_id": "utility-tou-summer-2024",
@@ -231,6 +238,7 @@ CREATE INDEX idx_devices_status ON devices USING GIN (status);
 ### 4. Cost Calculations
 
 #### Cost Record Model
+
 ```json
 {
   "calculation_id": "calc-2024-01-15-001",
@@ -267,6 +275,7 @@ CREATE INDEX idx_devices_status ON devices USING GIN (status);
 ### 5. Alerts & Automations
 
 #### Alert Configuration
+
 ```json
 {
   "alert_id": "alert-high-consumption-001",
@@ -308,6 +317,7 @@ CREATE INDEX idx_devices_status ON devices USING GIN (status);
 ### 6. User & Preferences
 
 #### User Model
+
 ```json
 {
   "user_id": "usr-001",
@@ -352,6 +362,7 @@ CREATE INDEX idx_devices_status ON devices USING GIN (status);
 ### Continuous Aggregates
 
 #### Hourly Aggregates
+
 ```sql
 CREATE MATERIALIZED VIEW metrics_hourly
 WITH (timescaledb.continuous) AS
@@ -377,6 +388,7 @@ SELECT add_continuous_aggregate_policy('metrics_hourly',
 ```
 
 #### Daily Aggregates
+
 ```sql
 CREATE MATERIALIZED VIEW metrics_daily
 WITH (timescaledb.continuous) AS
@@ -418,6 +430,7 @@ CREATE INDEX idx_daily_costs_device ON daily_costs(device_id);
 ### Redis Cache Schema
 
 #### Real-time Metrics
+
 ```redis
 # Current power reading
 SET metrics:current:shelly-plug-office-01:power 125.4 EX 60
@@ -438,6 +451,7 @@ HSET device:status:shelly-plug-office-01
 ```
 
 #### Calculated Values
+
 ```redis
 # Hourly cache
 SET cache:hourly:2024-01-15-10:office:total_consumption 1254 EX 3600
@@ -456,6 +470,7 @@ HSET rates:current
 ## Index Strategies
 
 ### Time-Series Indexes
+
 ```sql
 -- Primary query patterns
 CREATE INDEX idx_recent_by_device ON metrics (device_id, time DESC)
@@ -474,6 +489,7 @@ CREATE INDEX idx_cost_by_device_date ON cost_calculations (device_id, DATE(times
 ```
 
 ### Configuration Indexes
+
 ```sql
 -- Device queries
 CREATE INDEX idx_devices_online ON devices ((status->>'online'))
@@ -490,13 +506,13 @@ CREATE INDEX idx_alerts_enabled ON alerts (enabled, next_check)
 
 ### Retention Rules
 
-| Data Type | Raw | 1min | 5min | 1hour | 1day |
-|-----------|-----|------|------|-------|------|
-| Power Metrics | 1hr | 7d | 30d | 90d | 1yr |
-| Energy Totals | - | 7d | 30d | 90d | 5yr |
-| Cost Records | - | - | 30d | 90d | 7yr |
-| Device Status | 24hr | - | - | 30d | - |
-| Alerts | - | - | - | - | 90d |
+| Data Type     | Raw  | 1min | 5min | 1hour | 1day |
+| ------------- | ---- | ---- | ---- | ----- | ---- |
+| Power Metrics | 1hr  | 7d   | 30d  | 90d   | 1yr  |
+| Energy Totals | -    | 7d   | 30d  | 90d   | 5yr  |
+| Cost Records  | -    | -    | 30d  | 90d   | 7yr  |
+| Device Status | 24hr | -    | -    | 30d   | -    |
+| Alerts        | -    | -    | -    | -     | 90d  |
 
 ### Cleanup Procedures
 
@@ -527,6 +543,7 @@ SELECT cron.schedule('cleanup_metrics', '0 2 * * *', 'SELECT cleanup_old_metrics
 ## Migration Scripts
 
 ### Schema Versioning
+
 ```sql
 CREATE TABLE schema_versions (
     version INTEGER PRIMARY KEY,
@@ -552,6 +569,7 @@ COMMIT;
 ## Backup & Recovery
 
 ### Backup Strategy
+
 ```bash
 #!/bin/bash
 # Daily backup script
@@ -575,6 +593,7 @@ aws s3 sync /backup s3://aetherlens-backup/$(hostname)/
 ```
 
 ### Recovery Procedures
+
 ```bash
 #!/bin/bash
 # Restore from backup
@@ -602,6 +621,7 @@ systemctl start aetherlens
 ## Performance Optimization
 
 ### Query Optimization
+
 ```sql
 -- Example: Get last 24h consumption by room
 WITH latest_readings AS (
@@ -625,6 +645,7 @@ GROUP BY room;
 ```
 
 ### Batch Processing
+
 ```python
 # Batch insert example
 def batch_insert_metrics(metrics: List[Metric], batch_size: int = 1000):
@@ -647,4 +668,5 @@ def batch_insert_metrics(metrics: List[Metric], batch_size: int = 1000):
         db.execute(query)
 ```
 
-This comprehensive schema design provides efficient storage, fast queries, and scalable data management for the AetherLens home energy monitoring system.
+This comprehensive schema design provides efficient storage, fast queries, and scalable data management for the
+AetherLens home energy monitoring system.

@@ -12,12 +12,14 @@
 ### Initial Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/aetherlens/home.git
    cd aetherlens
    ```
 
-2. **Create virtual environment:**
+1. **Create virtual environment:**
+
    ```bash
    python -m venv venv
 
@@ -28,7 +30,8 @@
    source venv/bin/activate
    ```
 
-3. **Install dependencies:**
+1. **Install dependencies:**
+
    ```bash
    make install-dev
    # OR
@@ -36,7 +39,8 @@
    pip install -e .
    ```
 
-4. **Install pre-commit hooks:**
+1. **Install pre-commit hooks:**
+
    ```bash
    make pre-commit-install
    # OR
@@ -44,18 +48,20 @@
    pre-commit install
    ```
 
-5. **Verify setup:**
+1. **Verify setup:**
+
    ```bash
    make lint
    ```
 
----
+______________________________________________________________________
 
 ## Code Quality & Linting
 
 ### Why Linting Matters
 
 Local linting ensures:
+
 - ✅ Your code passes CI checks **before** pushing
 - ✅ Consistent code style across the project
 - ✅ Type safety with mypy
@@ -64,13 +70,13 @@ Local linting ensures:
 
 ### Quick Reference
 
-| Command | Purpose | When to Use |
-|---------|---------|-------------|
-| `make lint` | Run all linters (matches CI exactly) | **Before every commit/push** |
-| `make format` | Auto-fix formatting issues | When lint fails on style |
-| `./scripts/lint.sh` | Bash script for linting | Alternative to make |
-| `scripts\lint.bat` | Windows batch script | Windows cmd.exe users |
-| `pre-commit run --all-files` | Run pre-commit hooks manually | Testing pre-commit setup |
+| Command                      | Purpose                              | When to Use                  |
+| ---------------------------- | ------------------------------------ | ---------------------------- |
+| `make lint`                  | Run all linters (matches CI exactly) | **Before every commit/push** |
+| `make format`                | Auto-fix formatting issues           | When lint fails on style     |
+| `./scripts/lint.sh`          | Bash script for linting              | Alternative to make          |
+| `scripts\lint.bat`           | Windows batch script                 | Windows cmd.exe users        |
+| `pre-commit run --all-files` | Run pre-commit hooks manually        | Testing pre-commit setup     |
 
 ### Linting Workflow
 
@@ -90,11 +96,13 @@ make lint
 #### Method 2: Direct Scripts
 
 **On Linux/Mac/Git Bash:**
+
 ```bash
 ./scripts/lint.sh
 ```
 
 **On Windows (cmd.exe):**
+
 ```cmd
 scripts\lint.bat
 ```
@@ -122,11 +130,13 @@ mypy src/
 Pre-commit hooks run automatically on `git commit` and prevent commits with linting issues.
 
 **Install hooks:**
+
 ```bash
 make pre-commit-install
 ```
 
 **What runs on commit:**
+
 - Trailing whitespace removal
 - End-of-file fixer
 - YAML/JSON/TOML validation
@@ -137,11 +147,13 @@ make pre-commit-install
 - Bandit security checks
 
 **Skip hooks temporarily (not recommended):**
+
 ```bash
 git commit --no-verify -m "WIP: temp commit"
 ```
 
 **Update pre-commit hooks:**
+
 ```bash
 pre-commit autoupdate
 ```
@@ -155,6 +167,7 @@ src/aetherlens/api/main.py:45:80: E501 Line too long (88 > 79 characters)
 ```
 
 **Fix:** Break line into multiple lines or disable for specific line:
+
 ```python
 # Disable for one line
 some_long_function_call()  # noqa: E501
@@ -174,6 +187,7 @@ would reformat src/aetherlens/api/main.py
 ```
 
 **Fix:** Run black to auto-format:
+
 ```bash
 black src/ tests/
 # OR
@@ -187,6 +201,7 @@ ERROR: src/aetherlens/api/main.py Imports are incorrectly sorted
 ```
 
 **Fix:** Run isort to auto-sort:
+
 ```bash
 isort src/ tests/
 # OR
@@ -200,6 +215,7 @@ src/aetherlens/api/main.py:50: error: Argument 1 to "create_user" has incompatib
 ```
 
 **Fix:** Add proper type hints or fix type mismatch:
+
 ```python
 # Before
 def create_user(user_id: int) -> User:
@@ -219,12 +235,13 @@ create_user(123)  # OK
 Our GitHub Actions workflow runs on every push and PR:
 
 1. **Lint Job** - Runs all linters (same as `make lint`)
-2. **Unit Tests** - Python 3.11 & 3.12
-3. **Integration Tests** - With TimescaleDB and Redis
-4. **Security Scan** - safety and bandit
-5. **Docker Build** - Validates Dockerfile
+1. **Unit Tests** - Python 3.11 & 3.12
+1. **Integration Tests** - With TimescaleDB and Redis
+1. **Security Scan** - safety and bandit
+1. **Docker Build** - Validates Dockerfile
 
 **To ensure CI passes:**
+
 ```bash
 # Before pushing to GitHub
 make lint
@@ -234,7 +251,7 @@ make test
 git push origin your-branch
 ```
 
----
+______________________________________________________________________
 
 ## Testing
 
@@ -259,7 +276,7 @@ make test-coverage
 make docker-test
 ```
 
----
+______________________________________________________________________
 
 ## Database Operations
 
@@ -286,38 +303,43 @@ docker-compose -f docker/docker-compose.yml exec db psql -U postgres -d aetherle
 SELECT * FROM timescaledb_information.hypertables;
 ```
 
----
+______________________________________________________________________
 
 ## Development Workflow
 
 ### Feature Development
 
 1. **Create feature branch:**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-2. **Make changes and test frequently:**
+1. **Make changes and test frequently:**
+
    ```bash
    # After making changes
    make lint
    make test-unit
    ```
 
-3. **Commit changes:**
+1. **Commit changes:**
+
    ```bash
    # Pre-commit hooks run automatically
    git add .
    git commit -m "feat: add new feature"
    ```
 
-4. **Run full test suite:**
+1. **Run full test suite:**
+
    ```bash
    make lint
    make test
    ```
 
-5. **Push and create PR:**
+1. **Push and create PR:**
+
    ```bash
    git push origin feature/your-feature-name
    # Create PR on GitHub
@@ -326,18 +348,21 @@ SELECT * FROM timescaledb_information.hypertables;
 ### Bug Fixes
 
 1. **Write failing test first** (TDD):
+
    ```bash
    # Create test that reproduces bug
    # Run test to verify it fails
    pytest tests/unit/test_bugfix.py -v
    ```
 
-2. **Fix the bug:**
+1. **Fix the bug:**
+
    ```python
    # Make minimal changes to fix
    ```
 
-3. **Verify fix:**
+1. **Verify fix:**
+
    ```bash
    # Test should now pass
    pytest tests/unit/test_bugfix.py -v
@@ -346,13 +371,14 @@ SELECT * FROM timescaledb_information.hypertables;
    make test
    ```
 
-4. **Lint and commit:**
+1. **Lint and commit:**
+
    ```bash
    make lint
    git commit -m "fix: resolve issue with X"
    ```
 
----
+______________________________________________________________________
 
 ## Code Style Guide
 
@@ -454,7 +480,7 @@ async def fetch_device_data(device_id: str) -> Dict:
     return {}
 ```
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -467,6 +493,7 @@ ModuleNotFoundError: No module named 'aetherlens'
 ```
 
 **Solution:**
+
 ```bash
 pip install -e .
 ```
@@ -478,6 +505,7 @@ black....................................................................Failed
 ```
 
 **Solution:**
+
 ```bash
 # Auto-fix formatting
 make format
@@ -493,6 +521,7 @@ Error: Connection refused
 ```
 
 **Solution:**
+
 ```bash
 # Check container status
 docker-compose -f docker/docker-compose.yml ps
@@ -511,18 +540,20 @@ error: Cannot determine type of 'result'
 ```
 
 **Solution:**
+
 ```python
 # Add explicit type annotation
 result: Optional[Dict[str, Any]] = await conn.fetchrow(...)
 ```
 
----
+______________________________________________________________________
 
 ## Tools & IDE Setup
 
 ### VS Code
 
 Recommended extensions:
+
 - Python (Microsoft)
 - Pylance
 - Ruff
@@ -530,6 +561,7 @@ Recommended extensions:
 - isort
 
 **settings.json:**
+
 ```json
 {
   "python.linting.enabled": true,
@@ -548,10 +580,10 @@ Recommended extensions:
 ### PyCharm
 
 1. **Settings → Tools → Black:** Enable on save
-2. **Settings → Tools → isort:** Enable on save
-3. **Settings → Editor → Inspections:** Enable mypy
+1. **Settings → Tools → isort:** Enable on save
+1. **Settings → Editor → Inspections:** Enable mypy
 
----
+______________________________________________________________________
 
 ## Additional Resources
 
@@ -563,7 +595,7 @@ Recommended extensions:
 - [Ruff Rules](https://docs.astral.sh/ruff/rules/)
 - [Black Code Style](https://black.readthedocs.io/en/stable/the_black_code_style/)
 
----
+______________________________________________________________________
 
 ## Getting Help
 
@@ -571,6 +603,6 @@ Recommended extensions:
 - **GitHub Issues:** Report bugs and request features
 - **Discord:** Real-time chat with maintainers and community
 
----
+______________________________________________________________________
 
 **Happy coding! 🚀**

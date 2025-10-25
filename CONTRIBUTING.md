@@ -1,8 +1,9 @@
 # Contributing to AetherLens
 
-Thank you for your interest in contributing to **AetherLens Home Edition**! This document provides guidelines and requirements for contributing to the project.
+Thank you for your interest in contributing to **AetherLens Home Edition**! This document provides guidelines and
+requirements for contributing to the project.
 
----
+______________________________________________________________________
 
 ## Table of Contents
 
@@ -15,7 +16,7 @@ Thank you for your interest in contributing to **AetherLens Home Edition**! This
 - [Submitting Changes](#submitting-changes)
 - [Review Process](#review-process)
 
----
+______________________________________________________________________
 
 ## Code of Conduct
 
@@ -27,12 +28,13 @@ This project adheres to a code of conduct adapted from the Contributor Covenant.
 - Show empathy towards other community members
 
 **Unacceptable behavior includes:**
+
 - Harassment, discrimination, or hostile language
 - Publishing others' private information
 - Trolling or insulting comments
 - Any conduct that could be considered unprofessional
 
----
+______________________________________________________________________
 
 ## Getting Started
 
@@ -47,35 +49,40 @@ This project adheres to a code of conduct adapted from the Contributor Covenant.
 
 1. **Fork the repository** on GitHub
 
-2. **Clone your fork:**
+1. **Clone your fork:**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/aetherlens.git
    cd aetherlens
    ```
 
-3. **Add upstream remote:**
+1. **Add upstream remote:**
+
    ```bash
    git remote add upstream https://github.com/aetherlens/home.git
    ```
 
-4. **Install development dependencies:**
+1. **Install development dependencies:**
+
    ```bash
    pip install -r requirements-dev.txt
    pip install -e .
    ```
 
-5. **Install pre-commit hooks:**
+1. **Install pre-commit hooks:**
+
    ```bash
    make pre-commit-install
    ```
 
-6. **Verify setup:**
+1. **Verify setup:**
+
    ```bash
    make lint
    ./scripts/test-local.sh
    ```
 
----
+______________________________________________________________________
 
 ## Development Setup
 
@@ -111,6 +118,7 @@ pre-commit run --all-files
 ```
 
 **Hooks include:**
+
 - ruff (linting)
 - black (formatting)
 - isort (import sorting)
@@ -121,31 +129,35 @@ These match **exactly** what runs in CI, preventing surprises.
 ### IDE Setup
 
 **Visual Studio Code:**
+
 - Install Python extension
 - Use `.vscode/settings.json` for project settings
 - Enable formatOnSave for black
 - Configure pytest as test runner
 
 **PyCharm:**
+
 - Mark `src/` as Sources Root
 - Configure pytest as default test runner
 - Enable black and ruff in settings
 - Set up run configurations for tests
 
----
+______________________________________________________________________
 
 ## Making Changes
 
 ### Branching Strategy
 
 1. **Create a feature branch:**
+
    ```bash
    git checkout -b feature/your-feature-name
    # or
    git checkout -b fix/your-bug-fix
    ```
 
-2. **Keep branch up to date:**
+1. **Keep branch up to date:**
+
    ```bash
    git fetch upstream
    git rebase upstream/master
@@ -156,6 +168,7 @@ These match **exactly** what runs in CI, preventing surprises.
 Write clear, descriptive commit messages:
 
 **Format:**
+
 ```
 <type>: <short summary> (<50 chars)
 
@@ -165,6 +178,7 @@ Write clear, descriptive commit messages:
 ```
 
 **Types:**
+
 - `feat:` New feature
 - `fix:` Bug fix
 - `docs:` Documentation changes
@@ -174,6 +188,7 @@ Write clear, descriptive commit messages:
 - `chore:` Maintenance tasks
 
 **Examples:**
+
 ```
 feat: Add device auto-discovery for Shelly plugs
 
@@ -197,6 +212,7 @@ Fixes #456
 Follow the project's code style (enforced by pre-commit hooks):
 
 **Python:**
+
 - **PEP 8** compliant (via ruff and black)
 - **Type hints** on all function signatures
 - **Docstrings** for all public APIs (Google style)
@@ -204,6 +220,7 @@ Follow the project's code style (enforced by pre-commit hooks):
 - **Descriptive names** over comments
 
 **Example:**
+
 ```python
 async def collect_device_metrics(
     device_id: str,
@@ -231,7 +248,7 @@ async def collect_device_metrics(
     # Implementation...
 ```
 
----
+______________________________________________________________________
 
 ## Testing Requirements
 
@@ -258,6 +275,7 @@ tests/
 ```
 
 **Unit Test Example:**
+
 ```python
 def test_power_consumption_calculation():
     """Test power consumption calculation."""
@@ -274,6 +292,7 @@ def test_power_consumption_calculation():
 ```
 
 **API Test Example:**
+
 ```python
 import pytest
 
@@ -290,6 +309,7 @@ async def test_create_device_requires_admin(authenticated_client):
 ```
 
 **Integration Test Example:**
+
 ```python
 @pytest.mark.integration
 @pytest.mark.asyncio
@@ -342,6 +362,7 @@ pytest tests/ --cov=src/aetherlens --cov-report=term
 ### Test Guidelines
 
 ✅ **Do:**
+
 - Write independent, isolated tests
 - Use descriptive test names
 - Test both success and error cases
@@ -350,6 +371,7 @@ pytest tests/ --cov=src/aetherlens --cov-report=term
 - Mock external services (when appropriate)
 
 ❌ **Don't:**
+
 - Write tests that depend on other tests
 - Use `time.sleep()` for timing
 - Test implementation details
@@ -358,7 +380,7 @@ pytest tests/ --cov=src/aetherlens --cov-report=term
 
 **See [docs/TESTING.md](docs/TESTING.md) for comprehensive testing guide.**
 
----
+______________________________________________________________________
 
 ## Code Quality Standards
 
@@ -367,11 +389,11 @@ pytest tests/ --cov=src/aetherlens --cov-report=term
 All code must pass these checks (runs in CI):
 
 1. **ruff** - Python linter
-2. **black** - Code formatter
-3. **isort** - Import sorting
-4. **mypy** - Type checking
-5. **pytest** - All tests pass
-6. **coverage** - >70% code coverage
+1. **black** - Code formatter
+1. **isort** - Import sorting
+1. **mypy** - Type checking
+1. **pytest** - All tests pass
+1. **coverage** - >70% code coverage
 
 ### Running Checks Locally
 
@@ -406,6 +428,7 @@ def calculate_cost(power, rate):
 ### Documentation
 
 **Docstrings required** for:
+
 - All public functions and methods
 - All classes
 - All modules
@@ -441,31 +464,35 @@ def example_function(param1: str, param2: int) -> bool:
     # Implementation...
 ```
 
----
+______________________________________________________________________
 
 ## Submitting Changes
 
 ### Pull Request Process
 
 1. **Ensure all checks pass locally:**
+
    ```bash
    make lint
    ./scripts/test-local.sh
    ```
 
-2. **Push to your fork:**
+1. **Push to your fork:**
+
    ```bash
    git push origin feature/your-feature-name
    ```
 
-3. **Create Pull Request** on GitHub:
+1. **Create Pull Request** on GitHub:
+
    - Use a clear, descriptive title
    - Reference related issues (`Closes #123`)
    - Describe what changed and why
    - Include test results and screenshots if relevant
    - Mark as draft if work in progress
 
-4. **Respond to review feedback:**
+1. **Respond to review feedback:**
+
    - Address all comments
    - Push updates to the same branch
    - Mark conversations as resolved
@@ -505,33 +532,38 @@ Closes #123
 Related to #456
 ```
 
----
+______________________________________________________________________
 
 ## Review Process
 
 ### What Reviewers Look For
 
 1. **Correctness**
+
    - Does the code do what it claims?
    - Are edge cases handled?
    - Are there potential bugs?
 
-2. **Test Coverage**
+1. **Test Coverage**
+
    - Are tests comprehensive?
    - Do tests cover error cases?
    - Is coverage >70%?
 
-3. **Code Quality**
+1. **Code Quality**
+
    - Is code readable and maintainable?
    - Are names descriptive?
    - Is complexity reasonable?
 
-4. **Documentation**
+1. **Documentation**
+
    - Are docstrings complete?
    - Is behavior clear?
    - Are examples provided?
 
-5. **Security**
+1. **Security**
+
    - Are inputs validated?
    - Are credentials handled securely?
    - Are there SQL injection risks?
@@ -551,7 +583,7 @@ Related to #456
 - Join Discord server (link in README)
 - Check [CLAUDE.md](CLAUDE.md) for AI assistant guidelines
 
----
+______________________________________________________________________
 
 ## Community
 
@@ -565,26 +597,27 @@ Related to #456
 ### Recognition
 
 Contributors are recognized in:
+
 - `CONTRIBUTORS.md` (added automatically)
 - Release notes
 - Project documentation
 
----
+______________________________________________________________________
 
 ## License
 
 By contributing, you agree that your contributions will be licensed under the **MIT License**.
 
----
+______________________________________________________________________
 
 ## Questions?
 
 **Not sure about something?**
 
 1. Check existing issues and discussions
-2. Review [CLAUDE.md](CLAUDE.md) for development guidelines
-3. Ask in GitHub Discussions
-4. Reach out on Discord
+1. Review [CLAUDE.md](CLAUDE.md) for development guidelines
+1. Ask in GitHub Discussions
+1. Reach out on Discord
 
 **We appreciate all contributions, no matter how small!**
 

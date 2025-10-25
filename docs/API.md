@@ -2,7 +2,8 @@
 
 ## Overview
 
-AetherLens provides a RESTful API for managing devices, metrics, and cost calculations. The API is built with FastAPI and includes comprehensive documentation via Swagger UI.
+AetherLens provides a RESTful API for managing devices, metrics, and cost calculations. The API is built with FastAPI
+and includes comprehensive documentation via Swagger UI.
 
 ## Base URL
 
@@ -27,6 +28,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
@@ -48,10 +50,12 @@ curl http://localhost:8080/api/v1/devices \
 ## Rate Limiting
 
 API requests are rate limited to:
+
 - **60 requests per minute** per IP address
 - **1000 requests per hour** per IP address
 
 Rate limit headers are included in all responses:
+
 - `X-RateLimit-Limit-Minute`: Maximum requests per minute
 - `X-RateLimit-Remaining-Minute`: Remaining requests in current minute
 - `X-RateLimit-Limit-Hour`: Maximum requests per hour
@@ -68,6 +72,7 @@ GET /health
 Returns status of all dependencies (database, TimescaleDB).
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -103,11 +108,13 @@ Authorization: Bearer <token>
 ```
 
 **Query Parameters:**
+
 - `page` (int, default: 1): Page number
 - `page_size` (int, default: 50, max: 100): Items per page
 - `type` (string, optional): Filter by device type
 
 **Response:**
+
 ```json
 {
   "devices": [
@@ -187,6 +194,7 @@ GET /metrics
 ```
 
 Exposes Prometheus-formatted metrics:
+
 - `aetherlens_api_requests_total` - Total API requests by method, endpoint, status
 - `aetherlens_api_request_duration_seconds` - Request duration histogram
 - `aetherlens_api_requests_in_progress` - Current in-progress requests
@@ -196,6 +204,7 @@ Exposes Prometheus-formatted metrics:
 ## Interactive Documentation
 
 Visit these URLs for interactive API documentation:
+
 - **Swagger UI**: http://localhost:8080/docs
 - **ReDoc**: http://localhost:8080/redoc
 - **OpenAPI JSON**: http://localhost:8080/openapi.json
@@ -302,15 +311,15 @@ docker-compose down
 
 ## Performance Targets
 
-| Metric | Target |
-|--------|--------|
-| API response time (p50) | <50ms |
-| API response time (p95) | <200ms |
-| API response time (p99) | <500ms |
-| Requests per second | >1000 |
-| Concurrent connections | >100 |
-| Memory usage (idle) | <256MB |
-| Startup time | <5s |
+| Metric                  | Target  |
+| ----------------------- | ------- |
+| API response time (p50) | \<50ms  |
+| API response time (p95) | \<200ms |
+| API response time (p99) | \<500ms |
+| Requests per second     | >1000   |
+| Concurrent connections  | >100    |
+| Memory usage (idle)     | \<256MB |
+| Startup time            | \<5s    |
 
 ## Security
 
@@ -324,6 +333,7 @@ docker-compose down
 ## Support
 
 For issues or questions:
+
 - GitHub Issues: https://github.com/aetherlens/home/issues
 - Documentation: https://docs.aetherlens.io
 - Discord: https://discord.gg/aetherlens

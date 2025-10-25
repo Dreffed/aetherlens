@@ -2,18 +2,19 @@
 
 ## Overview
 
-This document defines the complete API surface and plugin architecture for AetherLens Home Edition, including REST APIs, GraphQL schemas, WebSocket protocols, and the plugin development interface.
+This document defines the complete API surface and plugin architecture for AetherLens Home Edition, including REST APIs,
+GraphQL schemas, WebSocket protocols, and the plugin development interface.
 
 ## Table of Contents
 
 1. [REST API](#rest-api)
-2. [GraphQL API](#graphql-api)
-3. [WebSocket API](#websocket-api)
-4. [Plugin Architecture](#plugin-architecture)
-5. [Plugin SDK](#plugin-sdk)
-6. [Authentication & Authorization](#authentication--authorization)
-7. [Rate Limiting & Quotas](#rate-limiting--quotas)
-8. [Error Handling](#error-handling)
+1. [GraphQL API](#graphql-api)
+1. [WebSocket API](#websocket-api)
+1. [Plugin Architecture](#plugin-architecture)
+1. [Plugin SDK](#plugin-sdk)
+1. [Authentication & Authorization](#authentication--authorization)
+1. [Rate Limiting & Quotas](#rate-limiting--quotas)
+1. [Error Handling](#error-handling)
 
 ## REST API
 
@@ -1140,12 +1141,13 @@ return msg;
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2025-01-15 | Initial API specification |
-| 1.1.0 | TBD | WebSocket subscriptions, GraphQL support |
-| 1.2.0 | TBD | Plugin SDK v2, streaming metrics |
+| Version | Date       | Changes                                  |
+| ------- | ---------- | ---------------------------------------- |
+| 1.0.0   | 2025-01-15 | Initial API specification                |
+| 1.1.0   | TBD        | WebSocket subscriptions, GraphQL support |
+| 1.2.0   | TBD        | Plugin SDK v2, streaming metrics         |
 
----
+______________________________________________________________________
 
-This specification defines the complete interface for AetherLens Home Edition. All implementations must conform to these interfaces to ensure compatibility and maintainability.
+This specification defines the complete interface for AetherLens Home Edition. All implementations must conform to these
+interfaces to ensure compatibility and maintainability.

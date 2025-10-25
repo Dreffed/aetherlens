@@ -2,19 +2,19 @@
 
 **Quick Reference for fixing CI/CD pipeline errors**
 
----
+______________________________________________________________________
 
 ## 🚨 TL;DR - What to Do Right Now
 
 1. Install tools: `pip install -r requirements-dev.txt`
-2. Create 3 test files (see below)
-3. Add Bandit config
-4. Commit and push
-5. Watch CI turn green ✅
+1. Create 3 test files (see below)
+1. Add Bandit config
+1. Commit and push
+1. Watch CI turn green ✅
 
 **Estimated Time:** 30-45 minutes
 
----
+______________________________________________________________________
 
 ## 📝 Minimal Files to Create
 
@@ -111,7 +111,7 @@ skips:
   - B601  # paramiko_calls - not used
 ```
 
----
+______________________________________________________________________
 
 ## 🔧 Configuration Updates
 
@@ -133,7 +133,7 @@ addopts = [
 ]
 ```
 
----
+______________________________________________________________________
 
 ## 🧪 Test Locally Before Pushing
 
@@ -161,7 +161,7 @@ bandit -r src/ -c .bandit.yml
 # If all pass locally, CI will pass too!
 ```
 
----
+______________________________________________________________________
 
 ## 🚀 Commit and Push
 
@@ -180,23 +180,24 @@ Fixes GitHub Actions lint, test, and security scan errors."
 git push origin master
 ```
 
----
+______________________________________________________________________
 
 ## 🔍 Verify Success
 
 1. Go to GitHub repository
-2. Click "Actions" tab
-3. Watch the latest workflow run
-4. All three jobs should show ✅:
+1. Click "Actions" tab
+1. Watch the latest workflow run
+1. All three jobs should show ✅:
    - Lint Code
    - Run Tests
    - Security Scan
 
----
+______________________________________________________________________
 
 ## ⚠️ If Something Still Fails
 
 ### Lint Failures
+
 ```bash
 # Auto-fix most issues
 black src/ tests/
@@ -205,6 +206,7 @@ ruff check --fix src/ tests/
 ```
 
 ### Test Failures
+
 ```bash
 # Get detailed error output
 pytest tests/ -vv --tb=short
@@ -214,6 +216,7 @@ pytest tests/ --collect-only
 ```
 
 ### Security Failures
+
 ```bash
 # Check which package has issues
 safety check --json | python -m json.tool
@@ -223,42 +226,42 @@ pip install --upgrade <package-name>
 pip freeze > requirements.txt
 ```
 
----
+______________________________________________________________________
 
 ## 📊 Expected Results
 
 After following these steps:
 
-| Check | Status | Coverage |
-|-------|--------|----------|
-| Lint (ruff) | ✅ Pass | 100% |
-| Lint (black) | ✅ Pass | 100% |
-| Lint (isort) | ✅ Pass | 100% |
-| Lint (mypy) | ✅ Pass | 100% |
-| Tests | ✅ Pass | ~35% |
-| Security | ✅ Pass | Warnings OK |
-| Docker Build | ✅ Pass | 100% |
+| Check        | Status  | Coverage    |
+| ------------ | ------- | ----------- |
+| Lint (ruff)  | ✅ Pass | 100%        |
+| Lint (black) | ✅ Pass | 100%        |
+| Lint (isort) | ✅ Pass | 100%        |
+| Lint (mypy)  | ✅ Pass | 100%        |
+| Tests        | ✅ Pass | ~35%        |
+| Security     | ✅ Pass | Warnings OK |
+| Docker Build | ✅ Pass | 100%        |
 
----
+______________________________________________________________________
 
 ## 📈 Next Steps (After CI is Green)
 
 1. ✅ Add more comprehensive unit tests
-2. ✅ Create real integration tests with mocked services
-3. ✅ Increase coverage threshold to 50%, then 70%
-4. ✅ Review and fix security warnings
-5. ✅ Add API endpoint tests when implemented
+1. ✅ Create real integration tests with mocked services
+1. ✅ Increase coverage threshold to 50%, then 70%
+1. ✅ Review and fix security warnings
+1. ✅ Add API endpoint tests when implemented
 
----
+______________________________________________________________________
 
 ## 💡 Pro Tips
 
 1. **Run locally first** - Faster feedback than waiting for CI
-2. **Small commits** - Easier to debug if something breaks
-3. **Check logs** - GitHub Actions shows detailed error messages
-4. **Use mocks** - Don't need real database for tests to pass
-5. **Incremental improvement** - Get to green first, improve later
+1. **Small commits** - Easier to debug if something breaks
+1. **Check logs** - GitHub Actions shows detailed error messages
+1. **Use mocks** - Don't need real database for tests to pass
+1. **Incremental improvement** - Get to green first, improve later
 
----
+______________________________________________________________________
 
 **This is the fast path to a working CI/CD pipeline. See `fix-github-actions-plan.md` for the complete detailed plan.**

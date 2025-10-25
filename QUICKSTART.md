@@ -40,12 +40,12 @@ make test                 # Run all tests
 
 ## Common Commands
 
-| Task | Command (Windows) | Command (Linux/Mac with Make) |
-|------|-------------------|--------------------------------|
-| **Check before push** | `.\venv\Scripts\python -m ruff check src/ tests/`<br>`.\venv\Scripts\python -m black --check src/ tests/`<br>`.\venv\Scripts\python -m isort --check-only src/ tests/`<br>`.\venv\Scripts\python -m mypy src/` | `make lint` |
-| **Auto-fix formatting** | `.\venv\Scripts\python -m black src/ tests/`<br>`.\venv\Scripts\python -m isort src/ tests/`<br>`.\venv\Scripts\python -m ruff check src/ tests/ --fix` | `make format` |
-| **Run tests** | `.\venv\Scripts\pytest tests/ -v` | `make test` |
-| **Test coverage** | `.\venv\Scripts\pytest tests/ -v --cov=src/aetherlens` | `make test-coverage` |
+| Task                    | Command (Windows)                                                                                                                                                                                              | Command (Linux/Mac with Make) |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **Check before push**   | `.\venv\Scripts\python -m ruff check src/ tests/`<br>`.\venv\Scripts\python -m black --check src/ tests/`<br>`.\venv\Scripts\python -m isort --check-only src/ tests/`<br>`.\venv\Scripts\python -m mypy src/` | `make lint`                   |
+| **Auto-fix formatting** | `.\venv\Scripts\python -m black src/ tests/`<br>`.\venv\Scripts\python -m isort src/ tests/`<br>`.\venv\Scripts\python -m ruff check src/ tests/ --fix`                                                        | `make format`                 |
+| **Run tests**           | `.\venv\Scripts\pytest tests/ -v`                                                                                                                                                                              | `make test`                   |
+| **Test coverage**       | `.\venv\Scripts\pytest tests/ -v --cov=src/aetherlens`                                                                                                                                                         | `make test-coverage`          |
 
 ## What Runs in GitHub Actions CI?
 

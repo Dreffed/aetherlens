@@ -190,6 +190,7 @@ import ipdb; ipdb.set_trace()
 ### VS Code
 
 Recommended extensions:
+
 - Python
 - Pylance
 - Ruff
@@ -199,9 +200,9 @@ Recommended extensions:
 ### PyCharm
 
 1. Mark `src` as Sources Root
-2. Enable Django/FastAPI support
-3. Configure pytest as test runner
-4. Enable mypy and ruff inspections
+1. Enable Django/FastAPI support
+1. Configure pytest as test runner
+1. Enable mypy and ruff inspections
 
 ## Troubleshooting
 

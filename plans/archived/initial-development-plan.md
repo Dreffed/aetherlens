@@ -1,49 +1,47 @@
 # AetherLens Home Edition - Initial Development Plan
 
-**Project:** AetherLens Home Edition
-**Version:** 1.0.0
-**Created:** October 21, 2025
-**Last Updated:** October 24, 2025
-**Status:** 🚧 In Development - Phase 1.2 Complete
-**Target:** Home Lab Cost & Usage Monitoring Platform
+**Project:** AetherLens Home Edition **Version:** 1.0.0 **Created:** October 21, 2025 **Last Updated:** October 24, 2025
+**Status:** 🚧 In Development - Phase 1.2 Complete **Target:** Home Lab Cost & Usage Monitoring Platform
 
----
+______________________________________________________________________
 
 ## 📊 Progress Tracker
 
 ### Overall Progress: 20% Complete (2/13 weeks)
 
-| Phase | Status | Progress | Completed Date |
-|-------|--------|----------|----------------|
-| **Phase 1: Foundation (Weeks 1-2)** | ✅ Complete | 100% | Oct 24, 2025 |
-| 1.1 Development Environment | ✅ Complete | 100% | Oct 24, 2025 |
-| 1.2 Database Setup | ✅ Complete | 100% | Oct 24, 2025 |
-| 1.3 Core API Framework | ✅ Complete | 100% | Oct 24, 2025 |
-| **Phase 2: Core Engine (Weeks 3-5)** | ⏳ Pending | 0% | - |
-| **Phase 3: Initial Plugins (Weeks 6-8)** | ⏳ Pending | 0% | - |
-| **Phase 4: Web UI (Weeks 9-10)** | ⏳ Pending | 0% | - |
-| **Phase 5: Testing & Docs (Weeks 11-12)** | ⏳ Pending | 0% | - |
-| **Phase 6: Deployment (Week 13)** | ⏳ Pending | 0% | - |
+| Phase                                     | Status      | Progress | Completed Date |
+| ----------------------------------------- | ----------- | -------- | -------------- |
+| **Phase 1: Foundation (Weeks 1-2)**       | ✅ Complete | 100%     | Oct 24, 2025   |
+| 1.1 Development Environment               | ✅ Complete | 100%     | Oct 24, 2025   |
+| 1.2 Database Setup                        | ✅ Complete | 100%     | Oct 24, 2025   |
+| 1.3 Core API Framework                    | ✅ Complete | 100%     | Oct 24, 2025   |
+| **Phase 2: Core Engine (Weeks 3-5)**      | ⏳ Pending  | 0%       | -              |
+| **Phase 3: Initial Plugins (Weeks 6-8)**  | ⏳ Pending  | 0%       | -              |
+| **Phase 4: Web UI (Weeks 9-10)**          | ⏳ Pending  | 0%       | -              |
+| **Phase 5: Testing & Docs (Weeks 11-12)** | ⏳ Pending  | 0%       | -              |
+| **Phase 6: Deployment (Week 13)**         | ⏳ Pending  | 0%       | -              |
 
 ### Current Focus
-🎯 **Phase 1 Complete!** All foundation infrastructure in place.
-🎯 **Next Up:** Phase 2.1 - Plugin System Architecture
 
----
+🎯 **Phase 1 Complete!** All foundation infrastructure in place. 🎯 **Next Up:** Phase 2.1 - Plugin System Architecture
+
+______________________________________________________________________
 
 ## Executive Summary
 
-This plan outlines the initial development roadmap for AetherLens Home Edition, an open-source cost and usage monitoring platform for home labs, smart homes, and personal cloud services. The project emphasizes **privacy-first**, **local-only** operation, and **community-driven** development.
+This plan outlines the initial development roadmap for AetherLens Home Edition, an open-source cost and usage monitoring
+platform for home labs, smart homes, and personal cloud services. The project emphasizes **privacy-first**,
+**local-only** operation, and **community-driven** development.
 
 ### Key Objectives
 
 1. Build a minimal viable product (MVP) within 3 months
-2. Support 3 key cloud cost integrations (Azure, AWS, Home Assistant)
-3. Run efficiently on Raspberry Pi 4 (<2GB RAM)
-4. Establish foundation for community plugin ecosystem
-5. Maintain 100% local operation with optional cloud features
+1. Support 3 key cloud cost integrations (Azure, AWS, Home Assistant)
+1. Run efficiently on Raspberry Pi 4 (\<2GB RAM)
+1. Establish foundation for community plugin ecosystem
+1. Maintain 100% local operation with optional cloud features
 
----
+______________________________________________________________________
 
 ## Phase 1: Foundation Setup (Weeks 1-2)
 
@@ -54,6 +52,7 @@ This plan outlines the initial development roadmap for AetherLens Home Edition, 
 **Objective:** Set up development infrastructure and tooling
 
 **Tasks:**
+
 - [x] Initialize Git repository structure
 - [x] Set up Python virtual environment (3.11+) - Python 3.12.3 installed
 - [x] Configure development dependencies (see requirements.txt)
@@ -63,6 +62,7 @@ This plan outlines the initial development roadmap for AetherLens Home Edition, 
 - [x] Initialize project structure per ARCHITECTURE.md
 
 **Deliverables:** ✅ All Created
+
 ```
 aetherlens/
 ├── .github/
@@ -99,31 +99,34 @@ aetherlens/
 ```
 
 **Acceptance Criteria:** ✅ All Met
+
 - ✅ Python environment activates successfully (Python 3.12.3)
 - ✅ Docker Compose configuration created and ready
 - ✅ CI pipeline configured (lint, test, security, build)
 - ✅ Code quality tools configured (ruff, mypy, black, isort)
 
 **Notes:**
+
 - 29 configuration and code files created
 - Multi-stage Docker build optimized for production
 - Development compose includes PGAdmin and Redis Commander
 - CI/CD supports Python 3.11 and 3.12
 - Pre-commit hooks configured for automatic code quality checks
 
----
+______________________________________________________________________
 
 ### 1.2 Database Setup ✅ COMPLETE
 
-**Status:** ✅ **Complete**
-**Actual Duration:** 3 days (Oct 22-24, 2025)
-**Completion Date:** October 24, 2025
+**Status:** ✅ **Complete** **Actual Duration:** 3 days (Oct 22-24, 2025) **Completion Date:** October 24, 2025
 
-**Objective:** Initialize TimescaleDB with core schema, hypertables, compression, retention policies, and migration framework.
+**Objective:** Initialize TimescaleDB with core schema, hypertables, compression, retention policies, and migration
+framework.
 
-📋 **Detailed Plan:** See [plans/1.2-database-setup-plan.md](./1.2-database-setup-plan.md) for comprehensive task breakdown.
+📋 **Detailed Plan:** See [plans/1.2-database-setup-plan.md](./1.2-database-setup-plan.md) for comprehensive task
+breakdown.
 
 **High-Level Tasks:**
+
 - ✅ Task 1: TimescaleDB Docker Setup (2 hours)
 - ✅ Task 2: Migration Framework Setup - Direct SQL approach (3 hours)
 - ✅ Task 3: Core Schema Creation (4 hours)
@@ -136,6 +139,7 @@ aetherlens/
 - ✅ Task 10: Backup and Recovery Scripts (2 hours)
 
 **Key Deliverables:**
+
 ```
 migrations/
 ├── alembic.ini                      # Migration config
@@ -155,6 +159,7 @@ scripts/
 ```
 
 **Acceptance Criteria:**
+
 - ✅ TimescaleDB container runs successfully with healthcheck
 - ✅ All migrations run: `alembic upgrade head`
 - ✅ All core tables created with proper indexes
@@ -164,18 +169,20 @@ scripts/
 - ✅ Retention policies active (90 days raw, 1yr hourly, 5yr daily)
 - ✅ Sample data loads successfully
 - ✅ Backup and restore scripts working
-- ✅ Recent queries (<24h) complete in <50ms
+- ✅ Recent queries (\<24h) complete in \<50ms
 
 **Performance Targets:**
-- Recent data queries (<24h): <50ms ✅
-- Historical queries (7 days): <500ms ✅
-- Bulk insert (1000 metrics): <1s ✅
+
+- Recent data queries (\<24h): \<50ms ✅
+- Historical queries (7 days): \<500ms ✅
+- Bulk insert (1000 metrics): \<1s ✅
 - Compression ratio: >70% ✅
-- Memory usage: <512MB ✅
+- Memory usage: \<512MB ✅
 
 **Acceptance Criteria:** ✅ All Met
 
 **Notes:**
+
 - TimescaleDB 2.22.1 with PostgreSQL 15 running successfully
 - 7 core tables + 2 hypertables (7-day chunks) created
 - 31 performance indexes implemented
@@ -187,19 +194,20 @@ scripts/
 - Used direct SQL migrations via docker exec (bypassed Alembic auth issues)
 - 6 migration files created in versions/ directory
 
----
+______________________________________________________________________
 
 ### 1.3 Core API Framework ✅ COMPLETE
 
-**Status:** ✅ **Complete**
-**Actual Duration:** 18.5 hours (9/10 tasks completed)
-**Completion Date:** October 24, 2025
+**Status:** ✅ **Complete** **Actual Duration:** 18.5 hours (9/10 tasks completed) **Completion Date:** October 24, 2025
 
-**Objective:** Build production-ready FastAPI foundation with authentication, middleware, monitoring, and comprehensive API documentation.
+**Objective:** Build production-ready FastAPI foundation with authentication, middleware, monitoring, and comprehensive
+API documentation.
 
-📋 **Detailed Plan:** See [plans/1.3-core-api-framework-plan.md](./1.3-core-api-framework-plan.md) for comprehensive task breakdown.
+📋 **Detailed Plan:** See [plans/1.3-core-api-framework-plan.md](./1.3-core-api-framework-plan.md) for comprehensive task
+breakdown.
 
 **High-Level Tasks:**
+
 - ✅ Task 1: FastAPI Application Bootstrap (2 hours)
 - ✅ Task 2: Structured Logging Setup (1.5 hours)
 - ✅ Task 3: JWT Authentication System (4 hours)
@@ -212,6 +220,7 @@ scripts/
 - ✅ Task 10: Documentation and Deployment (1.5 hours)
 
 **Files:**
+
 ```python
 src/aetherlens/
 ├── api/
@@ -234,6 +243,7 @@ src/aetherlens/
 ```
 
 **Key Deliverables:**
+
 - `src/aetherlens/api/main.py` - FastAPI application with lifespan management
 - `src/aetherlens/api/database.py` - Database connection pool manager
 - `src/aetherlens/api/logging.py` - Structured logging with request IDs
@@ -249,6 +259,7 @@ src/aetherlens/
 - `src/aetherlens/models/metric.py` - Metric models
 
 **Acceptance Criteria:**
+
 - ✅ FastAPI server starts on port 8080
 - ✅ Database connection pool initializes successfully
 - ✅ `/health` endpoint returns comprehensive status
@@ -263,14 +274,16 @@ src/aetherlens/
 - 🟡 Docker deployment - Ready, not yet tested
 
 **Performance Targets:**
-- API response time (p95): <200ms ✅
+
+- API response time (p95): \<200ms ✅
 - Requests per second: >1000 ✅
-- Memory usage: <256MB ✅
-- Startup time: <5s ✅ (<1s actual)
+- Memory usage: \<256MB ✅
+- Startup time: \<5s ✅ (\<1s actual)
 
 **Acceptance Criteria:** ✅ All Met (except deferred testing)
 
 **Notes:**
+
 - Complete FastAPI implementation with 17 files created
 - 13 API endpoints implemented (auth, health, devices, docs)
 - JWT tokens: 1h access, 7d refresh
@@ -283,7 +296,7 @@ src/aetherlens/
 - FastAPI app loads successfully, all dependencies installed
 - Integration testing framework ready (pytest-asyncio)
 
----
+______________________________________________________________________
 
 ## Phase 2: Core Engine (Weeks 3-5)
 
@@ -292,6 +305,7 @@ src/aetherlens/
 **Objective:** Implement plugin manager and base plugin interface
 
 **Tasks:**
+
 - [ ] Design BasePlugin abstract class
 - [ ] Create plugin loader/registry
 - [ ] Implement plugin lifecycle management
@@ -302,6 +316,7 @@ src/aetherlens/
 - [ ] Create plugin validation (manifest, signatures)
 
 **Code Structure:**
+
 ```python
 src/aetherlens/plugins/
 ├── __init__.py
@@ -313,6 +328,7 @@ src/aetherlens/plugins/
 ```
 
 **Acceptance Criteria:**
+
 - BasePlugin class is well-documented
 - Plugin manager loads test plugin
 - Plugins run in separate processes
@@ -320,13 +336,14 @@ src/aetherlens/plugins/
 - Configuration validates properly
 - Health checks detect plugin failures
 
----
+______________________________________________________________________
 
 ### 2.2 Data Collection Pipeline
 
 **Objective:** Build metric collection and processing system
 
 **Tasks:**
+
 - [ ] Implement MetricCollector class
 - [ ] Create metric buffering system (10k metrics)
 - [ ] Build batch insertion logic (1000/batch)
@@ -337,6 +354,7 @@ src/aetherlens/plugins/
 - [ ] Add collection error handling and retries
 
 **Components:**
+
 ```python
 src/aetherlens/collection/
 ├── __init__.py
@@ -348,20 +366,22 @@ src/aetherlens/collection/
 ```
 
 **Acceptance Criteria:**
+
 - Collector handles 1,000 metrics/second
 - Buffering prevents data loss
-- Batch inserts complete in <1 second
+- Batch inserts complete in \<1 second
 - Invalid metrics logged but don't crash system
-- Memory usage stays <256MB
-- Error rate <0.1% in normal operation
+- Memory usage stays \<256MB
+- Error rate \<0.1% in normal operation
 
----
+______________________________________________________________________
 
 ### 2.3 Cost Calculation Engine
 
 **Objective:** Implement energy cost calculations with TOU rates
 
 **Tasks:**
+
 - [ ] Create RateSchedule model
 - [ ] Implement CostCalculator class
 - [ ] Support time-of-use (TOU) rates
@@ -372,6 +392,7 @@ src/aetherlens/collection/
 - [ ] Build daily/monthly cost summaries
 
 **Code:**
+
 ```python
 src/aetherlens/costs/
 ├── __init__.py
@@ -382,14 +403,15 @@ src/aetherlens/costs/
 ```
 
 **Acceptance Criteria:**
+
 - Correct cost for peak/off-peak periods
 - Handles DST transitions properly
 - Supports multiple rate schedules
 - Calculates monthly projections
 - Carbon emissions accurate (±5%)
-- Cost queries return in <100ms
+- Cost queries return in \<100ms
 
----
+______________________________________________________________________
 
 ## Phase 3: Initial Plugins (Weeks 6-8)
 
@@ -398,6 +420,7 @@ src/aetherlens/costs/
 **Objective:** Create plugin development kit and documentation
 
 **Tasks:**
+
 - [ ] Write plugin development guide
 - [ ] Create plugin template repository
 - [ ] Build plugin testing framework
@@ -408,18 +431,20 @@ src/aetherlens/costs/
 - [ ] Create plugin submission guidelines
 
 **Deliverables:**
+
 - `docs/PLUGIN_GUIDE.md` (comprehensive guide)
 - Plugin template repository
 - Example plugins (3 working examples: Azure, Home Assistant, AWS)
 - Plugin testing utilities
 
----
+______________________________________________________________________
 
 ### 3.2 Azure Cost Management Plugin
 
 **Objective:** First production plugin for Azure cloud cost tracking
 
 **Tasks:**
+
 - [ ] Research Azure Cost Management API
 - [ ] Implement Azure authentication (managed identity, service principal)
 - [ ] Support multiple subscription access
@@ -433,6 +458,7 @@ src/aetherlens/costs/
 - [ ] Document configuration options
 
 **Metrics Collected:**
+
 - Daily Azure costs by subscription
 - Cost breakdown by resource group
 - Cost breakdown by service (Compute, Storage, Networking, etc.)
@@ -441,6 +467,7 @@ src/aetherlens/costs/
 - Budget alerts and overages
 
 **Configuration:**
+
 ```yaml
 plugins:
   - name: azure_cost
@@ -457,13 +484,14 @@ plugins:
     include_forecasts: true
 ```
 
----
+______________________________________________________________________
 
 ### 3.3 Home Assistant Integration Plugin
 
 **Objective:** Integrate with Home Assistant ecosystem
 
 **Tasks:**
+
 - [ ] Implement Home Assistant API client
 - [ ] Support long-lived access tokens
 - [ ] Query power/energy sensors
@@ -475,11 +503,13 @@ plugins:
 - [ ] Write integration tests
 
 **Metrics:**
+
 - Power consumption (from `sensor.*_power`)
 - Energy totals (from `sensor.*_energy`)
 - Device states (on/off from `switch.*`, `light.*`)
 
 **Configuration:**
+
 ```yaml
 plugins:
   - name: home_assistant
@@ -492,13 +522,14 @@ plugins:
       - switch.office_lights
 ```
 
----
+______________________________________________________________________
 
 ### 3.4 AWS Cost Explorer Plugin
 
 **Objective:** Track personal AWS cloud spending
 
 **Tasks:**
+
 - [ ] Implement AWS Cost Explorer API client
 - [ ] Support AWS profiles/credentials
 - [ ] Fetch daily cost data
@@ -510,12 +541,14 @@ plugins:
 - [ ] Add cost forecasting
 
 **Metrics:**
+
 - Daily AWS costs by service
 - Month-to-date spending
 - Cost forecasts
 - Usage by region
 
 **Configuration:**
+
 ```yaml
 plugins:
   - name: aws_cost
@@ -525,7 +558,7 @@ plugins:
     poll_interval: 3600  # Hourly
 ```
 
----
+______________________________________________________________________
 
 ## Phase 4: Web UI (Weeks 9-10)
 
@@ -534,6 +567,7 @@ plugins:
 **Objective:** Initialize React TypeScript frontend
 
 **Tasks:**
+
 - [ ] Create Vite + React + TypeScript project
 - [ ] Set up Tailwind CSS
 - [ ] Configure Recharts for visualizations
@@ -544,6 +578,7 @@ plugins:
 - [ ] Configure build pipeline
 
 **Structure:**
+
 ```
 web/
 ├── src/
@@ -560,13 +595,14 @@ web/
 └── tailwind.config.js
 ```
 
----
+______________________________________________________________________
 
 ### 4.2 Dashboard Views
 
 **Objective:** Build core UI screens
 
 **Tasks:**
+
 - [ ] Overview dashboard (current consumption, costs)
 - [ ] Device list view
 - [ ] Device detail view (history, graphs)
@@ -576,6 +612,7 @@ web/
 - [ ] Alert configuration page
 
 **Components:**
+
 ```typescript
 src/components/
 ├── Dashboard/
@@ -596,14 +633,15 @@ src/components/
 ```
 
 **Acceptance Criteria:**
-- Dashboard loads in <1 second
+
+- Dashboard loads in \<1 second
 - Real-time updates via WebSocket
 - Charts render smoothly
 - Mobile responsive design
 - Accessible (WCAG 2.1 AA)
 - Dark mode support
 
----
+______________________________________________________________________
 
 ## Phase 5: Testing & Documentation (Weeks 11-12)
 
@@ -614,36 +652,41 @@ src/components/
 **Test Types:**
 
 1. **Unit Tests** (pytest)
+
    - Core business logic
    - Cost calculations
    - Metric validation
    - Plugin loading
 
-2. **Integration Tests**
+1. **Integration Tests**
+
    - API endpoints
    - Database operations
    - Plugin lifecycle
    - Authentication flow
 
-3. **Performance Tests**
+1. **Performance Tests**
+
    - Bulk metric insertion
    - Query response times
    - Memory usage profiling
    - Concurrent requests
 
-4. **E2E Tests** (Playwright)
+1. **E2E Tests** (Playwright)
+
    - User workflows
    - Dashboard interactions
    - Device management
    - Settings configuration
 
 **Coverage Targets:**
+
 - Core engine: >80%
 - API endpoints: 100%
 - Plugins: >70%
 - Frontend: >60%
 
----
+______________________________________________________________________
 
 ### 5.2 Documentation
 
@@ -652,6 +695,7 @@ src/components/
 **Documents to Create:**
 
 1. **User Documentation**
+
    - [ ] Installation guide (all platforms)
    - [ ] Quick start tutorial
    - [ ] Configuration reference
@@ -659,7 +703,8 @@ src/components/
    - [ ] Troubleshooting guide
    - [ ] FAQ
 
-2. **Developer Documentation**
+1. **Developer Documentation**
+
    - [ ] CONTRIBUTING.md
    - [ ] SECURITY.md
    - [ ] Plugin development tutorial
@@ -667,13 +712,14 @@ src/components/
    - [ ] Database schema diagram
    - [ ] Architecture decision records
 
-3. **Community Documentation**
+1. **Community Documentation**
+
    - [ ] CODE_OF_CONDUCT.md
    - [ ] Issue templates
    - [ ] PR template
    - [ ] Release process guide
 
----
+______________________________________________________________________
 
 ## Phase 6: Deployment & Launch (Week 13)
 
@@ -682,6 +728,7 @@ src/components/
 **Objective:** Create production-ready Docker images
 
 **Tasks:**
+
 - [ ] Optimize Dockerfile (multi-stage build)
 - [ ] Create docker-compose.yml for production
 - [ ] Set up health checks
@@ -692,17 +739,19 @@ src/components/
 - [ ] Publish to Docker Hub
 
 **Images:**
+
 - `aetherlens/home:latest`
 - `aetherlens/home:1.0.0`
 - `aetherlens/home:1.0.0-alpine` (minimal)
 
----
+______________________________________________________________________
 
 ### 6.2 Release Preparation
 
 **Objective:** Prepare v1.0.0 release
 
 **Tasks:**
+
 - [ ] Create CHANGELOG.md
 - [ ] Tag v1.0.0 release
 - [ ] Generate release notes
@@ -714,6 +763,7 @@ src/components/
 - [ ] Create GitHub Discussions categories
 
 **Release Checklist:**
+
 - [ ] All tests passing
 - [ ] Documentation complete
 - [ ] Security audit complete
@@ -722,137 +772,151 @@ src/components/
 - [ ] GitHub release created
 - [ ] Community channels live
 
----
+______________________________________________________________________
 
 ## Resource Requirements
 
 ### Development Team
 
 **Recommended:**
+
 - 1 Backend Developer (Python/FastAPI)
 - 1 Frontend Developer (React/TypeScript)
 - 1 DevOps/Infrastructure (Docker/CI/CD)
 - 1 QA/Testing (optional but recommended)
 
 **Solo Developer:**
+
 - Expect 3-4 months for MVP
 - Focus on core features first
 - Leverage AI tools (Claude, Copilot)
 
----
+______________________________________________________________________
 
 ### Infrastructure
 
 **Development:**
+
 - Local development machine (8GB+ RAM)
 - Docker Desktop
 - GitHub account (free tier sufficient)
 - VS Code or PyCharm
 
 **Production (Recommended):**
+
 - Raspberry Pi 4 (4GB RAM) or equivalent
 - 32GB+ microSD card or SSD
 - Reliable power supply
 - Local network connection
 
 **Cloud (Optional):**
+
 - GitHub Actions (2,000 free minutes/month)
 - Docker Hub (1 free private repo)
 - Optional: DigitalOcean/AWS for demo instance
 
----
+______________________________________________________________________
 
 ## Success Metrics
 
 ### Technical Metrics
 
 **Performance:**
+
 - [ ] System runs on Raspberry Pi 4 (2GB RAM)
 - [ ] Handles 1,000 metrics/second
-- [ ] API p50 latency <100ms
-- [ ] API p99 latency <1s
-- [ ] Memory usage <1GB total
-- [ ] Storage growth <50MB/day (100 devices)
+- [ ] API p50 latency \<100ms
+- [ ] API p99 latency \<1s
+- [ ] Memory usage \<1GB total
+- [ ] Storage growth \<50MB/day (100 devices)
 
 **Reliability:**
+
 - [ ] Uptime >99.5%
-- [ ] Plugin crash recovery <10 seconds
-- [ ] Data loss rate <0.01%
-- [ ] Database backup completes in <5 minutes
+- [ ] Plugin crash recovery \<10 seconds
+- [ ] Data loss rate \<0.01%
+- [ ] Database backup completes in \<5 minutes
 
 **Quality:**
+
 - [ ] Test coverage >70%
 - [ ] Zero critical security vulnerabilities
 - [ ] Code quality score >8/10 (CodeClimate)
 - [ ] Documentation completeness >90%
 
----
+______________________________________________________________________
 
 ### User Metrics (Post-Launch)
 
 **Adoption:**
+
 - 100 GitHub stars in month 1
 - 500 Docker Hub pulls in month 1
 - 50 active installs in month 1
 - 10 community contributions in quarter 1
 
 **Engagement:**
+
 - 5 plugins contributed by community (quarter 2)
 - 100+ Discord members (month 3)
 - 50+ GitHub issues/discussions (month 2)
 - 10+ blog posts/tutorials by users (quarter 2)
 
----
+______________________________________________________________________
 
 ## Risk Management
 
 ### Technical Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| Plugin crashes affect core | Medium | High | Process isolation, health checks |
-| TimescaleDB performance issues | Low | Medium | Use continuous aggregates, compression |
-| Memory leaks in long-running process | Medium | High | Regular profiling, leak detection tests |
-| API rate limits on cloud services | High | Low | Caching, exponential backoff |
-| Security vulnerabilities | Medium | High | Regular audits, dependency scanning |
-| Database corruption | Low | Critical | Automated backups, WAL archiving |
+| Risk                                 | Probability | Impact   | Mitigation                              |
+| ------------------------------------ | ----------- | -------- | --------------------------------------- |
+| Plugin crashes affect core           | Medium      | High     | Process isolation, health checks        |
+| TimescaleDB performance issues       | Low         | Medium   | Use continuous aggregates, compression  |
+| Memory leaks in long-running process | Medium      | High     | Regular profiling, leak detection tests |
+| API rate limits on cloud services    | High        | Low      | Caching, exponential backoff            |
+| Security vulnerabilities             | Medium      | High     | Regular audits, dependency scanning     |
+| Database corruption                  | Low         | Critical | Automated backups, WAL archiving        |
 
 ### Project Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| Scope creep | High | Medium | Strict MVP definition, feature freeze |
-| Insufficient testing | Medium | High | Automated testing, CI/CD |
-| Poor documentation | Medium | High | Documentation as code, peer review |
-| Lack of contributors | High | Medium | Good docs, welcoming community |
-| Competing projects | Low | Medium | Focus on unique value (privacy, plugins) |
-| Burnout (solo dev) | Medium | High | Realistic timeline, community support |
+| Risk                 | Probability | Impact | Mitigation                               |
+| -------------------- | ----------- | ------ | ---------------------------------------- |
+| Scope creep          | High        | Medium | Strict MVP definition, feature freeze    |
+| Insufficient testing | Medium      | High   | Automated testing, CI/CD                 |
+| Poor documentation   | Medium      | High   | Documentation as code, peer review       |
+| Lack of contributors | High        | Medium | Good docs, welcoming community           |
+| Competing projects   | Low         | Medium | Focus on unique value (privacy, plugins) |
+| Burnout (solo dev)   | Medium      | High   | Realistic timeline, community support    |
 
----
+______________________________________________________________________
 
 ## Communication Plan
 
 ### Internal (Team)
 
 **Daily:**
+
 - Standup (async via GitHub Discussions)
 - Code reviews (GitHub PRs)
 
 **Weekly:**
+
 - Sprint planning (Monday)
 - Demo/retrospective (Friday)
 - Office hours (Discord)
 
 **Monthly:**
+
 - Roadmap review
 - Community updates
 - Security review
 
----
+______________________________________________________________________
 
 ### External (Community)
 
 **Channels:**
+
 - GitHub Discussions (async Q&A)
 - Discord (real-time chat)
 - Blog/Changelog (announcements)
@@ -860,22 +924,25 @@ src/components/
 - Reddit (r/homelab, r/selfhosted)
 
 **Cadence:**
+
 - Weekly development updates
 - Monthly community calls
 - Quarterly roadmap updates
 - Immediate security advisories
 
----
+______________________________________________________________________
 
 ## Budget (Open Source Project)
 
 ### Costs
 
 **Required (Minimal):**
+
 - Domain name: $12/year
 - Nothing else required! (All free/open-source tools)
 
 **Optional (Recommended):**
+
 - Cloud demo instance: $5-10/month (DigitalOcean)
 - SSL certificate: $0 (Let's Encrypt)
 - Monitoring: $0 (self-hosted Prometheus)
@@ -883,7 +950,7 @@ src/components/
 
 **Total:** $12-132/year depending on demo instance
 
----
+______________________________________________________________________
 
 ## Timeline Summary
 
@@ -898,31 +965,35 @@ Week 13:    Deployment, Release v1.0.0
 
 **Total:** 13 weeks (3.25 months) to MVP
 
----
+______________________________________________________________________
 
 ## Next Immediate Steps
 
 ### This Week
 
 1. **Set up development environment**
+
    - Install Python 3.11+
    - Install Docker Desktop
    - Clone repository
    - Create virtual environment
 
-2. **Initialize project structure**
+1. **Initialize project structure**
+
    - Create directory structure
    - Set up pyproject.toml
    - Configure linters and formatters
    - Initialize Git
 
-3. **Database setup**
+1. **Database setup**
+
    - Start TimescaleDB container
    - Run schema migrations
    - Test sample queries
    - Set up retention policies
 
-4. **Start core API**
+1. **Start core API**
+
    - Create FastAPI app
    - Implement health endpoint
    - Add authentication
@@ -931,156 +1002,162 @@ Week 13:    Deployment, Release v1.0.0
 ### Next Week
 
 1. **Plugin system foundation**
+
    - Design BasePlugin class
    - Implement PluginManager
    - Create test plugin
    - Verify process isolation
 
-2. **Data collection pipeline**
+1. **Data collection pipeline**
+
    - Build MetricCollector
    - Add buffering
    - Implement batch inserts
    - Test performance
 
-3. **Start first plugin (Azure Cost Management)**
+1. **Start first plugin (Azure Cost Management)**
+
    - Research Azure Cost Management API documentation
    - Set up Azure authentication flow
    - Create basic plugin structure
 
----
+______________________________________________________________________
 
 ## Appendix A: Technology Stack Decisions
 
 ### Backend Rationale
 
 **Python 3.11+**
+
 - AI-assisted development friendly
 - Rich ecosystem (FastAPI, Pydantic, SQLAlchemy)
 - Fast enough for home lab scale
 - Easy for contributors
 
 **FastAPI**
+
 - High performance (async ASGI)
 - Built-in OpenAPI documentation
 - Excellent validation (Pydantic)
 - Modern Python features
 
 **TimescaleDB**
+
 - SQL + time-series in one database
 - Excellent compression (90% reduction)
 - Mature ecosystem
 - Familiar to most developers
 
----
+______________________________________________________________________
 
 ### Frontend Rationale
 
 **React 18**
+
 - Large ecosystem
 - Component reusability
 - Concurrent features for smooth UI
 - Wide talent pool
 
 **TypeScript**
+
 - Type safety
 - Better IDE support
 - Scales well
 - Industry standard
 
 **Tailwind CSS**
+
 - Utility-first (fast development)
 - Small bundle size
 - Consistent design
 - Great documentation
 
----
+______________________________________________________________________
 
 ## Appendix B: Alternative Approaches Considered
 
 ### 1. Language Choice
 
-**Considered:** Go, Rust, Node.js
-**Chosen:** Python
-**Reason:** AI-assisted development, faster iteration, easier contributions
+**Considered:** Go, Rust, Node.js **Chosen:** Python **Reason:** AI-assisted development, faster iteration, easier
+contributions
 
 ### 2. Database
 
-**Considered:** InfluxDB, QuestDB, PostgreSQL only
-**Chosen:** TimescaleDB
-**Reason:** Single database for time-series + config, SQL familiarity
+**Considered:** InfluxDB, QuestDB, PostgreSQL only **Chosen:** TimescaleDB **Reason:** Single database for time-series +
+config, SQL familiarity
 
 ### 3. Frontend
 
-**Considered:** Vue.js, Svelte, Angular
-**Chosen:** React
-**Reason:** Largest ecosystem, most contributors familiar
+**Considered:** Vue.js, Svelte, Angular **Chosen:** React **Reason:** Largest ecosystem, most contributors familiar
 
 ### 4. Plugin Architecture
 
-**Considered:** In-process, WebAssembly, gRPC
-**Chosen:** HTTP-based process isolation
-**Reason:** Security, fault tolerance, simplicity
+**Considered:** In-process, WebAssembly, gRPC **Chosen:** HTTP-based process isolation **Reason:** Security, fault
+tolerance, simplicity
 
----
+______________________________________________________________________
 
 ## Appendix C: Resources & References
 
 ### Learning Resources
 
 **FastAPI:**
+
 - Official Tutorial: https://fastapi.tiangolo.com/tutorial/
 - Async Python: https://realpython.com/async-io-python/
 
 **TimescaleDB:**
+
 - Getting Started: https://docs.timescale.com/getting-started/
 - Best Practices: https://docs.timescale.com/use-timescale/latest/
 
 **React:**
+
 - Official Docs: https://react.dev/learn
 - TypeScript Handbook: https://www.typescriptlang.org/docs/
 
 **Docker:**
+
 - Compose Docs: https://docs.docker.com/compose/
 - Best Practices: https://docs.docker.com/develop/dev-best-practices/
 
----
+______________________________________________________________________
 
 ### Inspiration Projects
 
 **Similar Projects:**
+
 - Home Assistant: https://www.home-assistant.io/
 - Grafana: https://grafana.com/
 - Telegraf: https://www.influxdata.com/time-series-platform/telegraf/
 
 **Home Lab Community:**
+
 - r/homelab: https://reddit.com/r/homelab
 - r/selfhosted: https://reddit.com/r/selfhosted
 
----
+______________________________________________________________________
 
 ## Appendix D: Contact & Support
 
-**Project Lead:** TBD
-**Email:** info@aetherlens.io
-**GitHub:** https://github.com/aetherlens/home
-**Discord:** https://discord.gg/aetherlens (to be created)
+**Project Lead:** TBD **Email:** info@aetherlens.io **GitHub:** https://github.com/aetherlens/home **Discord:**
+https://discord.gg/aetherlens (to be created)
 
----
+______________________________________________________________________
 
-**Document Version:** 1.0.0
-**Last Updated:** October 21, 2025
-**Status:** Ready for Development
+**Document Version:** 1.0.0 **Last Updated:** October 21, 2025 **Status:** Ready for Development
 
----
+______________________________________________________________________
 
 ## Sign-Off
 
 This plan has been reviewed and is ready for execution. Team members should:
 
 1. Review this entire document
-2. Ask questions in GitHub Discussions
-3. Set up local development environment
-4. Attend kickoff meeting
-5. Begin Phase 1 tasks
+1. Ask questions in GitHub Discussions
+1. Set up local development environment
+1. Attend kickoff meeting
+1. Begin Phase 1 tasks
 
 **Ready to build something amazing!** 🚀
