@@ -38,7 +38,10 @@
       "Bash(test:*)",
       "Bash(scriptspre-push.bat)",
       "Bash(cmd /c scripts\\pre-push.bat)",
-      "Bash(scripts/format.bat)"
+      "Bash(scripts/format.bat)",
+      "Bash(echo:*)",
+      "Bash(cmd /c \"scripts\\pre-push.bat && echo SUCCESS || echo FAILED\")",
+      "Bash(/dev/null)"
     ],
     "deny": [],
     "ask": []
