@@ -43,7 +43,8 @@
       "Bash(cmd /c \"scripts\\pre-push.bat && echo SUCCESS || echo FAILED\")",
       "Bash(/dev/null)",
       "Bash(scripts/install-hooks.bat)",
-      "Bash(.git/hooks/pre-push)"
+      "Bash(.git/hooks/pre-push)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
