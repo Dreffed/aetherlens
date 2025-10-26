@@ -75,6 +75,7 @@ echo ON PUSH (pre-push):
 echo   - Ruff linting
 echo   - Black formatting check
 echo   - isort import ordering
+echo   - mypy type checking
 echo   - Unit tests
 echo   - Security tests
 echo   - Coverage report (warning only)

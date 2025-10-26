@@ -58,10 +58,24 @@ if errorlevel 1 (
     echo [OK] isort import ordering passed
 )
 
-REM Step 4: Run unit tests
+REM Step 4: Run mypy type checking (warning only in Phase 1)
 echo.
 echo =====================================================================
-echo 4/5 Running unit tests...
+echo 4/6 Running mypy type checking...
+echo =====================================================================
+.\venv\Scripts\python -m mypy src/
+if errorlevel 1 (
+    echo [WARNING] Type checking found errors (non-blocking in Phase 1)
+    echo   These will need to be fixed before Phase 2
+    echo   See output above for details
+) else (
+    echo [OK] Type checking passed
+)
+
+REM Step 5: Run unit tests
+echo.
+echo =====================================================================
+echo 5/6 Running unit tests...
 echo =====================================================================
 .\venv\Scripts\pytest tests/unit/ -v --tb=short
 if errorlevel 1 (
@@ -72,10 +86,10 @@ if errorlevel 1 (
     echo [OK] Unit tests passed
 )
 
-REM Step 5: Run security tests
+REM Step 6: Run security tests
 echo.
 echo =====================================================================
-echo 5/5 Running security tests...
+echo 6/6 Running security tests...
 echo =====================================================================
 .\venv\Scripts\pytest tests/security/ -v -m security
 if errorlevel 1 (
@@ -86,7 +100,7 @@ if errorlevel 1 (
     echo [OK] Security tests passed
 )
 
-REM Step 6: Check test coverage (warning only)
+REM Bonus: Check test coverage (warning only)
 echo.
 echo =====================================================================
 echo Bonus: Checking test coverage...
