@@ -1,15 +1,14 @@
 """
 Rate limiting middleware for API protection.
 """
+
 import time
 from collections import defaultdict
-from typing import Dict, Tuple
 
 import structlog
-from fastapi import Request, Response, status
+from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
-
 
 logger = structlog.get_logger()
 
@@ -18,14 +17,9 @@ class InMemoryRateLimiter:
     """In-memory rate limiter using sliding window."""
 
     def __init__(self):
-        self.requests: Dict[str, list[float]] = defaultdict(list)
+        self.requests: dict[str, list[float]] = defaultdict(list)
 
-    def is_allowed(
-        self,
-        key: str,
-        max_requests: int,
-        window_seconds: int
-    ) -> Tuple[bool, int]:
+    def is_allowed(self, key: str, max_requests: int, window_seconds: int) -> tuple[bool, int]:
         """
         Check if request is allowed under rate limit.
 
@@ -42,8 +36,7 @@ class InMemoryRateLimiter:
 
         # Remove old requests outside window
         self.requests[key] = [
-            timestamp for timestamp in self.requests[key]
-            if timestamp > window_start
+            timestamp for timestamp in self.requests[key] if timestamp > window_start
         ]
 
         # Check if under limit
@@ -59,12 +52,7 @@ class InMemoryRateLimiter:
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Middleware to enforce rate limiting on API endpoints."""
 
-    def __init__(
-        self,
-        app,
-        requests_per_minute: int = 60,
-        requests_per_hour: int = 1000
-    ):
+    def __init__(self, app, requests_per_minute: int = 60, requests_per_hour: int = 1000):
         super().__init__(app)
         self.limiter = InMemoryRateLimiter()
         self.requests_per_minute = requests_per_minute
@@ -82,46 +70,33 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         # Check minute limit
         minute_allowed, minute_remaining = self.limiter.is_allowed(
-            f"{client_ip}:minute",
-            self.requests_per_minute,
-            60
+            f"{client_ip}:minute", self.requests_per_minute, 60
         )
 
         # Check hour limit
         hour_allowed, hour_remaining = self.limiter.is_allowed(
-            f"{client_ip}:hour",
-            self.requests_per_hour,
-            3600
+            f"{client_ip}:hour", self.requests_per_hour, 3600
         )
 
         if not minute_allowed:
             logger.warning(
-                "Rate limit exceeded (minute)",
-                client_ip=client_ip,
-                path=request.url.path
+                "Rate limit exceeded (minute)", client_ip=client_ip, path=request.url.path
             )
             return JSONResponse(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                 content={
                     "detail": "Rate limit exceeded. Try again in 1 minute.",
-                    "retry_after": 60
+                    "retry_after": 60,
                 },
-                headers={"Retry-After": "60"}
+                headers={"Retry-After": "60"},
             )
 
         if not hour_allowed:
-            logger.warning(
-                "Rate limit exceeded (hour)",
-                client_ip=client_ip,
-                path=request.url.path
-            )
+            logger.warning("Rate limit exceeded (hour)", client_ip=client_ip, path=request.url.path)
             return JSONResponse(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                content={
-                    "detail": "Rate limit exceeded. Try again later.",
-                    "retry_after": 3600
-                },
-                headers={"Retry-After": "3600"}
+                content={"detail": "Rate limit exceeded. Try again later.", "retry_after": 3600},
+                headers={"Retry-After": "3600"},
             )
 
         # Process request

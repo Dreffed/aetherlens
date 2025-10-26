@@ -47,9 +47,7 @@ async def test_devices_table_schema(db_pool):
         # Verify required columns exist
         required_columns = ["device_id", "name", "type", "created_at", "updated_at"]
         for col in required_columns:
-            assert (
-                col in column_names
-            ), f"Required column '{col}' missing from devices table"
+            assert col in column_names, f"Required column '{col}' missing from devices table"
 
 
 @pytest.mark.integration
@@ -70,9 +68,7 @@ async def test_users_table_schema(db_pool):
 
         required_columns = ["user_id", "username", "email", "password_hash", "role"]
         for col in required_columns:
-            assert (
-                col in column_names
-            ), f"Required column '{col}' missing from users table"
+            assert col in column_names, f"Required column '{col}' missing from users table"
 
 
 @pytest.mark.integration

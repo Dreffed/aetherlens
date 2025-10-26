@@ -12,16 +12,13 @@ Tests for:
 import pytest
 from httpx import AsyncClient
 
-
 # ============================================================================
 # List Devices Tests
 # ============================================================================
 
 
 @pytest.mark.asyncio
-async def test_list_devices_authenticated(
-    authenticated_client: AsyncClient, sample_device
-):
+async def test_list_devices_authenticated(authenticated_client: AsyncClient, sample_device):
     """Test listing devices as authenticated user."""
     response = await authenticated_client.get("/api/v1/devices")
 
@@ -49,9 +46,7 @@ async def test_list_devices_unauthenticated(api_client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_list_devices_pagination(
-    authenticated_client: AsyncClient, sample_devices
-):
+async def test_list_devices_pagination(authenticated_client: AsyncClient, sample_devices):
     """Test device list pagination."""
     response = await authenticated_client.get("/api/v1/devices?page=1&page_size=2")
 
@@ -133,9 +128,7 @@ async def test_get_device_unauthenticated(api_client: AsyncClient, sample_device
 
 
 @pytest.mark.asyncio
-async def test_get_device_includes_timestamps(
-    authenticated_client: AsyncClient, sample_device
-):
+async def test_get_device_includes_timestamps(authenticated_client: AsyncClient, sample_device):
     """Test that device response includes created_at and updated_at."""
     device_id = sample_device["device_id"]
     response = await authenticated_client.get(f"/api/v1/devices/{device_id}")
@@ -272,16 +265,12 @@ async def test_update_device_as_admin(admin_client: AsyncClient, sample_device):
 
 
 @pytest.mark.asyncio
-async def test_update_device_as_user_forbidden(
-    authenticated_client: AsyncClient, sample_device
-):
+async def test_update_device_as_user_forbidden(authenticated_client: AsyncClient, sample_device):
     """Test that regular users cannot update devices."""
     device_id = sample_device["device_id"]
     update_data = {"name": "Should Not Update"}
 
-    response = await authenticated_client.put(
-        f"/api/v1/devices/{device_id}", json=update_data
-    )
+    response = await authenticated_client.put(f"/api/v1/devices/{device_id}", json=update_data)
 
     assert response.status_code == 403
 
@@ -291,9 +280,7 @@ async def test_update_device_not_found(admin_client: AsyncClient):
     """Test updating non-existent device returns 404."""
     update_data = {"name": "Updated Name"}
 
-    response = await admin_client.put(
-        "/api/v1/devices/no-such-device", json=update_data
-    )
+    response = await admin_client.put("/api/v1/devices/no-such-device", json=update_data)
 
     assert response.status_code == 404
 
@@ -336,9 +323,7 @@ async def test_delete_device_as_admin(admin_client: AsyncClient, sample_device):
 
 
 @pytest.mark.asyncio
-async def test_delete_device_as_user_forbidden(
-    authenticated_client: AsyncClient, sample_device
-):
+async def test_delete_device_as_user_forbidden(authenticated_client: AsyncClient, sample_device):
     """Test that regular users cannot delete devices."""
     device_id = sample_device["device_id"]
 
@@ -371,9 +356,7 @@ async def test_delete_device_unauthenticated(api_client: AsyncClient, sample_dev
 
 
 @pytest.mark.asyncio
-async def test_device_response_structure(
-    authenticated_client: AsyncClient, sample_device
-):
+async def test_device_response_structure(authenticated_client: AsyncClient, sample_device):
     """Test that device response has correct structure."""
     device_id = sample_device["device_id"]
     response = await authenticated_client.get(f"/api/v1/devices/{device_id}")

@@ -1,8 +1,9 @@
 """API endpoint performance tests."""
 
-import pytest
-import time
 import asyncio
+import time
+
+import pytest
 from httpx import AsyncClient
 
 
@@ -47,6 +48,7 @@ async def test_device_list_performance(authenticated_client: AsyncClient, sample
 @pytest.mark.asyncio
 async def test_concurrent_requests(authenticated_client: AsyncClient):
     """Test handling concurrent requests."""
+
     async def make_request():
         return await authenticated_client.get("/health/live")
 

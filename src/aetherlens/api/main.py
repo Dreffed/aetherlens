@@ -1,21 +1,21 @@
 """
 AetherLens FastAPI Application
 """
+
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 import structlog
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from aetherlens.config import settings
 from aetherlens.api.database import db_manager
-from aetherlens.api.logging import configure_logging, RequestLoggingMiddleware
-from aetherlens.api.rate_limit import RateLimitMiddleware
+from aetherlens.api.logging import RequestLoggingMiddleware, configure_logging
 from aetherlens.api.metrics import PrometheusMiddleware, metrics_endpoint
-from aetherlens.api.routes import auth, health, devices
-
+from aetherlens.api.rate_limit import RateLimitMiddleware
+from aetherlens.api.routes import auth, devices, health
+from aetherlens.config import settings
 
 logger = structlog.get_logger()
 
@@ -73,11 +73,7 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestLoggingMiddleware)
 
     # Rate limiting middleware
-    app.add_middleware(
-        RateLimitMiddleware,
-        requests_per_minute=60,
-        requests_per_hour=1000
-    )
+    app.add_middleware(RateLimitMiddleware, requests_per_minute=60, requests_per_hour=1000)
 
     # Prometheus metrics middleware
     app.add_middleware(PrometheusMiddleware)
@@ -113,8 +109,4 @@ async def metrics():
 @app.get("/")
 async def root():
     """Root endpoint - basic health check."""
-    return {
-        "service": "AetherLens Home Edition",
-        "version": "1.0.0",
-        "status": "running"
-    }
+    return {"service": "AetherLens Home Edition", "version": "1.0.0", "status": "running"}

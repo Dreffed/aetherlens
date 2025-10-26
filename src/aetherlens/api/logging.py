@@ -1,10 +1,10 @@
 """
 Structured logging configuration for AetherLens.
 """
+
 import logging
 import sys
 import uuid
-from typing import Any, Dict
 
 import structlog
 from fastapi import Request
@@ -31,8 +31,11 @@ def configure_logging() -> None:
             structlog.processors.StackInfoRenderer(),
             structlog.dev.set_exc_info,
             structlog.processors.TimeStamper(fmt="iso", utc=True),
-            structlog.processors.JSONRenderer() if settings.log_format == "json"
-            else structlog.dev.ConsoleRenderer(),
+            (
+                structlog.processors.JSONRenderer()
+                if settings.log_format == "json"
+                else structlog.dev.ConsoleRenderer()
+            ),
         ],
         wrapper_class=structlog.make_filtering_bound_logger(
             getattr(logging, settings.aetherlens_log_level.upper())

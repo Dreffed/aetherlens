@@ -1,20 +1,14 @@
 """
 Device management API endpoints.
 """
-from typing import List, Optional
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from aetherlens.api.database import db_manager
 from aetherlens.api.dependencies import get_current_user, require_admin
-from aetherlens.models.device import (
-    DeviceCreate,
-    DeviceUpdate,
-    DeviceResponse,
-    DeviceListResponse
-)
-
+from aetherlens.models.device import (DeviceCreate, DeviceListResponse,
+                                      DeviceResponse, DeviceUpdate)
 
 logger = structlog.get_logger()
 router = APIRouter(prefix="/api/v1/devices", tags=["Devices"])
@@ -24,8 +18,8 @@ router = APIRouter(prefix="/api/v1/devices", tags=["Devices"])
 async def list_devices(
     page: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(50, ge=1, le=100, description="Items per page"),
-    type: Optional[str] = Query(None, description="Filter by device type"),
-    current_user: dict = Depends(get_current_user)
+    type: str | None = Query(None, description="Filter by device type"),
+    current_user: dict = Depends(get_current_user),
 ):
     """
     List all devices with pagination.
@@ -51,7 +45,8 @@ async def list_devices(
             params.append(type)
 
         # Get total count
-        count_query = f"SELECT COUNT(*) FROM devices {where_clause}"
+        # Safe: where_clause is either empty or hardcoded "WHERE type = $3", values parameterized
+        count_query = f"SELECT COUNT(*) FROM devices {where_clause}"  # noqa: S608
         count_params = params[2:] if type else []
         total = await conn.fetchval(count_query, *count_params)
 
@@ -72,19 +67,12 @@ async def list_devices(
     pages = (total + page_size - 1) // page_size
 
     return DeviceListResponse(
-        devices=devices,
-        total=total,
-        page=page,
-        page_size=page_size,
-        pages=pages
+        devices=devices, total=total, page=page, page_size=page_size, pages=pages
     )
 
 
 @router.get("/{device_id}", response_model=DeviceResponse)
-async def get_device(
-    device_id: str,
-    current_user: dict = Depends(get_current_user)
-):
+async def get_device(device_id: str, current_user: dict = Depends(get_current_user)):
     """
     Get a specific device by ID.
 
@@ -104,23 +92,19 @@ async def get_device(
             FROM devices
             WHERE device_id = $1
             """,
-            device_id
+            device_id,
         )
 
     if row is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Device '{device_id}' not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Device '{device_id}' not found"
         )
 
     return DeviceResponse(**dict(row))
 
 
 @router.post("", response_model=DeviceResponse, status_code=status.HTTP_201_CREATED)
-async def create_device(
-    device: DeviceCreate,
-    current_user: dict = Depends(require_admin)
-):
+async def create_device(device: DeviceCreate, current_user: dict = Depends(require_admin)):
     """
     Create a new device.
 
@@ -155,7 +139,7 @@ async def create_device(
                 device.location,
                 device.capabilities,
                 device.configuration,
-                {"online": False}  # Default status
+                {"online": False},  # Default status
             )
 
         logger.info("Device created", device_id=device.device_id, user_id=current_user["user_id"])
@@ -164,16 +148,13 @@ async def create_device(
     except Exception as e:
         logger.error("Failed to create device", error=str(e), device_id=device.device_id)
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to create device: {str(e)}"
-        )
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Failed to create device: {str(e)}"
+        ) from e
 
 
 @router.put("/{device_id}", response_model=DeviceResponse)
 async def update_device(
-    device_id: str,
-    device: DeviceUpdate,
-    current_user: dict = Depends(require_admin)
+    device_id: str, device: DeviceUpdate, current_user: dict = Depends(require_admin)
 ):
     """
     Update an existing device.
@@ -197,31 +178,26 @@ async def update_device(
         param_count += 1
 
     if not updates:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No fields to update"
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No fields to update")
 
     params.append(device_id)
 
     pool = db_manager.get_pool()
     async with pool.acquire() as conn:
-        row = await conn.fetchrow(
-            f"""
-            UPDATE devices
-            SET {', '.join(updates)}, updated_at = NOW()
-            WHERE device_id = ${param_count}
-            RETURNING device_id, name, type, manufacturer, model, location,
-                      capabilities, configuration, metadata, status,
-                      created_at, updated_at
-            """,
-            *params
+        # Safe: field names from Pydantic model, values parameterized ($1, $2, etc.)
+        query = (
+            f"UPDATE devices "  # noqa: S608
+            f"SET {', '.join(updates)}, updated_at = NOW() "  # noqa: S608
+            f"WHERE device_id = ${param_count} "  # noqa: S608
+            f"RETURNING device_id, name, type, manufacturer, model, location, "  # noqa: S608
+            f"capabilities, configuration, metadata, status, "  # noqa: S608
+            f"created_at, updated_at"  # noqa: S608
         )
+        row = await conn.fetchrow(query, *params)
 
     if row is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Device '{device_id}' not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Device '{device_id}' not found"
         )
 
     logger.info("Device updated", device_id=device_id, user_id=current_user["user_id"])
@@ -229,10 +205,7 @@ async def update_device(
 
 
 @router.delete("/{device_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_device(
-    device_id: str,
-    current_user: dict = Depends(require_admin)
-):
+async def delete_device(device_id: str, current_user: dict = Depends(require_admin)):
     """
     Delete a device.
 
@@ -245,15 +218,11 @@ async def delete_device(
     """
     pool = db_manager.get_pool()
     async with pool.acquire() as conn:
-        result = await conn.execute(
-            "DELETE FROM devices WHERE device_id = $1",
-            device_id
-        )
+        result = await conn.execute("DELETE FROM devices WHERE device_id = $1", device_id)
 
     if result == "DELETE 0":
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Device '{device_id}' not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Device '{device_id}' not found"
         )
 
     logger.info("Device deleted", device_id=device_id, user_id=current_user["user_id"])

@@ -1,15 +1,15 @@
 """
 JWT token management for authentication.
 """
+
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Any
 
 import jwt
 import structlog
 from fastapi import HTTPException, status
 
 from aetherlens.config import settings
-
 
 logger = structlog.get_logger()
 
@@ -18,9 +18,7 @@ class JWTManager:
     """Manages JWT token creation and validation."""
 
     def create_access_token(
-        self,
-        data: Dict[str, Any],
-        expires_delta: Optional[timedelta] = None
+        self, data: dict[str, Any], expires_delta: timedelta | None = None
     ) -> str:
         """
         Create JWT access token.
@@ -38,25 +36,15 @@ class JWTManager:
             expires_delta = timedelta(minutes=settings.jwt_access_token_expire_minutes)
 
         expire = datetime.utcnow() + expires_delta
-        to_encode.update({
-            "exp": expire,
-            "iat": datetime.utcnow(),
-            "type": "access"
-        })
+        to_encode.update({"exp": expire, "iat": datetime.utcnow(), "type": "access"})
 
-        encoded_jwt = jwt.encode(
-            to_encode,
-            settings.secret_key,
-            algorithm=settings.jwt_algorithm
-        )
+        encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
 
         logger.info("Access token created", user_id=data.get("sub"), expires_at=expire.isoformat())
         return encoded_jwt
 
     def create_refresh_token(
-        self,
-        data: Dict[str, Any],
-        expires_delta: Optional[timedelta] = None
+        self, data: dict[str, Any], expires_delta: timedelta | None = None
     ) -> str:
         """Create JWT refresh token."""
         to_encode = data.copy()
@@ -65,21 +53,11 @@ class JWTManager:
             expires_delta = timedelta(days=settings.jwt_refresh_token_expire_days)
 
         expire = datetime.utcnow() + expires_delta
-        to_encode.update({
-            "exp": expire,
-            "iat": datetime.utcnow(),
-            "type": "refresh"
-        })
+        to_encode.update({"exp": expire, "iat": datetime.utcnow(), "type": "refresh"})
 
-        encoded_jwt = jwt.encode(
-            to_encode,
-            settings.secret_key,
-            algorithm=settings.jwt_algorithm
-        )
+        return jwt.encode(to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
 
-        return encoded_jwt
-
-    def decode_token(self, token: str) -> Dict[str, Any]:
+    def decode_token(self, token: str) -> dict[str, Any]:
         """
         Decode and validate JWT token.
 
@@ -93,12 +71,7 @@ class JWTManager:
             HTTPException: If token is invalid or expired
         """
         try:
-            payload = jwt.decode(
-                token,
-                settings.secret_key,
-                algorithms=[settings.jwt_algorithm]
-            )
-            return payload
+            return jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
 
         except jwt.ExpiredSignatureError:
             logger.warning("Token expired")
@@ -106,7 +79,7 @@ class JWTManager:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token has expired",
                 headers={"WWW-Authenticate": "Bearer"},
-            )
+            ) from None
 
         except jwt.JWTError as e:
             logger.error("Token validation failed", error=str(e))
@@ -114,7 +87,7 @@ class JWTManager:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials",
                 headers={"WWW-Authenticate": "Bearer"},
-            )
+            ) from e
 
 
 jwt_manager = JWTManager()

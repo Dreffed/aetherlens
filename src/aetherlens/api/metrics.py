@@ -1,46 +1,39 @@
 """
 Prometheus metrics for API monitoring.
 """
+
 import time
-from typing import Callable
+from collections.abc import Callable
 
 import structlog
 from fastapi import Request, Response
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
+from prometheus_client import (CONTENT_TYPE_LATEST, Counter, Gauge, Histogram,
+                               generate_latest)
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response as StarletteResponse
-
 
 logger = structlog.get_logger()
 
 
 # Define metrics
 REQUEST_COUNT = Counter(
-    'aetherlens_api_requests_total',
-    'Total API requests',
-    ['method', 'endpoint', 'status']
+    "aetherlens_api_requests_total", "Total API requests", ["method", "endpoint", "status"]
 )
 
 REQUEST_DURATION = Histogram(
-    'aetherlens_api_request_duration_seconds',
-    'API request duration',
-    ['method', 'endpoint']
+    "aetherlens_api_request_duration_seconds", "API request duration", ["method", "endpoint"]
 )
 
 REQUEST_IN_PROGRESS = Gauge(
-    'aetherlens_api_requests_in_progress',
-    'API requests currently being processed',
-    ['method', 'endpoint']
+    "aetherlens_api_requests_in_progress",
+    "API requests currently being processed",
+    ["method", "endpoint"],
 )
 
-DATABASE_POOL_SIZE = Gauge(
-    'aetherlens_database_pool_size',
-    'Database connection pool size'
-)
+DATABASE_POOL_SIZE = Gauge("aetherlens_database_pool_size", "Database connection pool size")
 
 DATABASE_POOL_AVAILABLE = Gauge(
-    'aetherlens_database_pool_available',
-    'Available database connections'
+    "aetherlens_database_pool_available", "Available database connections"
 )
 
 
@@ -69,11 +62,7 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
             # Record metrics
             duration = time.time() - start_time
             REQUEST_DURATION.labels(method=method, endpoint=path).observe(duration)
-            REQUEST_COUNT.labels(
-                method=method,
-                endpoint=path,
-                status=response.status_code
-            ).inc()
+            REQUEST_COUNT.labels(method=method, endpoint=path, status=response.status_code).inc()
 
             return response
 
@@ -90,6 +79,7 @@ async def metrics_endpoint() -> StarletteResponse:
     # Update database pool metrics if available
     try:
         from aetherlens.api.database import db_manager
+
         pool = db_manager.get_pool()
         if pool:
             DATABASE_POOL_SIZE.set(pool.get_size())
@@ -100,7 +90,4 @@ async def metrics_endpoint() -> StarletteResponse:
     # Generate metrics
     metrics_data = generate_latest()
 
-    return StarletteResponse(
-        content=metrics_data,
-        media_type=CONTENT_TYPE_LATEST
-    )
+    return StarletteResponse(content=metrics_data, media_type=CONTENT_TYPE_LATEST)

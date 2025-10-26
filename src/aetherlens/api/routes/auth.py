@@ -1,16 +1,14 @@
 """
 Authentication routes for token generation.
 """
-from typing import Annotated
 
 import structlog
-from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, EmailStr
+from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel
 
 from aetherlens.api.database import db_manager
 from aetherlens.security.jwt import jwt_manager
 from aetherlens.security.passwords import verify_password
-
 
 logger = structlog.get_logger()
 router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
@@ -18,12 +16,14 @@ router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
 
 class LoginRequest(BaseModel):
     """Login request model."""
+
     username: str
     password: str
 
 
 class TokenResponse(BaseModel):
     """Token response model."""
+
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
@@ -56,7 +56,7 @@ async def login(request: LoginRequest):
             FROM users
             WHERE username = $1
             """,
-            request.username
+            request.username,
         )
 
     # Verify user exists
@@ -78,11 +78,7 @@ async def login(request: LoginRequest):
         )
 
     # Create tokens
-    token_data = {
-        "sub": user["user_id"],
-        "username": user["username"],
-        "role": user["role"]
-    }
+    token_data = {"sub": user["user_id"], "username": user["username"], "role": user["role"]}
 
     access_token = jwt_manager.create_access_token(token_data)
     refresh_token = jwt_manager.create_refresh_token({"sub": user["user_id"]})
@@ -92,5 +88,5 @@ async def login(request: LoginRequest):
     return TokenResponse(
         access_token=access_token,
         refresh_token=refresh_token,
-        expires_in=60 * 60  # 1 hour in seconds
+        expires_in=60 * 60,  # 1 hour in seconds
     )

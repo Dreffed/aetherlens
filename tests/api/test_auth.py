@@ -7,8 +7,9 @@ Tests for:
 - Invalid credentials handling
 """
 
-import pytest
 from datetime import timedelta
+
+import pytest
 from httpx import AsyncClient
 
 

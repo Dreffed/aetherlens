@@ -1,7 +1,8 @@
 """Database query performance tests."""
 
-import pytest
 import time
+
+import pytest
 
 
 @pytest.mark.performance
@@ -35,7 +36,7 @@ async def test_aggregate_query_performance(db_pool, sample_metrics):
     """Test performance of aggregate queries."""
     async with db_pool.acquire() as conn:
         start = time.time()
-        result = await conn.fetchrow(
+        _ = await conn.fetchrow(
             """
             SELECT
                 device_id,

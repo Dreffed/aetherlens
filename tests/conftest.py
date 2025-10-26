@@ -9,19 +9,17 @@ This module provides comprehensive test fixtures for:
 """
 
 import asyncio
+from collections.abc import AsyncGenerator
 from datetime import datetime, timedelta
-from typing import AsyncGenerator, Dict, List
 
 import asyncpg
 import pytest
 from httpx import AsyncClient
 
-from aetherlens.api.database import db_manager
 from aetherlens.api.main import create_app
-from aetherlens.config import Settings, settings
+from aetherlens.config import Settings
 from aetherlens.security.jwt import jwt_manager
 from aetherlens.security.passwords import hash_password
-
 
 # ============================================================================
 # Event Loop Configuration
@@ -114,7 +112,7 @@ async def db_conn(db_pool) -> AsyncGenerator[asyncpg.Connection, None]:
 
 
 @pytest.fixture
-async def test_user(db_pool) -> Dict:
+async def test_user(db_pool) -> dict:
     """
     Create a test user with regular permissions.
 
@@ -148,7 +146,7 @@ async def test_user(db_pool) -> Dict:
 
 
 @pytest.fixture
-async def admin_user(db_pool) -> Dict:
+async def admin_user(db_pool) -> dict:
     """
     Create an admin user with full permissions.
 
@@ -262,7 +260,7 @@ async def admin_client(api_client, admin_token) -> AsyncClient:
 
 
 @pytest.fixture
-async def sample_device(db_pool, admin_user) -> Dict:
+async def sample_device(db_pool, admin_user) -> dict:
     """
     Create a sample device for testing.
 
@@ -297,7 +295,7 @@ async def sample_device(db_pool, admin_user) -> Dict:
 
 
 @pytest.fixture
-async def sample_devices(db_pool, admin_user) -> List[Dict]:
+async def sample_devices(db_pool, admin_user) -> list[dict]:
     """
     Create multiple sample devices for testing.
 
@@ -338,7 +336,7 @@ async def sample_devices(db_pool, admin_user) -> List[Dict]:
 
 
 @pytest.fixture
-async def sample_metrics(db_pool, sample_device) -> List[Dict]:
+async def sample_metrics(db_pool, sample_device) -> list[dict]:
     """
     Create sample time-series metrics for testing.
 
@@ -353,12 +351,8 @@ async def sample_metrics(db_pool, sample_device) -> List[Dict]:
         timestamp = base_time + timedelta(minutes=5 * i)
         # Vary power consumption realistically (80-150 watts with some pattern)
         hour = timestamp.hour
-        base_power = 100
         # Higher during day, lower at night
-        if 6 <= hour < 22:
-            base_power = 120
-        else:
-            base_power = 80
+        base_power = 120 if 6 <= hour < 22 else 80
 
         # Add some variation
         power = base_power + (i % 30) - 15
@@ -395,7 +389,7 @@ async def sample_metrics(db_pool, sample_device) -> List[Dict]:
 
 
 @pytest.fixture
-async def sample_rate_schedule(db_pool) -> Dict:
+async def sample_rate_schedule(db_pool) -> dict:
     """
     Create a sample electricity rate schedule for testing.
 
@@ -452,9 +446,7 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "integration: mark test as integration test (requires services)"
     )
-    config.addinivalue_line(
-        "markers", "performance: mark test as performance benchmark"
-    )
+    config.addinivalue_line("markers", "performance: mark test as performance benchmark")
     config.addinivalue_line("markers", "security: mark test as security scan")
     config.addinivalue_line("markers", "quality: mark test as code quality check")
     config.addinivalue_line("markers", "slow: mark test as slow-running")

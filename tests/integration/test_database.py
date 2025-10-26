@@ -10,8 +10,9 @@ Tests for:
 - Transaction handling
 """
 
-import pytest
 from datetime import datetime, timedelta
+
+import pytest
 
 
 @pytest.mark.integration
@@ -97,9 +98,7 @@ async def test_insert_and_query_device(db_pool):
         )
 
         # Query device
-        result = await conn.fetchrow(
-            "SELECT * FROM devices WHERE device_id = $1", device_id
-        )
+        result = await conn.fetchrow("SELECT * FROM devices WHERE device_id = $1", device_id)
 
         assert result is not None
         assert result["device_id"] == device_id
@@ -191,14 +190,10 @@ async def test_continuous_aggregate_refresh(db_pool, sample_metrics):
     """Test that continuous aggregates can be refreshed."""
     async with db_pool.acquire() as conn:
         # Manually refresh aggregate
-        await conn.execute(
-            "CALL refresh_continuous_aggregate('metrics_hourly', NULL, NULL)"
-        )
+        await conn.execute("CALL refresh_continuous_aggregate('metrics_hourly', NULL, NULL)")
 
         # Query aggregate
-        result = await conn.fetch(
-            "SELECT * FROM metrics_hourly ORDER BY bucket DESC LIMIT 1"
-        )
+        result = await conn.fetch("SELECT * FROM metrics_hourly ORDER BY bucket DESC LIMIT 1")
 
         assert len(result) > 0, "Continuous aggregate has no data"
         # Verify structure
@@ -227,33 +222,29 @@ async def test_device_metrics_foreign_key(db_pool, sample_device, sample_metrics
 
         assert len(result) > 0, "No metrics found for device"
         # All should have the device name
-        assert all(
-            r["device_name"] == sample_device["name"] for r in result
-        ), "Device join failed"
+        assert all(r["device_name"] == sample_device["name"] for r in result), "Device join failed"
 
 
 @pytest.mark.integration
 @pytest.mark.asyncio
 async def test_transaction_rollback(db_pool, sample_device):
     """Test that transaction rollback works correctly."""
-    async with db_pool.acquire() as conn:
-        # Start transaction
-        async with conn.transaction():
-            # Update device name
-            await conn.execute(
-                "UPDATE devices SET name = 'Modified Name' WHERE device_id = $1",
-                sample_device["device_id"],
-            )
+    async with db_pool.acquire() as conn, conn.transaction():
+        # Update device name
+        await conn.execute(
+            "UPDATE devices SET name = 'Modified Name' WHERE device_id = $1",
+            sample_device["device_id"],
+        )
 
-            # Verify change within transaction
-            result = await conn.fetchval(
-                "SELECT name FROM devices WHERE device_id = $1",
-                sample_device["device_id"],
-            )
-            assert result == "Modified Name"
+        # Verify change within transaction
+        result = await conn.fetchval(
+            "SELECT name FROM devices WHERE device_id = $1",
+            sample_device["device_id"],
+        )
+        assert result == "Modified Name"
 
-            # Rollback by raising exception
-            raise Exception("Force rollback")
+        # Rollback by raising exception
+        raise Exception("Force rollback")
 
     # Verify rollback happened
     async with db_pool.acquire() as conn:
@@ -298,7 +289,7 @@ async def test_query_performance_with_index(db_pool, sample_metrics):
         start = time.time()
 
         # Query that should use idx_metrics_device_time index
-        result = await conn.fetch(
+        _ = await conn.fetch(
             """
             SELECT * FROM metrics
             WHERE device_id = $1
