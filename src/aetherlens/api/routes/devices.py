@@ -50,6 +50,7 @@ async def list_devices(
         total = await conn.fetchval(count_query, *count_params)
 
         # Get devices
+        # Safe: where_clause is either empty or hardcoded "WHERE type = $3", values parameterized
         query = f"""
             SELECT device_id, name, type, manufacturer, model, location,
                    capabilities, configuration, metadata, status,
@@ -58,7 +59,7 @@ async def list_devices(
             {where_clause}
             ORDER BY created_at DESC
             LIMIT $1 OFFSET $2
-        """
+        """  # noqa: S608
 
         rows = await conn.fetch(query, *params)
 
