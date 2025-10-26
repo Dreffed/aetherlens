@@ -95,13 +95,13 @@ echo Running coverage analysis (this may take a moment)...
 .\venv\Scripts\pytest tests/unit/ tests/security/ --cov=src/aetherlens --cov-report=term --cov-report=xml -q > coverage_output.tmp 2>&1
 
 REM Try to extract coverage from the output
+set "COVERAGE="
 for /f "tokens=4 delims= " %%a in ('findstr /C:"TOTAL" coverage_output.tmp') do (
-    set COVERAGE=%%a
-    set COVERAGE=!COVERAGE:%%=!
+    set "COVERAGE=%%a"
 )
 
 if defined COVERAGE (
-    echo Current coverage: !COVERAGE!%%
+    echo Current coverage: !COVERAGE!
     REM Note: batch doesn't do float comparison easily, so we just report it
     echo [OK] Coverage report generated
 ) else (
@@ -113,23 +113,24 @@ del coverage_output.tmp 2>nul
 REM Final summary
 echo.
 echo =====================================================================
-if !SHOULD_PUSH! equ 1 (
+if %SHOULD_PUSH% EQU 1 (
+    echo.
     echo [OK] All pre-push checks passed! Pushing to remote...
     echo.
     exit /b 0
-) else (
-    echo.
-    echo [ERROR] Pre-push checks failed!
-    echo.
-    echo Please fix the issues above before pushing.
-    echo.
-    echo Quick fixes:
-    echo   - Format code:  .\venv\Scripts\python -m black src/ tests/
-    echo   - Format code:  .\venv\Scripts\python -m isort src/ tests/
-    echo   - Run tests:    .\venv\Scripts\pytest tests/unit/ -v
-    echo.
-    echo To skip this check (NOT RECOMMENDED):
-    echo   git push --no-verify
-    echo.
-    exit /b 1
 )
+
+echo.
+echo [ERROR] Pre-push checks failed!
+echo.
+echo Please fix the issues above before pushing.
+echo.
+echo Quick fixes:
+echo   - Format code:  .\venv\Scripts\python -m black src/ tests/
+echo   - Format code:  .\venv\Scripts\python -m isort src/ tests/
+echo   - Run tests:    .\venv\Scripts\pytest tests/unit/ -v
+echo.
+echo To skip this check (NOT RECOMMENDED):
+echo   git push --no-verify
+echo.
+exit /b 1
