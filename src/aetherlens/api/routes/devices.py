@@ -2,6 +2,8 @@
 Device management API endpoints.
 """
 
+from typing import Any
+
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
@@ -18,8 +20,8 @@ async def list_devices(
     page: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(50, ge=1, le=100, description="Items per page"),
     type: str | None = Query(None, description="Filter by device type"),
-    current_user: dict = Depends(get_current_user),
-):
+    current_user: dict[str, Any] = Depends(get_current_user),
+) -> DeviceListResponse:
     """
     List all devices with pagination.
 
@@ -37,7 +39,7 @@ async def list_devices(
     async with pool.acquire() as conn:
         # Build query
         where_clause = ""
-        params = [page_size, offset]
+        params: list[Any] = [page_size, offset]
 
         if type:
             where_clause = "WHERE type = $3"
@@ -72,7 +74,9 @@ async def list_devices(
 
 
 @router.get("/{device_id}", response_model=DeviceResponse)
-async def get_device(device_id: str, current_user: dict = Depends(get_current_user)):
+async def get_device(
+    device_id: str, current_user: dict[str, Any] = Depends(get_current_user)
+) -> DeviceResponse:
     """
     Get a specific device by ID.
 
@@ -104,7 +108,9 @@ async def get_device(device_id: str, current_user: dict = Depends(get_current_us
 
 
 @router.post("", response_model=DeviceResponse, status_code=status.HTTP_201_CREATED)
-async def create_device(device: DeviceCreate, current_user: dict = Depends(require_admin)):
+async def create_device(
+    device: DeviceCreate, current_user: dict[str, Any] = Depends(require_admin)
+) -> DeviceResponse:
     """
     Create a new device.
 
@@ -154,8 +160,10 @@ async def create_device(device: DeviceCreate, current_user: dict = Depends(requi
 
 @router.put("/{device_id}", response_model=DeviceResponse)
 async def update_device(
-    device_id: str, device: DeviceUpdate, current_user: dict = Depends(require_admin)
-):
+    device_id: str,
+    device: DeviceUpdate,
+    current_user: dict[str, Any] = Depends(require_admin),
+) -> DeviceResponse:
     """
     Update an existing device.
 
@@ -205,7 +213,9 @@ async def update_device(
 
 
 @router.delete("/{device_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_device(device_id: str, current_user: dict = Depends(require_admin)):
+async def delete_device(
+    device_id: str, current_user: dict[str, Any] = Depends(require_admin)
+) -> None:
     """
     Delete a device.
 

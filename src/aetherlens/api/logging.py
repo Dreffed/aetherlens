@@ -5,10 +5,12 @@ Structured logging configuration for AetherLens.
 import logging
 import sys
 import uuid
+from collections.abc import Awaitable, Callable
 
 import structlog
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 
 from aetherlens.config import settings
 
@@ -49,7 +51,9 @@ def configure_logging() -> None:
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
     """Middleware to add request ID and log HTTP requests."""
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(
+        self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
         """Add request ID and log request/response."""
 
         # Generate or extract request ID

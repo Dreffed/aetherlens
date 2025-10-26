@@ -72,7 +72,7 @@ async def check_timescaledb() -> dict[str, Any]:
 
 
 @router.get("/health", response_model=HealthStatus)
-async def health_check():
+async def health_check() -> JSONResponse:
     """
     Comprehensive health check for all dependencies.
 
@@ -86,9 +86,9 @@ async def health_check():
     - 503: One or more checks failed (unhealthy)
     """
     # Run all checks concurrently
-    db_check, timescale_check = await asyncio.gather(
-        check_database(), check_timescaledb(), return_exceptions=True
-    )
+    results = await asyncio.gather(check_database(), check_timescaledb(), return_exceptions=True)
+    db_check: dict[str, Any] | BaseException = results[0]
+    timescale_check: dict[str, Any] | BaseException = results[1]
 
     # Determine overall status
     all_healthy = all(
@@ -114,8 +114,8 @@ async def health_check():
     return JSONResponse(content=response.model_dump(), status_code=status_code)
 
 
-@router.get("/health/ready")
-async def readiness_check():
+@router.get("/health/ready", response_model=None)
+async def readiness_check() -> dict[str, str] | JSONResponse:
     """
     Kubernetes-style readiness probe.
 
@@ -138,7 +138,7 @@ async def readiness_check():
 
 
 @router.get("/health/live")
-async def liveness_check():
+async def liveness_check() -> dict[str, str]:
     """
     Kubernetes-style liveness probe.
 

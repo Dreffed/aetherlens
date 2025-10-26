@@ -71,7 +71,10 @@ class JWTManager:
             HTTPException: If token is invalid or expired
         """
         try:
-            return jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
+            payload: dict[str, Any] = jwt.decode(
+                token, settings.secret_key, algorithms=[settings.jwt_algorithm]
+            )
+            return payload
 
         except jwt.ExpiredSignatureError:
             logger.warning("Token expired")
@@ -81,7 +84,7 @@ class JWTManager:
                 headers={"WWW-Authenticate": "Bearer"},
             ) from None
 
-        except jwt.JWTError as e:
+        except (jwt.InvalidTokenError, jwt.DecodeError) as e:
             logger.error("Token validation failed", error=str(e))
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

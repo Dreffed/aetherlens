@@ -2,6 +2,8 @@
 FastAPI dependencies for authentication and authorization.
 """
 
+from typing import Any
+
 import structlog
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -13,7 +15,9 @@ logger = structlog.get_logger()
 security = HTTPBearer()
 
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+) -> dict[str, Any]:
     """
     Dependency to get current authenticated user from JWT token.
 
@@ -59,7 +63,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     return dict(user)
 
 
-async def require_admin(current_user: dict = Depends(get_current_user)) -> dict:
+async def require_admin(current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
     """
     Dependency to require admin role.
 

@@ -3,7 +3,7 @@ Prometheus metrics for API monitoring.
 """
 
 import time
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 
 import structlog
 from fastapi import Request, Response
@@ -39,7 +39,9 @@ DATABASE_POOL_AVAILABLE = Gauge(
 class PrometheusMiddleware(BaseHTTPMiddleware):
     """Middleware to collect Prometheus metrics."""
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
         """Collect metrics for each request."""
 
         # Skip metrics endpoint itself
@@ -56,7 +58,7 @@ class PrometheusMiddleware(BaseHTTPMiddleware):
         start_time = time.time()
 
         try:
-            response = await call_next(request)
+            response: Response = await call_next(request)
 
             # Record metrics
             duration = time.time() - start_time
