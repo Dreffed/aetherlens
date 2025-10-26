@@ -34,7 +34,8 @@
       "Read(//d/**)",
       "Bash(git rm:*)",
       "Bash(./venv/Scripts/pytest tests/security/ -v -m security)",
-      "Bash(scripts/pre-push.bat:*)"
+      "Bash(scripts/pre-push.bat:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []
