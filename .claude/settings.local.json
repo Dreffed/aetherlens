@@ -41,7 +41,9 @@
       "Bash(scripts/format.bat)",
       "Bash(echo:*)",
       "Bash(cmd /c \"scripts\\pre-push.bat && echo SUCCESS || echo FAILED\")",
-      "Bash(/dev/null)"
+      "Bash(/dev/null)",
+      "Bash(scripts/install-hooks.bat)",
+      "Bash(.git/hooks/pre-push)"
     ],
     "deny": [],
     "ask": []
