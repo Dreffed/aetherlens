@@ -142,12 +142,22 @@ icacls scripts\*.bat /grant %username%:F
 
 ### Git Hooks Not Running
 
-```cmd
-REM Reinstall hooks
-scripts\install-hooks.bat
+**Error: "cannot spawn .git/hooks/pre-push: No such file or directory"**
 
-REM Check if hooks are installed
+This means the pre-push hook isn't installed. Run:
+
+```cmd
+scripts\install-hooks.bat
+```
+
+The install script creates a bash wrapper that Git for Windows can execute. To verify:
+
+```cmd
+REM Check if hook exists
 dir .git\hooks\pre-push
+
+REM Test the hook manually
+.git\hooks\pre-push
 ```
 
 ### Skip Hooks (Emergency Only)

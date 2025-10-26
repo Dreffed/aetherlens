@@ -33,7 +33,20 @@ if exist ".git\hooks\pre-push" (
     move /y .git\hooks\pre-push .git\hooks\pre-push.backup >nul
 )
 
-copy /y scripts\pre-push.bat .git\hooks\pre-push >nul
+REM Create bash wrapper for Git for Windows
+(
+echo #!/bin/bash
+echo # Pre-push hook wrapper for Windows
+echo # Calls the batch file implementation
+echo.
+echo # Get the repository root directory
+echo REPO_ROOT="$(git rev-parse --show-toplevel)"
+echo.
+echo # Call the batch file using Windows path
+echo cd "$REPO_ROOT" ^|^| exit 1
+echo cmd.exe //c "scripts\\pre-push.bat"
+echo exit $?
+) > .git\hooks\pre-push
 echo [OK] Pre-push hook installed
 
 echo.
