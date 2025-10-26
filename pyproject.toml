@@ -81,6 +81,11 @@ ignore = [
 [tool.ruff.isort]
 known-third-party = ["fastapi", "pydantic", "sqlalchemy"]
 
+[tool.isort]
+profile = "black"
+line_length = 100
+known_third_party = ["fastapi", "pydantic", "sqlalchemy"]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true

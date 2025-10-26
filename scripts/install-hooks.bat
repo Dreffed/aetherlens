@@ -9,7 +9,7 @@ echo.
 
 REM Check if .git directory exists
 if not exist ".git" (
-    echo [31m[ERROR] Not in a git repository. Run this from the project root.[0m
+    echo [ERROR] Not in a git repository. Run this from the project root.
     exit /b 1
 )
 
@@ -18,9 +18,9 @@ echo 1/3 Installing pre-commit hooks...
 where pre-commit >nul 2>&1
 if %errorlevel% equ 0 (
     pre-commit install
-    echo [32m[OK] Pre-commit hooks installed[0m
+    echo [OK] Pre-commit hooks installed
 ) else (
-    echo [33m[WARNING] pre-commit not found. Install with: pip install pre-commit[0m
+    echo [WARNING] pre-commit not found. Install with: pip install pre-commit
     echo            Then run: pre-commit install
 )
 
@@ -34,18 +34,18 @@ if exist ".git\hooks\pre-push" (
 )
 
 copy /y scripts\pre-push.bat .git\hooks\pre-push >nul
-echo [32m[OK] Pre-push hook installed[0m
+echo [OK] Pre-push hook installed
 
 echo.
 
 REM Configure git hooks
 echo 3/3 Setting up hook configuration...
 git config --local core.hooksPath .git/hooks
-echo [32m[OK] Git hooks configured[0m
+echo [OK] Git hooks configured
 
 echo.
 echo =====================================================================
-echo [32m[OK] All git hooks installed successfully![0m
+echo [OK] All git hooks installed successfully!
 echo =====================================================================
 echo.
 echo What happens now:

@@ -11,7 +11,7 @@ echo.
 
 REM Check if we're in the right directory
 if not exist "pyproject.toml" (
-    echo [31m[ERROR] Must run from project root directory[0m
+    echo [ERROR] Must run from project root directory
     exit /b 1
 )
 
@@ -22,9 +22,9 @@ REM 1. Run ruff with auto-fix
 echo [1/3] Running ruff (with --fix)...
 .\venv\Scripts\python -m ruff check src/ tests/ --fix
 if errorlevel 1 (
-    echo [33m[WARNING] Ruff found some issues (some may be fixed)[0m
+    echo [WARNING] Ruff found some issues (some may be fixed)
 ) else (
-    echo [32m[OK] Ruff passed[0m
+    echo [OK] Ruff passed
 )
 echo.
 
@@ -32,10 +32,10 @@ REM 2. Run black
 echo [2/3] Running black formatter...
 .\venv\Scripts\python -m black src/ tests/
 if errorlevel 1 (
-    echo [31m[ERROR] Black failed[0m
+    echo [ERROR] Black failed
     exit /b 1
 ) else (
-    echo [32m[OK] Black formatting applied[0m
+    echo [OK] Black formatting applied
 )
 echo.
 
@@ -43,15 +43,15 @@ REM 3. Run isort
 echo [3/3] Running isort import sorter...
 .\venv\Scripts\python -m isort src/ tests/
 if errorlevel 1 (
-    echo [31m[ERROR] isort failed[0m
+    echo [ERROR] isort failed
     exit /b 1
 ) else (
-    echo [32m[OK] Imports sorted[0m
+    echo [OK] Imports sorted
 )
 echo.
 
 echo ========================================
-echo [32m[OK] Code formatted successfully![0m
+echo [OK] Code formatted successfully!
 echo ========================================
 echo.
 echo Next steps:

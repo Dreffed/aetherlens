@@ -35,7 +35,10 @@
       "Bash(git rm:*)",
       "Bash(./venv/Scripts/pytest tests/security/ -v -m security)",
       "Bash(scripts/pre-push.bat:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(scriptspre-push.bat)",
+      "Bash(cmd /c scripts\\pre-push.bat)",
+      "Bash(scripts/format.bat)"
     ],
     "deny": [],
     "ask": []
