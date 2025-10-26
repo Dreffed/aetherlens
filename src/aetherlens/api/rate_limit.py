@@ -4,11 +4,14 @@ Rate limiting middleware for API protection.
 
 import time
 from collections import defaultdict
+from collections.abc import Awaitable, Callable
 
 import structlog
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
+from starlette.types import ASGIApp
 
 logger = structlog.get_logger()
 
@@ -16,7 +19,7 @@ logger = structlog.get_logger()
 class InMemoryRateLimiter:
     """In-memory rate limiter using sliding window."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.requests: dict[str, list[float]] = defaultdict(list)
 
     def is_allowed(self, key: str, max_requests: int, window_seconds: int) -> tuple[bool, int]:
@@ -52,13 +55,17 @@ class InMemoryRateLimiter:
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Middleware to enforce rate limiting on API endpoints."""
 
-    def __init__(self, app, requests_per_minute: int = 60, requests_per_hour: int = 1000):
+    def __init__(
+        self, app: ASGIApp, requests_per_minute: int = 60, requests_per_hour: int = 1000
+    ) -> None:
         super().__init__(app)
-        self.limiter = InMemoryRateLimiter()
+        self.limiter: InMemoryRateLimiter = InMemoryRateLimiter()
         self.requests_per_minute = requests_per_minute
         self.requests_per_hour = requests_per_hour
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(
+        self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
         """Apply rate limiting to request."""
 
         # Skip rate limiting for health checks and metrics
@@ -66,6 +73,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         # Get client identifier (IP or user ID)
+        if request.client is None:
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"detail": "Client address unavailable"},
+            )
         client_ip = request.client.host
 
         # Check minute limit

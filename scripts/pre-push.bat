@@ -58,16 +58,17 @@ if errorlevel 1 (
     echo [OK] isort import ordering passed
 )
 
-REM Step 4: Run mypy type checking (warning only in Phase 1)
+REM Step 4: Run mypy type checking (blocking in Phase 2)
 echo.
 echo =====================================================================
 echo 4/6 Running mypy type checking...
 echo =====================================================================
 .\venv\Scripts\python -m mypy src/
 if errorlevel 1 (
-    echo [WARNING] Type checking found errors (non-blocking in Phase 1)
-    echo   These will need to be fixed before Phase 2
+    echo [ERROR] Type checking failed
+    echo   All type errors must be fixed before pushing
     echo   See output above for details
+    set SHOULD_PUSH=0
 ) else (
     echo [OK] Type checking passed
 )

@@ -4,6 +4,7 @@ AetherLens FastAPI Application
 
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from typing import Any
 
 import structlog
 from fastapi import FastAPI, Request, status
@@ -21,7 +22,7 @@ logger = structlog.get_logger()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
     Application lifespan handler for startup/shutdown tasks.
 
@@ -80,7 +81,7 @@ def create_app() -> FastAPI:
 
     # Exception handlers
     @app.exception_handler(Exception)
-    async def global_exception_handler(request: Request, exc: Exception):
+    async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
         logger.error("Unhandled exception", error=str(exc), path=request.url.path)
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -100,13 +101,13 @@ app = create_app()
 
 # Metrics endpoint
 @app.get("/metrics")
-async def metrics():
+async def metrics() -> Any:
     """Prometheus metrics endpoint."""
     return await metrics_endpoint()
 
 
 # Root endpoint - basic health check
 @app.get("/")
-async def root():
+async def root() -> dict[str, str]:
     """Root endpoint - basic health check."""
     return {"service": "AetherLens Home Edition", "version": "1.0.0", "status": "running"}

@@ -2,7 +2,7 @@
 Database connection management for FastAPI.
 """
 
-import asyncpg
+import asyncpg  # type: ignore[import-untyped]
 import structlog
 
 from aetherlens.config import settings
@@ -13,7 +13,7 @@ logger = structlog.get_logger()
 class DatabaseManager:
     """Manages PostgreSQL connection pool."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.pool: asyncpg.Pool | None = None
 
     async def connect(self) -> None:
@@ -47,4 +47,4 @@ class DatabaseManager:
         return self.pool
 
 
-db_manager = DatabaseManager()
+db_manager: DatabaseManager = DatabaseManager()

@@ -34,7 +34,6 @@ jobs:
         run: isort --check-only src/ tests/
 
       - name: Run mypy
-        continue-on-error: true  # Non-blocking in Phase 1 - 41 type errors to fix in Phase 2
         run: mypy src/
 
   test-unit:

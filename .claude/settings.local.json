@@ -44,7 +44,12 @@
       "Bash(/dev/null)",
       "Bash(scripts/install-hooks.bat)",
       "Bash(.git/hooks/pre-push)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(.venvScriptspython -m mypy src/ --no-error-summary)",
+      "Bash(findstr:*)",
+      "Bash(.venvScriptspython -m mypy src/)",
+      "Bash(./venv/Scripts/pytest tests/unit/ -v --cov=src/aetherlens --cov-report=term)"
     ],
     "deny": [],
     "ask": []

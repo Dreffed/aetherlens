@@ -31,7 +31,7 @@ class TokenResponse(BaseModel):
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(request: LoginRequest):
+async def login(request: LoginRequest) -> TokenResponse:
     """
     Authenticate user and return JWT tokens.
 
