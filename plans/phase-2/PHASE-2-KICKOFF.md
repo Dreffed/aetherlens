@@ -27,6 +27,8 @@
 
 **Goal:** Fix all 41 mypy type errors
 
+**📋 Detailed Plan:** [2.1-type-system-cleanup-plan.md](./2.1-type-system-cleanup-plan.md)
+
 **Files to Fix:**
 ```
 src/aetherlens/security/jwt.py          (2 errors)
@@ -54,6 +56,8 @@ src/aetherlens/api/main.py              (3 errors)
 - [ ] Type hints on all public functions
 
 **Estimated Effort:** 2-4 hours
+
+**Status:** 📋 Plan Created - Ready to Implement
 
 ---
 

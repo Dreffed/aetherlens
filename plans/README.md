@@ -63,7 +63,7 @@ plans/
 
 | Task | Plan | Status |
 |------|------|--------|
-| Type System Cleanup | [PHASE-2-KICKOFF.md](phase-2/PHASE-2-KICKOFF.md#1-type-system-cleanup-priority-p0) | 📋 Planned |
+| **2.1 Type System Cleanup** | [2.1-type-system-cleanup-plan.md](phase-2/2.1-type-system-cleanup-plan.md) | 📋 Detailed Plan Ready |
 | API Implementation | [PHASE-2-KICKOFF.md](phase-2/PHASE-2-KICKOFF.md#2-api-endpoint-implementation-priority-p0) | 📋 Planned |
 | Database Completion | [PHASE-2-KICKOFF.md](phase-2/PHASE-2-KICKOFF.md#3-database-layer-completion-priority-p0) | 📋 Planned |
 | Test Coverage | [PHASE-2-KICKOFF.md](phase-2/PHASE-2-KICKOFF.md#4-test-coverage-improvements-priority-p1) | 📋 Planned |
