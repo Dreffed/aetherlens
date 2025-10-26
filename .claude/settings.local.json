@@ -33,7 +33,8 @@
       "Bash(./venv/Scripts/mdformat:*)",
       "Read(//d/**)",
       "Bash(git rm:*)",
-      "Bash(./venv/Scripts/pytest tests/security/ -v -m security)"
+      "Bash(./venv/Scripts/pytest tests/security/ -v -m security)",
+      "Bash(scripts/pre-push.bat:*)"
     ],
     "deny": [],
     "ask": []

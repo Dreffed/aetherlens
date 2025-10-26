@@ -69,10 +69,14 @@ ______________________________________________________________________
    pip install -e .
    ```
 
-1. **Install pre-commit hooks:**
+1. **Install git hooks (IMPORTANT):**
 
    ```bash
-   make pre-commit-install
+   # Install both pre-commit AND pre-push hooks
+   make install-hooks
+
+   # Or install individually:
+   # make pre-commit-install  # Only pre-commit hooks
    ```
 
 1. **Verify setup:**
@@ -105,26 +109,57 @@ pip install -r requirements-dev.txt
 pip install -e .
 ```
 
-### Pre-commit Hooks
+### Git Hooks
 
-Pre-commit hooks automatically check code quality before commits:
+We use two types of git hooks to ensure code quality:
+
+#### Pre-Commit Hooks
+
+Automatically check and fix code **before** commits:
 
 ```bash
-# Install hooks
+# Install all hooks (recommended)
+make install-hooks
+
+# Or install pre-commit only
 pre-commit install
 
 # Run manually
 pre-commit run --all-files
 ```
 
-**Hooks include:**
+**Pre-commit hooks include:**
 
-- ruff (linting)
-- black (formatting)
-- isort (import sorting)
-- mypy (type checking)
+- Trailing whitespace removal
+- End-of-file fixing
+- YAML/JSON/TOML validation
+- **ruff** (linting with auto-fix)
+- **black** (code formatting)
+- **isort** (import sorting)
+- **mypy** (type checking on src/)
+- **bandit** (security scanning)
 
-These match **exactly** what runs in CI, preventing surprises.
+#### Pre-Push Hooks
+
+Run comprehensive checks **before** pushing to remote:
+
+```bash
+# Automatically runs on: git push
+# Manually test with:
+make pre-push
+# Or: scripts/pre-push.bat (Windows) or scripts/pre-push.sh (Linux/Mac)
+```
+
+**Pre-push checks include:**
+
+1. **Ruff linting** - Must pass with 0 errors
+1. **Black formatting** - Code must be formatted
+1. **isort import ordering** - Imports must be sorted
+1. **Unit tests** - All unit tests must pass
+1. **Security tests** - Security scans must pass
+1. **Coverage report** - Shows current coverage (warning only)
+
+**These match exactly what runs in GitHub Actions CI**, preventing CI failures.
 
 ### IDE Setup
 
@@ -475,12 +510,19 @@ ______________________________________________________________________
    ```bash
    make lint
    ./scripts/test-local.sh
+
+   # Or run the pre-push checks manually:
+   make pre-push
    ```
 
 1. **Push to your fork:**
 
    ```bash
+   # Pre-push hooks will automatically run before pushing
    git push origin feature/your-feature-name
+
+   # If hooks fail, fix issues and try again
+   # To skip hooks (NOT RECOMMENDED): git push --no-verify
    ```
 
 1. **Create Pull Request** on GitHub:

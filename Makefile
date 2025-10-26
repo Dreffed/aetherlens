@@ -1,7 +1,7 @@
 # AetherLens Makefile
 # Provides convenient commands for development, testing, and linting
 
-.PHONY: help install install-dev lint format lint-md format-md test test-unit test-integration test-api test-performance test-coverage clean docker-test pre-commit-install
+.PHONY: help install install-dev lint format lint-md format-md test test-unit test-integration test-api test-performance test-coverage clean docker-test pre-commit-install install-hooks pre-push
 
 # Default target
 help:
@@ -11,7 +11,8 @@ help:
 	@echo "Setup:"
 	@echo "  make install              Install production dependencies"
 	@echo "  make install-dev          Install development dependencies"
-	@echo "  make pre-commit-install   Install pre-commit hooks"
+	@echo "  make install-hooks        Install ALL git hooks (pre-commit + pre-push)"
+	@echo "  make pre-commit-install   Install pre-commit hooks only"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  make lint                 Run all linters (matches GitHub Actions)"
@@ -37,6 +38,7 @@ help:
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean                Remove build artifacts and cache files"
+	@echo "  make pre-push             Run pre-push checks (lint + tests + coverage)"
 	@echo "  make db-migrate           Run database migrations"
 	@echo "  make db-backup            Backup database"
 	@echo ""
@@ -53,6 +55,14 @@ pre-commit-install:
 	pip install pre-commit
 	pre-commit install
 	@echo "Pre-commit hooks installed successfully!"
+
+install-hooks:
+	@echo "Installing all git hooks (pre-commit + pre-push)..."
+	@bash scripts/install-hooks.sh || (echo "Note: Run 'scripts\\install-hooks.bat' on Windows" && exit 1)
+
+pre-push:
+	@echo "Running pre-push checks (same as git push)..."
+	@bash scripts/pre-push.sh || (echo "Note: Run 'scripts\\pre-push.bat' on Windows" && exit 1)
 
 # Linting (matches GitHub Actions CI exactly)
 lint:

@@ -7,8 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from aetherlens.api.database import db_manager
 from aetherlens.api.dependencies import get_current_user, require_admin
-from aetherlens.models.device import (DeviceCreate, DeviceListResponse,
-                                      DeviceResponse, DeviceUpdate)
+from aetherlens.models.device import DeviceCreate, DeviceListResponse, DeviceResponse, DeviceUpdate
 
 logger = structlog.get_logger()
 router = APIRouter(prefix="/api/v1/devices", tags=["Devices"])
